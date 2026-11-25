@@ -1,0 +1,553 @@
+<!doctype html>
+<html lang="es-AR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Valenttiel Macro</title>
+<meta name="description" content="Fundamentales de EE.UU. en vivo, y cómo reaccionó cada activo.">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#070B0A">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@300..700&family=Geist+Mono:wght@400..600&display=swap">
+<style>
+/* Layout: luz difusa que se mueve detrás, todo lo demás quieto y con aire. La pieza propia es la curva de cada activo alrededor del minuto del dato. */
+:root{
+  --bg:#070B0A;--ink:#F1F6F3;--muted:#94A69E;--line:rgba(210,240,226,.1);--glass:rgba(17,26,22,.55);--glass2:rgba(28,41,35,.6);
+  --mint:#5FD0A0;--aqua:#5CC6D6;--amber:#EBB24A;--up:#5FD0A0;--down:#F08A7B;
+  --f:'Geist',ui-sans-serif,system-ui,-apple-system,sans-serif;--m:'Geist Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
+  --ease:cubic-bezier(.2,.8,.2,1);color-scheme:dark;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{background:var(--bg)}
+body{margin:0;color:var(--ink);font:400 16px/1.6 var(--f);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+h1,h2,h3,p,ul,ol,dl,dd{margin:0}
+h1,h2,h3{text-wrap:balance;font-weight:600;letter-spacing:-.028em}
+h1{font-size:clamp(34px,6.2vw,68px);line-height:1.02;letter-spacing:-.042em;font-weight:600}
+h2{font-size:clamp(22px,2.6vw,28px);line-height:1.15}
+h3{font-size:17px;line-height:1.3;letter-spacing:-.015em}
+a{color:var(--mint)}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:2px solid var(--mint);outline-offset:3px}
+.wrap{max-width:1180px;margin-inline:auto;padding-left:max(20px,env(safe-area-inset-left,0px));padding-right:max(20px,env(safe-area-inset-right,0px))}
+.muted{color:var(--muted)}.small{font-size:14px}
+.num{font-family:var(--m);font-variant-numeric:tabular-nums;white-space:nowrap;letter-spacing:-.02em}
+.grad{background:linear-gradient(100deg,var(--ink) 35%,var(--mint) 78%,var(--aqua));-webkit-background-clip:text;background-clip:text;color:transparent}
+.up{color:var(--up)}.down{color:var(--down)}
+
+/* luz de fondo */
+.aura{position:fixed;inset:0;z-index:-1;overflow:hidden;background:var(--bg)}
+.aura i{position:absolute;width:min(78vw,900px);aspect-ratio:1;border-radius:50%;will-change:transform}
+.aura i:nth-child(1){left:-18%;top:-34%;background:radial-gradient(closest-side,rgba(60,180,130,.36),transparent);animation:d1 26s ease-in-out infinite alternate}
+.aura i:nth-child(2){right:-22%;top:-18%;background:radial-gradient(closest-side,rgba(58,150,178,.3),transparent);animation:d2 32s ease-in-out infinite alternate}
+.aura i:nth-child(3){left:24%;bottom:-58%;background:radial-gradient(closest-side,rgba(212,150,52,.17),transparent);animation:d3 38s ease-in-out infinite alternate}
+@keyframes d1{to{transform:translate(16vw,12vh) scale(1.15)}}
+@keyframes d2{to{transform:translate(-14vw,16vh) scale(.9)}}
+@keyframes d3{to{transform:translate(-18vw,-14vh) scale(1.2)}}
+
+.top{position:sticky;top:0;z-index:5;background:rgba(7,11,10,.58);-webkit-backdrop-filter:blur(22px) saturate(1.4);backdrop-filter:blur(22px) saturate(1.4);border-bottom:1px solid var(--line);padding-top:env(safe-area-inset-top,0px)}
+.top .wrap{display:flex;flex-wrap:wrap;align-items:center;gap:4px 22px;padding-block:10px}
+.brand{font-weight:600;font-size:17px;letter-spacing:-.03em}
+.brand span{color:var(--mint)}
+.clock{margin-left:auto;font-size:13px;color:var(--muted)}
+.join{text-decoration:none;font-size:14.5px;font-weight:500;color:#06110C;background:linear-gradient(110deg,var(--mint),var(--aqua));border-radius:999px;padding:7px 16px;transition:transform .3s var(--ease)}
+.join:hover{transform:translateY(-1px)}
+.tabs{position:relative;display:flex;overflow-x:auto;scrollbar-width:none;max-width:100%}
+.tabs::-webkit-scrollbar{display:none}
+.tabs a{position:relative;flex:none;text-decoration:none;color:var(--muted);font-size:14.5px;padding:8px 13px;transition:color .25s}
+.tabs a:focus-visible{outline-offset:-4px;border-radius:999px}
+.tabs a:hover,.tabs a[aria-current]{color:var(--ink)}
+.pill{position:absolute;top:2px;bottom:2px;left:0;width:0;border-radius:999px;background:linear-gradient(120deg,rgba(95,208,160,.26),rgba(92,198,214,.16));box-shadow:inset 0 0 0 1px rgba(95,208,160,.3);transition:transform .5s var(--ease),width .5s var(--ease)}
+.tape{border-bottom:1px solid var(--line);min-height:46px}
+
+main{padding-block:clamp(30px,6vw,68px) 70px}
+.view{display:grid;gap:clamp(44px,6vw,76px)}
+.view>*,.cols>*,.stack>*{min-width:0}
+.hero{display:grid;gap:22px;max-width:900px}
+.lead{font-size:clamp(17px,1.9vw,20px);line-height:1.5;color:var(--muted);max-width:60ch}
+.stamp{display:inline-flex;align-items:center;gap:10px;font:500 13px/1.4 var(--m);color:var(--muted)}
+.stamp::before{content:"";flex:none;width:8px;height:8px;border-radius:50%;background:var(--mint);animation:late 2.4s ease-out infinite}
+@keyframes late{0%{box-shadow:0 0 0 0 rgba(95,208,160,.55)}80%,100%{box-shadow:0 0 0 12px rgba(95,208,160,0)}}
+.stamp span{color:var(--mint);white-space:nowrap}
+.warn{border-radius:14px;padding:13px 17px;font-size:14.5px;background:rgba(235,178,74,.1);box-shadow:inset 0 0 0 1px rgba(235,178,74,.4)}
+.cols{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:clamp(34px,5vw,68px);align-items:start}
+.stack{display:grid;gap:clamp(40px,5vw,60px)}
+section{display:grid;gap:18px}
+.glass{background:linear-gradient(160deg,var(--glass2),var(--glass));-webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px);border:1px solid var(--line);border-radius:22px;padding:26px}
+.count{font:500 clamp(36px,5vw,50px)/1 var(--m);font-variant-numeric:tabular-nums;letter-spacing:-.06em;background:linear-gradient(100deg,var(--amber),#F6D79A);-webkit-background-clip:text;background-clip:text;color:transparent}
+#prox{display:grid;gap:13px}
+
+.thermo{display:grid;gap:24px}
+.scale{display:flex;justify-content:space-between;font-size:13px;color:var(--muted)}
+.factor{display:grid;gap:9px}
+.factor header{display:flex;flex-wrap:wrap;justify-content:space-between;gap:2px 14px}
+.rail{position:relative;height:6px;border-radius:6px;background:linear-gradient(90deg,var(--aqua),rgba(210,240,226,.1) 50%,var(--amber))}
+.rail i{position:absolute;top:50%;width:16px;height:16px;border-radius:50%;background:var(--ink);transform:translate(-50%,-50%);box-shadow:0 0 0 5px rgba(7,11,10,.75),0 0 26px rgba(241,246,243,.5)}
+.ideas{display:grid;gap:20px}
+.ideas>div{border-top:1px solid var(--line);padding-top:18px;display:grid;gap:5px}
+.scroll{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:15px}
+th{font-weight:400;font-size:13px;color:var(--muted);text-align:right;padding:8px 0 8px 12px;border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:13px 0 13px 12px;border-bottom:1px solid var(--line);text-align:right;vertical-align:baseline}
+th:first-child,td:first-child{text-align:left;padding-left:0}
+td small{display:block;color:var(--muted);font-size:13px}
+.chip{display:inline-block;font-size:13px;line-height:1.5;border-radius:999px;padding:2px 10px;white-space:nowrap;box-shadow:inset 0 0 0 1px var(--line);color:var(--muted)}
+.chip.mayor{color:var(--amber);box-shadow:inset 0 0 0 1px rgba(235,178,74,.45)}
+.chip.ok{color:var(--mint);box-shadow:inset 0 0 0 1px rgba(95,208,160,.45)}
+.chip.menor{color:var(--aqua);box-shadow:inset 0 0 0 1px rgba(92,198,214,.45)}
+.agenda{display:grid;padding:0}
+.agenda>li{list-style:none;display:grid;grid-template-columns:92px minmax(0,1fr);gap:12px;padding:13px 0;border-top:1px solid var(--line);font-size:15px}
+.agenda .num{font-size:13px;line-height:1.85;color:var(--amber)}
+.agenda .past{opacity:.6}
+.btns{display:flex;flex-wrap:wrap;gap:10px}
+.btn{border:0;background:rgba(210,240,226,.07);box-shadow:inset 0 0 0 1px var(--line);border-radius:999px;padding:11px 19px;font-size:14.5px;font-weight:500;text-decoration:none;color:var(--ink);transition:transform .3s var(--ease),background .3s}
+.btn:hover{transform:translateY(-2px);background:rgba(210,240,226,.12)}
+.btn.main{background:linear-gradient(110deg,var(--mint),var(--aqua));color:#06110C;box-shadow:0 10px 34px -12px rgba(95,208,160,.7)}
+
+/* activos */
+.filters{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;padding-block:2px}
+.filters button{flex:none;border:0;border-radius:999px;background:transparent;box-shadow:inset 0 0 0 1px var(--line);padding:8px 15px;font-size:14.5px;color:var(--muted);transition:color .25s,background .25s}
+.filters button:hover{color:var(--ink)}
+.filters button[aria-pressed=true]{color:#06110C;background:linear-gradient(110deg,var(--mint),var(--aqua));font-weight:500}
+.rank{display:grid;gap:11px}
+.rank>button{display:grid;grid-template-columns:128px minmax(0,1fr) 74px;gap:14px;align-items:center;background:none;border:0;padding:3px 0;text-align:left;font-size:15px}
+.rank .tr{position:relative;height:10px}
+.rank .tr::before{content:"";position:absolute;left:50%;top:-6px;bottom:-6px;width:1px;background:var(--line)}
+.rank .tr i{position:absolute;top:0;bottom:0;border-radius:10px;transition:filter .3s}
+.rank .tr .u{left:50%;transform-origin:left;background:linear-gradient(90deg,rgba(95,208,160,.25),var(--up))}
+.rank .tr .d{right:50%;transform-origin:right;background:linear-gradient(270deg,rgba(240,138,123,.25),var(--down))}
+.rank>button:hover i{filter:brightness(1.25)}
+.rank .num{text-align:right;font-size:14px}
+.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.card{position:relative;overflow:hidden;display:grid;gap:14px;align-content:start;text-align:left;width:100%;transition:transform .5s var(--ease),border-color .4s}
+.card::before{content:"";position:absolute;inset:0;background:radial-gradient(340px circle at var(--x,50%) var(--y,0%),rgba(95,208,160,.17),transparent 70%);opacity:0;transition:opacity .45s;pointer-events:none}
+.card>*{position:relative}
+.card:hover{transform:translateY(-5px);border-color:rgba(95,208,160,.35)}
+.card:hover::before{opacity:1}
+.vivo{min-height:190px;margin-inline:-10px;overflow:hidden;border-radius:14px}
+.vivo.sin{margin-inline:0;display:grid;gap:12px;align-content:center}
+.vivo .tradingview-widget-container,.vivo iframe{height:190px!important}
+.pie{display:grid;gap:10px;border-top:1px solid var(--line);padding-top:14px;min-height:84px;align-content:start}
+.pie b{font-size:21px;font-weight:500;letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+.pie .hd{align-items:center!important}
+.btn.mini{padding:6px 14px;font-size:13.5px}
+.card>.hd h3,.card>.hd span{white-space:nowrap}
+.card .hd{display:flex;justify-content:space-between;gap:10px;align-items:baseline}
+.big{font:500 32px/1 var(--f);letter-spacing:-.04em;font-variant-numeric:tabular-nums}
+.spark{display:block;width:100%;height:78px;overflow:visible}
+.spark .ln{fill:none;stroke-width:2;stroke-linejoin:round;stroke-linecap:round;vector-effect:non-scaling-stroke}
+.spark .ev{stroke:var(--amber);stroke-width:1;stroke-dasharray:3 4;vector-effect:non-scaling-stroke}
+.spark .ze{stroke:var(--line);stroke-width:1;vector-effect:non-scaling-stroke}
+.axis{position:relative;min-height:18px;display:flex;justify-content:space-between;font:400 12px var(--m);color:var(--muted);margin-top:-6px}
+.axis .dt{position:absolute;transform:translateX(-50%);color:var(--amber)}
+dialog{width:min(760px,calc(100vw - 28px));max-height:min(88vh,900px);overflow:auto;border:1px solid var(--line);border-radius:26px;padding:28px;color:var(--ink);background:rgba(13,20,17,.86);-webkit-backdrop-filter:blur(30px) saturate(1.3);backdrop-filter:blur(30px) saturate(1.3)}
+dialog::backdrop{background:rgba(4,7,6,.6);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
+.dlg{display:grid;gap:20px}
+.dlg .hd{display:flex;justify-content:space-between;gap:14px;align-items:start}
+.facts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.facts dt{font-size:13px;color:var(--muted)}
+.facts dd{font:500 21px/1.3 var(--f);letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+.dia{border-top:1px solid var(--line);padding-bottom:18px}
+.dia .row{border-top:0!important}
+.dia .stamp{margin:0 0 12px 4px}
+.nov{margin:0 0 0 4px}
+.days button{display:grid;width:100%;grid-template-columns:130px minmax(0,1fr);gap:14px;text-align:left;background:none;border:0;border-top:1px solid var(--line);padding:20px 4px;transition:padding .4s var(--ease)}
+.days button.row:hover{padding-left:14px}
+.days .btns button{display:inline-block;width:auto;padding:11px 19px;border-radius:999px;background:rgba(210,240,226,.07)}
+.gloss{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:26px 44px}
+.gloss dt{font-weight:500}.gloss dd{color:var(--muted)}
+ol.q{padding-left:22px;display:grid;gap:9px}
+.tv{min-height:120px;border-radius:18px;overflow:hidden}
+.tradingview-widget-container{color-scheme:light}
+.tv-credit{font-size:12.5px;color:var(--muted);padding-block:4px}
+footer{border-top:1px solid var(--line);padding-block:24px 44px;font-size:13.5px;color:var(--muted)}
+footer .wrap{display:grid;gap:8px}
+
+/* sumate */
+.cta{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px 28px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding-block:24px}
+.cta h3{font-size:19px}
+.door{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:18px 30px}
+.door>div{display:grid;gap:6px;max-width:56ch}
+.form{display:grid;gap:18px}
+.fld{display:grid;gap:7px;border:0;padding:0;margin:0;min-width:0}
+.fld label,.fld legend{font-size:14.5px;font-weight:500;padding:0;margin-bottom:0}
+.fld legend{margin-bottom:7px}
+.form input:not([type=checkbox]):not([type=radio]),.form textarea{width:100%;font:inherit;font-size:16px;color:var(--ink);background:rgba(7,11,10,.5);border:1px solid rgba(210,240,226,.2);border-radius:13px;padding:12px 14px;transition:border-color .25s,box-shadow .25s;resize:vertical}
+.form input::placeholder{color:#7C8E86}
+.form input:not([type=checkbox]):not([type=radio]):focus,.form textarea:focus{outline:none;border-color:var(--mint);box-shadow:0 0 0 4px rgba(95,208,160,.16)}
+.form [aria-invalid=true]{border-color:var(--down)!important}
+.opts{display:flex;flex-wrap:wrap;gap:8px}
+.opts label{position:relative;font-size:14.5px;font-weight:400;border-radius:999px;padding:8px 15px;box-shadow:inset 0 0 0 1px rgba(210,240,226,.2);cursor:pointer;transition:background .25s,color .25s}
+.opts input{position:absolute;inset:0;opacity:0;margin:0;cursor:pointer}
+.opts label:has(:checked){background:linear-gradient(110deg,var(--mint),var(--aqua));color:#06110C;font-weight:500;box-shadow:none}
+.opts label:has(:focus-visible){outline:2px solid var(--mint);outline-offset:3px}
+.chk{display:grid;grid-template-columns:20px minmax(0,1fr);gap:11px;font-size:14px;line-height:1.5;color:var(--muted);cursor:pointer}
+.chk input{width:18px;height:18px;margin:2px 0 0;accent-color:var(--mint)}
+.err{color:var(--down);font-size:14.5px}
+.trap{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+.btn:disabled{opacity:.6;cursor:default;transform:none}
+.done{display:grid;gap:12px}
+
+/* movimiento: entra una vez, siempre termina visible */
+@media (prefers-reduced-motion:no-preference){
+  .in .hero>*{animation:rise .9s var(--ease) backwards}
+  .in .hero>:nth-child(2){animation-delay:.08s}.in .hero>:nth-child(3){animation-delay:.16s}.in .hero>:nth-child(n+4){animation-delay:.24s}
+  .in .grad{animation:rise .9s var(--ease) .08s backwards,sheen 2.2s ease-out .3s backwards;background-size:200% 100%}
+  .in .rail i{animation:slide 1.3s var(--ease) .35s backwards}
+  .in .tr i{animation:grow 1.1s var(--ease) backwards;animation-delay:calc(var(--i,0)*45ms)}
+  .in .card{animation:rcard .7s var(--ease) backwards;animation-delay:calc(var(--i,0)*40ms)}
+  .in .spark .ln{stroke-dasharray:1;animation:draw 1.7s ease-out backwards;animation-delay:calc(var(--i,0)*40ms + .25s)}
+  .in .spark .ar{animation:fade 1.2s ease-out 1.1s backwards}
+  dialog[open]{animation:pop .5s var(--ease)}
+  @supports (animation-timeline:view()){.in .stack>section{animation:rise2 linear both;animation-timeline:view();animation-range:entry 0% entry 35%}}
+}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+@keyframes rise{from{opacity:0;transform:translateY(26px);filter:blur(12px)}}
+@keyframes rcard{from{opacity:.4;transform:translateY(16px)}}
+@keyframes rise2{from{opacity:.25;transform:translateY(30px)}}
+@keyframes sheen{from{background-position:100% 0}}
+@keyframes slide{from{left:50%;opacity:0}}
+@keyframes grow{from{transform:scaleX(0)}}
+@keyframes draw{from{stroke-dashoffset:1}to{stroke-dashoffset:0}}
+@keyframes fade{from{opacity:0}}
+@keyframes pop{from{opacity:0;transform:translateY(24px) scale(.97);filter:blur(10px)}}
+@media (max-width:980px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:860px){.cols{grid-template-columns:minmax(0,1fr)}.gloss{grid-template-columns:minmax(0,1fr)}}
+@media (max-width:620px){.grid{grid-template-columns:minmax(0,1fr)}.clock{display:none}.join{margin-left:auto}.tabs{order:2;width:100%}table{font-size:14px}th,td{padding-left:8px}.cta .btn,.door .btn{width:100%;text-align:center}.days button{grid-template-columns:minmax(0,1fr);gap:2px}.agenda>li{grid-template-columns:78px minmax(0,1fr)}.rank>button{grid-template-columns:92px minmax(0,1fr) 62px;gap:10px;font-size:14px}.facts{grid-template-columns:minmax(0,1fr);gap:10px}.glass{padding:22px}.tabs a{padding-inline:11px}}
+</style>
+</head>
+<body>
+<div class="aura" aria-hidden="true"><i></i><i></i><i></i></div>
+<div class="top"><div class="wrap">
+  <div class="brand">Valenttiel <span>Macro</span></div>
+  <nav class="tabs" aria-label="Secciones"><span class="pill" id="pill"></span>
+    <a href="#hoy">Hoy</a><a href="#activos">Activos</a><a href="#en-vivo">En vivo</a><a href="#historial">Historial</a><a href="#aprender">Aprender</a>
+  </nav>
+  <div class="clock num" id="clock"></div>
+  <a class="join" href="#sumate">Sumate</a>
+</div></div>
+<div class="tape" id="tape"></div>
+
+<main class="wrap">
+  <div class="view" id="v-hoy"><p class="muted">Cargando el resumen…</p></div>
+  <div class="view" id="v-activos" hidden></div>
+  <div class="view" id="v-en-vivo" hidden>
+    <div class="hero"><h1 class="grad">En vivo</h1><p class="lead">Cada dato de EE.UU. cuando se publica. El resumen explicado llega después, en la pestaña Hoy.</p></div>
+    <section><h2>Calendario económico</h2><div class="tv" id="tv-cal"></div></section>
+    <section><h2>Nasdaq 100</h2><div class="tv" id="tv-chart"></div></section>
+  </div>
+  <div class="view" id="v-historial" hidden>
+    <div class="hero"><h1 class="grad">Historial</h1><p class="lead">Cada actualización queda registrada con su hora. Tocá un día para repasar cómo se leyó.</p></div>
+    <div class="days" id="days"></div>
+  </div>
+  <div class="view" id="v-aprender" hidden>
+    <div class="hero"><h1 class="grad">Cómo leer un dato</h1><p class="lead">Pensá en la Fed como alguien que maneja un auto. Si la economía va rápido y los precios suben, pisa el freno y sube las tasas. Si se enfría, afloja. Cada dato le dice a qué velocidad va.</p></div>
+    <section class="glass"><h2>Tres preguntas antes de operar</h2><ol class="q"><li>¿Salió distinto a lo esperado?</li><li>¿Cambia lo que va a hacer la Fed?</li><li>¿El precio confirma esa lectura?</li></ol><p class="muted">Si no podés responder las tres, no hay apuro. Mirar también es operar bien.</p></section>
+    <section><h2>Reaccionó después no es reaccionó por</h2><p class="lead">La pestaña Activos mide qué hizo el precio después del dato. A la misma hora pueden pesar otras noticias, así que la medida muestra coincidencia en el tiempo y no prueba la causa.</p></section>
+    <section><h2>De dónde salen los datos</h2><div class="ideas">
+      <div><h3>Datos económicos</h3><p class="muted">Se confirman en la fuente oficial (BEA, BLS, Censo, Fed, Tesoro) o en dos fuentes independientes antes de publicarse.</p></div>
+      <div><h3>Precios en vivo</h3><p class="muted">TradingView. Las acciones pueden tener demora.</p></div>
+      <div><h3>Reacción de Bitcoin, Ethereum, EUR/USD y oro</h3><p class="muted">Se calcula con los precios públicos de Kraken, Coinbase y Binance, según el activo; el oro, con el token PAXG. Si no coinciden, no se publica.</p></div>
+      <div><h3>Reacción de índices, acciones, petróleo y dólar</h3><p class="muted">No se publica hasta contar con una fuente con licencia.</p></div>
+      <div><h3>Tasa a 10 años</h3><p class="muted">Departamento del Tesoro de EE.UU., dato oficial diario.</p></div>
+    </div></section>
+    <section><h2>No operes el color</h2><p class="lead">El color de un calendario suele leerse como bueno o malo para el dólar. Para el Nasdaq puede ser al revés: más inflación refuerza las subas de tasas.</p></section>
+    <div class="cta-slot" data-origen="macro-aprender"></div>
+    <section><h2>Glosario</h2><dl class="gloss">
+      <div><dt>PCE subyacente</dt><dd>Inflación del consumo sin alimentos ni energía. La Fed la sigue de cerca.</dd></div>
+      <div><dt>IPC (CPI)</dt><dd>Otra medida de inflación: cuánto cambia el precio de una canasta de bienes y servicios.</dd></div>
+      <div><dt>PIB</dt><dd>Todo lo que produce la economía. Se publica con retraso, así que mira hacia atrás.</dd></div>
+      <div><dt>NFP</dt><dd>Empleos creados en el mes, sin contar el campo. Suele mover mucho al mercado.</dd></div>
+      <div><dt>Subsidios nuevos</dt><dd>Personas que piden el seguro de desempleo por primera vez. Menos pedidos, empleo más firme.</dd></div>
+      <div><dt>Consumo real</dt><dd>Lo que gasta la gente descontando la suba de precios.</dd></div>
+      <div><dt>FOMC</dt><dd>El comité de la Fed que decide la tasa.</dd></div>
+      <div><dt>Libro Beige</dt><dd>Informe de la Fed que cuenta cómo está la economía en cada región.</dd></div>
+      <div><dt>Subasta del Tesoro</dt><dd>EE.UU. vende deuda. Si hay poca demanda, los rendimientos suelen subir.</dd></div>
+      <div><dt>Punto básico (pb)</dt><dd>Una centésima de punto porcentual. De 4,80% a 4,85% son 5 pb.</dd></div>
+      <div><dt>Descontado</dt><dd>Que el mercado ya lo esperaba y lo puso en el precio.</dd></div>
+      <div><dt>Movimiento habitual</dt><dd>Cuánto suele moverse un activo en media hora, a esa misma hora, en el último mes.</dd></div>
+    </dl></section>
+  </div>
+  <div class="view" id="v-sumate" hidden>
+    <div class="hero"><h1 class="grad">Aprendé a leer el mercado</h1><p class="lead">Acá ves qué pasó y cómo reaccionó cada activo. Si querés llegar a esa lectura por tu cuenta, dejanos tus datos y te contamos cómo seguir.</p></div>
+    <div class="cols">
+      <section>
+        <h2>Qué vas a trabajar</h2>
+        <div class="ideas">
+          <div><h3>Leer el dato antes que el titular</h3><p class="muted">Comparar lo que salió con lo que se esperaba, y separar lo importante del ruido.</p></div>
+          <div><h3>Entender qué cambia para la Fed</h3><p class="muted">Seguir el hilo que une inflación, empleo, crecimiento y tasas.</p></div>
+          <div><h3>Mirar el precio con contexto</h3><p class="muted">Reconocer si un activo se movió más de lo normal, y qué venía haciendo antes.</p></div>
+        </div>
+        <p class="muted small">Operar implica riesgo de pérdida. Ningún curso ni mentoría garantiza resultados.</p>
+      </section>
+      <form class="glass form" id="f-sumate" novalidate>
+        <h2>Quiero aprender</h2>
+        <div class="fld"><label for="s-nombre">Nombre</label><input id="s-nombre" name="nombre" autocomplete="name" maxlength="120" required></div>
+        <div class="fld"><label for="s-contacto">WhatsApp con código de país, o Instagram</label><input id="s-contacto" name="contacto" maxlength="120" placeholder="+54 9 11… o @usuario" required></div>
+        <fieldset class="fld"><legend>¿Cuánta experiencia tenés?</legend><div class="opts" id="s-exp"></div></fieldset>
+        <div class="fld"><label for="s-cuesta">¿Qué te cuesta más? <span class="muted">(opcional)</span></label><textarea id="s-cuesta" name="que_le_cuesta" rows="3" maxlength="600"></textarea></div>
+        <div class="trap" aria-hidden="true"><label for="s-web">Sitio web</label><input id="s-web" name="sitio_web" tabindex="-1" autocomplete="off"></div>
+        <label class="chk" for="s-acepto"><input id="s-acepto" name="acepto" type="checkbox"><span>Tengo 18 años o más y acepto que Valenttiel guarde estos datos para contactarme sobre su formación. Puedo pedir que los borren cuando quiera.</span></label>
+        <p class="err" id="s-err" role="alert" hidden></p>
+        <button class="btn main" id="s-btn" type="submit">Quiero que me contacten</button>
+      </form>
+    </div>
+    <section class="glass door"><div><h2>¿Ya querés aplicar a la mentoría?</h2><p class="muted">Es para traders de la sesión de Nueva York. La aplicación es más completa y ayuda a ver si es para vos.</p></div><a class="btn" href="https://leads-vbm4.vercel.app/aplicar?origen=macro-sumate" target="_blank" rel="noopener">Completar la aplicación</a></section>
+  </div>
+</main>
+<dialog id="dlg" aria-labelledby="dlg-t"></dialog>
+<footer><div class="wrap">
+  <p>Contenido educativo. No es asesoramiento financiero ni una recomendación de compra o venta.</p>
+  <p>Precios y calendario en vivo de TradingView. La fuente de cada dato está en la pestaña Aprender. Pueden tener demora.</p>
+</div></footer>
+
+<script>
+'use strict';
+const TZ='America/Argentina/Buenos_Aires',$=id=>document.getElementById(id),CALMA=matchMedia('(prefers-reduced-motion:reduce)');
+const fmt=(d,o)=>new Intl.DateTimeFormat('es-AR',{timeZone:TZ,...o}).format(d);
+const hora=d=>fmt(d,{hour:'2-digit',minute:'2-digit',hour12:false});
+const isoDia=d=>new Intl.DateTimeFormat('en-CA',{timeZone:TZ,year:'numeric',month:'2-digit',day:'2-digit'}).format(d);
+const diaLargo=s=>{const t=fmt(new Date(s+'T12:00:00-03:00'),{weekday:'long',day:'numeric',month:'long'});return t[0].toUpperCase()+t.slice(1);};
+const signo=(x,u,dec=2)=>(x>0?'+':x<0?'−':'')+Math.abs(x).toLocaleString('es-AR',{minimumFractionDigits:dec,maximumFractionDigits:dec})+(u==='pb'?' pb':'%');
+function el(t,p,...k){const n=document.createElement(t);for(const a in p||{}){if(a==='class')n.className=p[a];else if(a==='text')n.textContent=p[a];else if(a==='style')n.style.cssText=p[a];else if(a.startsWith('on'))n.addEventListener(a.slice(2),p[a]);else n.setAttribute(a,p[a]);}for(const c of k.flat())if(c!=null&&c!==false)n.append(c);return n;}
+const sec=(t,...k)=>el('section',{},el('h2',{text:t}),...k);
+let idx=null,hoy=null,visto='',grupo='Todos';
+
+/* ---------- activos ---------- */
+const A={
+ nasdaq:['Nasdaq 100','Índices','FOREXCOM:NSXUSD','Muy sensible a las tasas: buena parte del valor de las tecnológicas está en ganancias futuras, que valen menos cuando la tasa sube.'],
+ sp500:['S&P 500','Índices','FOREXCOM:SPXUSD','Reúne 500 grandes empresas. Un dato fuerte puede ayudar a las ganancias y, a la vez, pesar si trae tasas más altas.'],
+ dow:['Dow Jones','Índices','FOREXCOM:DJI','Más industrial y financiero que el Nasdaq, por eso suele moverse menos con las tasas.'],
+ oro:['Oro','Materias primas','OANDA:XAUUSD','No paga interés. Tasas reales y dólar más altos suelen pesarle; el miedo suele ayudarlo.'],
+ petroleo:['Petróleo WTI','Materias primas','TVC:USOIL','Responde más a oferta, inventarios y geopolítica. El crecimiento influye por la demanda de energía.'],
+ dolar:['Dólar DXY','Dólar y tasas','CAPITALCOM:DXY','Suele fortalecerse cuando el mercado espera una Fed más dura que otros bancos centrales.'],
+ eurusd:['EUR/USD','Dólar y tasas','FX:EURUSD','Se mueve al revés del dólar: si el dólar sube, el par suele bajar.'],
+ tasa10:['Tasa a 10 años','Dólar y tasas','','Es el rendimiento del bono del Tesoro. Suele subir con más inflación o crecimiento, y bajar cuando se busca refugio.'],
+ bitcoin:['Bitcoin','Cripto','BITSTAMP:BTCUSD','Suele comportarse como activo de riesgo: le pesan las tasas altas y la aversión al riesgo.'],
+ ethereum:['Ethereum','Cripto','BITSTAMP:ETHUSD','Suele acompañar a Bitcoin, muchas veces con movimientos más amplios.'],
+ apple:['Apple','Acciones','NASDAQ:AAPL','Depende del consumo. Su caja y su tamaño suelen hacerla más defensiva que otras tecnológicas.'],
+ microsoft:['Microsoft','Acciones','NASDAQ:MSFT','Ingresos estables por software y nube. Sensible a las tasas y al gasto en IA.'],
+ nvidia:['Nvidia','Acciones','NASDAQ:NVDA','La mueve sobre todo la inversión en IA. Un dato macro suele pesar menos que una noticia del sector.'],
+ amazon:['Amazon','Acciones','NASDAQ:AMZN','Combina consumo y nube, así que mira el gasto de la gente y el de las empresas.'],
+ alphabet:['Alphabet','Acciones','NASDAQ:GOOGL','Vive en gran parte de la publicidad, que sigue el ciclo de la economía.'],
+ meta:['Meta','Acciones','NASDAQ:META','Publicidad e inversión en IA. Sensible al crecimiento y al costo del dinero.'],
+ tesla:['Tesla','Acciones','NASDAQ:TSLA','Muchos autos se compran a crédito, así que la tasa pesa en la demanda. Es muy volátil.']};
+const GRUPOS=['Todos','Índices','Materias primas','Dólar y tasas','Cripto','Acciones'];
+const veces=r=>r.normal30>0?r.r30/r.normal30:0;
+function fuerza(r){const v=Math.abs(veces(r));return v>=2?['Movimiento fuerte','mayor']:v>=1.2?['Más que lo habitual','mayor']:['Dentro de lo habitual',''];}
+function medidas(d){return((d&&d.reaccion&&d.reaccion.activos)||[]).filter(r=>Object.prototype.hasOwnProperty.call(A,r.id)&&Number.isFinite(r.r30)&&Number.isFinite(r.normal30)&&Array.isArray(r.serie));}
+const clase=x=>x>0?'up':x<0?'down':'';
+function svg(t,p){const n=document.createElementNS('http://www.w3.org/2000/svg',t);for(const a in p)n.setAttribute(a,p[a]);return n;}
+let gid=0;
+function curva(r,alto=78){
+  const s=r.serie.filter(p=>Number.isFinite(p[0])&&Number.isFinite(p[1]));if(s.length<3)return el('div',{});
+  const W=300,H=alto,x0=s[0][0],x1=s[s.length-1][0],ys=s.map(p=>p[1]).concat(0);let a=Math.min(...ys),b=Math.max(...ys);if(b-a<1e-6){a-=.1;b+=.1;}
+  const X=v=>(v-x0)/(x1-x0)*W,Y=v=>H-5-(v-a)/(b-a)*(H-10),id='g'+(++gid),col=r.r30>=0?'var(--up)':'var(--down)';
+  const ln='M'+s.map(p=>X(p[0]).toFixed(1)+' '+Y(p[1]).toFixed(1)).join('L');
+  const g=svg('svg',{class:'spark',viewBox:`0 0 ${W} ${H}`,preserveAspectRatio:'none',role:'img','aria-label':'Precio alrededor del dato. En 30 minutos: '+signo(r.r30,r.unidad)});g.style.height=alto+'px';
+  const gr=svg('linearGradient',{id,x1:0,y1:0,x2:0,y2:1}),s1=svg('stop',{offset:'0','stop-opacity':.36}),s2=svg('stop',{offset:'1','stop-opacity':0});s1.style.stopColor=s2.style.stopColor=col;gr.append(s1,s2);
+  const df=svg('defs',{});df.append(gr);
+  const l=svg('path',{class:'ln',d:ln,pathLength:1});l.style.stroke=col;
+  g.append(df,svg('path',{class:'ar',d:ln+`L${W} ${H}L0 ${H}Z`,fill:`url(#${id})`}),svg('line',{class:'ze',x1:0,x2:W,y1:Y(0),y2:Y(0)}),svg('line',{class:'ev',x1:X(0),x2:X(0),y1:0,y2:H}),l);
+  return g;
+}
+function eje(d,r){const t=new Date(d.reaccion.cuando).getTime(),s=r.serie;const x0=s[0][0],x1=s[s.length-1][0],k=x1>x0?-x0/(x1-x0)*100:50;return el('div',{class:'axis'},el('span',{text:k>24?hora(new Date(t+x0*6e4)):''}),el('span',{class:'dt',style:'left:'+Math.max(8,Math.min(92,k))+'%',text:hora(new Date(t))}),el('span',{text:k<76?hora(new Date(t+x1*6e4)):''}));}
+function frase(r){const v=Math.abs(veces(r)),n=A[r.id][0],u=r.unidad,q=Math.abs(r.r30)<.005?'casi no se movió':(r.r30>0?'subió ':'bajó ')+signo(Math.abs(r.r30),u).replace('+','');
+  return `${n} ${q} en los 30 minutos posteriores. Lo habitual a esa hora es ${signo(r.normal30,u).replace('+','')}, así que fue ${v.toLocaleString('es-AR',{maximumFractionDigits:1})} veces su movimiento normal.`;}
+function contar(n,v,u){if(CALMA.matches){n.textContent=signo(v,u);return;}const t0=performance.now();(function f(t){const k=Math.min(1,(t-t0)/1100),e=1-Math.pow(1-k,4);n.textContent=signo(k<1?v*e:v,u);if(k<1)requestAnimationFrame(f);})(t0);}
+function cta(origen,titulo,texto){return el('div',{class:'cta'},el('div',{},el('h3',{text:titulo}),el('p',{class:'muted small',text:texto})),el('a',{class:'btn main',href:'#sumate',text:'Quiero aprender',onclick:()=>{sOrigen=origen;if($('dlg').open)$('dlg').close();}}));}
+function abrir(d,r,id){
+  const a=A[r?r.id:id],D=$('dlg'),box=el('div',{class:'tv'});
+  D.replaceChildren(el('div',{class:'dlg'},
+    el('div',{class:'hd'},el('div',{},el('p',{class:'muted small',text:a[1]}),el('h2',{id:'dlg-t',text:a[0]})),el('button',{class:'btn',type:'button',text:'Cerrar',onclick:()=>D.close()})),
+    ...(r?[el('dl',{class:'facts'},el('div',{},el('dt',{text:'30 min después'}),el('dd',{class:clase(r.r30),text:signo(r.r30,r.unidad)})),el('div',{},el('dt',{text:'2 horas antes'}),el('dd',{class:clase(r.antes||0),text:Number.isFinite(r.antes)?signo(r.antes,r.unidad):'s/d'})),el('div',{},el('dt',{text:'Habitual en 30 min'}),el('dd',{text:signo(r.normal30,r.unidad).replace('+','±')}))),
+    el('div',{},curva(r,130),eje(d,r)),el('p',{text:frase(r)}),el('p',{class:'small'},el('span',{class:'chip'+(r.fuentes>=2?' ok':''),text:r.fuentes>=2?'Verificado en '+r.fuentes+' bolsas':'Una sola fuente'}),' ',el('span',{class:'muted',text:'Fuente: '+(typeof r.fuente==='string'?r.fuente:'sin identificar')}))]:[el('p',{class:'muted',text:id==='tasa10'?'Es un dato oficial diario del Tesoro: no se mide minuto a minuto.':'Todavía no hay una fuente verificada para medir la reacción de este activo al dato. Abajo está su precio en vivo.'})]),
+    el('div',{},el('h3',{text:'Cómo suele afectarle un dato'}),el('p',{class:'muted',text:a[3]})),
+    r?el('p',{class:'muted small',text:'La medida muestra qué pasó después del dato. No prueba que el dato haya sido la causa.'}):null,a[2]?box:null,cta('macro-activo','¿Querés aprender a leer esto?','Dejanos tus datos y te contamos cómo seguir.')));
+  D.showModal();D.scrollTop=0;
+  if(a[2])tv(box,'mini-symbol-overview',{...base,symbol:a[2],width:'100%',height:210,dateRange:'1D',autosize:false});
+}
+$('dlg').addEventListener('click',e=>{if(e.target===e.currentTarget)e.currentTarget.close();});
+$('dlg').addEventListener('close',()=>{if(!$('dlg').open)$('dlg').replaceChildren();});
+function ranking(d,l){const max=Math.max(1,...l.map(r=>Math.abs(veces(r))));
+  return el('div',{class:'rank'},l.map((r,i)=>{const v=veces(r);return el('button',{type:'button',style:'--i:'+i,onclick:()=>abrir(d,r),'aria-label':frase(r)},el('span',{text:A[r.id][0]}),el('span',{class:'tr'},el('i',{class:v>=0?'u':'d',style:'width:'+(Math.abs(v)/max*50)+'%'})),el('span',{class:'num '+clase(v),text:(v>0?'+':v<0?'−':'')+Math.abs(v).toLocaleString('es-AR',{minimumFractionDigits:1,maximumFractionDigits:1})+'×'}));}));}
+const HORARIO={'Índices':'Domingo a viernes','Materias primas':'Domingo a viernes','Dólar y tasas':'Domingo a viernes','Cripto':'24 horas, siempre','Acciones':'Horario de Nueva York'};
+let vistaA=null;
+function armarActivos(){
+  const v=$('v-activos'),f=el('div',{class:'filters',role:'group','aria-label':'Filtrar activos'}),g=el('div',{class:'grid'}),rank=el('div',{}),sello=el('p',{class:'stamp',text:'Precios en vivo'}),pies={};
+  const ver=new IntersectionObserver(es=>{for(const e of es)if(e.isIntersecting){ver.unobserve(e.target);const id=e.target.dataset.id;tv(e.target,'mini-symbol-overview',{...base,isTransparent:true,symbol:A[id][2],width:'100%',height:190,dateRange:'1D',chartOnly:false,noTimeScale:true});}},{rootMargin:'250px'});
+  let oficial=null;
+  const cards=Object.keys(A).map((id,n)=>{const a=A[id],pie=pies[id]=el('div',{class:'pie'});
+    const vivo=a[2]?el('div',{class:'vivo','data-id':id}):(oficial=el('div',{class:'vivo sin'},el('span',{class:'muted small',text:'Dato oficial diario del Tesoro de EE.UU.'})));
+    if(a[2])ver.observe(vivo);
+    return el('article',{class:'card glass',style:'--i:'+n,'data-g':a[1],onpointermove:e=>{const b=e.currentTarget.getBoundingClientRect();e.currentTarget.style.setProperty('--x',e.clientX-b.left+'px');e.currentTarget.style.setProperty('--y',e.clientY-b.top+'px');}},
+      el('div',{class:'hd'},el('h3',{text:a[0]}),el('span',{class:'muted small',text:id==='tasa10'?'Dato diario':HORARIO[a[1]]})),vivo,pie);});
+  g.append(...cards);
+  const filtrar=()=>{cards.forEach(c=>c.hidden=grupo!=='Todos'&&c.dataset.g!==grupo);[...f.children].forEach(b=>b.setAttribute('aria-pressed',b.textContent===grupo));};
+  f.append(...GRUPOS.map(x=>el('button',{type:'button',text:x,onclick:()=>{grupo=x;filtrar();}})));
+  v.replaceChildren(
+    el('div',{class:'hero'},sello,el('h1',{class:'grad',text:'Los activos, en vivo'}),el('p',{class:'lead',text:'El precio se mueve solo mientras el mercado está abierto. Donde hay una fuente verificada, también ves cuánto cambió en los 30 minutos posteriores al último dato.'})),
+    el('section',{},f,g,el('p',{class:'muted small',text:'Precios en vivo de TradingView. Índices y materias primas se muestran con contratos por diferencia, que pueden diferir un poco de los futuros; las acciones pueden tener demora. Fuera de horario queda el último precio. Si no ves los gráficos, probá desactivar el bloqueador de anuncios.'})),
+    rank);
+  filtrar();vistaA={pies,rank,sello,oficial};
+}
+function activos(d,anima){
+  if(!vistaA)armarActivos();
+  $('v-activos').classList.toggle('in',!!anima);
+  const l=medidas(d),por=Object.fromEntries(l.map(r=>[r.id,r])),t=d.reaccion?new Date(d.reaccion.cuando):null;
+  const of=d.tasa10,fv=vistaA.oficial;
+  if(fv&&of&&FECHA.test(of.fecha)&&Number.isFinite(of.valor))fv.replaceChildren(el('span',{class:'big',text:of.valor.toLocaleString('es-AR',{minimumFractionDigits:2})+'%'}),el('span',{class:'muted small',text:'Dato oficial del Tesoro del '+of.fecha.split('-').reverse().slice(0,2).join('/')+'. Se publica una vez por día hábil.'}));
+  for(const id in vistaA.pies){const r=por[id],p=vistaA.pies[id];
+    if(!r){p.replaceChildren(el('div',{class:'hd'},el('span',{class:'muted small',text:id==='tasa10'?'Dato diario, sin medida por minuto':t&&id in {bitcoin:1,ethereum:1,eurusd:1,oro:1}?'Las bolsas no coincidieron: sin medida':t?'Reacción sin fuente verificada':'Reacción al dato: todavía sin medir'}),el('button',{class:'btn mini',type:'button',text:'Ver detalle','aria-label':'Ver detalle de '+A[id][0],onclick:()=>abrir(d,null,id)})));continue;}
+    const n=el('b',{class:clase(r.r30),text:signo(r.r30,r.unidad)}),[ft,fc]=fuerza(r);if(anima)contar(n,r.r30,r.unidad);
+    p.replaceChildren(el('div',{class:'hd'},el('span',{class:'muted small',text:'30 min tras el dato de las '+hora(t)}),n),el('div',{class:'hd'},el('span',{class:'chip '+fc,text:ft}),el('button',{class:'btn mini',type:'button',text:'Ver detalle','aria-label':'Ver detalle de '+A[id][0],onclick:()=>abrir(d,r)})));}
+  const o=[...l].sort((a,b)=>Math.abs(veces(b))-Math.abs(veces(a)));
+  vistaA.rank.replaceChildren(...(o.length?[el('section',{class:'glass'},el('h2',{text:'Quién se movió más de lo normal'}),el('p',{class:'muted small',text:diaLargo(d.fecha)+', dato de las '+hora(t)+': '+d.reaccion.evento+'. Veces su movimiento habitual de media hora; a la izquierda bajó, a la derecha subió.'}),ranking(d,o),el('p',{class:'muted small',text:'Solo aparecen los activos con al menos dos bolsas que coinciden. Reaccionar después no prueba que el dato sea la causa.'}))]:[]));
+}
+
+/* ---------- widgets en vivo (TradingView) ---------- */
+const base={colorTheme:'dark',isTransparent:false,locale:'es'};
+function tv(box,name,cfg,sinCredito){
+  if(box.dataset.ok)return;box.dataset.ok='1';
+  const c=el('div',{class:'tradingview-widget-container'},el('div',{class:'tradingview-widget-container__widget'}));
+  const s=el('script',{src:'https://s3.tradingview.com/external-embedding/embed-widget-'+name+'.js',async:''});
+  s.textContent=JSON.stringify(cfg);c.append(s);box.append(c);
+  if(!sinCredito)box.append(el('p',{class:'tv-credit'+(name==='ticker-tape'?' wrap':'')},'Datos en vivo: ',el('a',{href:'https://es.tradingview.com/',target:'_blank',rel:'noopener nofollow',text:'TradingView'})));
+}
+tv($('tape'),'ticker-tape',{...base,showSymbolLogo:false,displayMode:'adaptive',symbols:['nasdaq','sp500','oro','bitcoin','dolar','eurusd','apple','nvidia','microsoft','tesla'].map(i=>({proName:A[i][2],title:A[i][0]}))});
+function enVivo(){
+  tv($('tv-cal'),'events',{...base,width:'100%',height:620,importanceFilter:'-1,0,1',countryFilter:'us'});
+  tv($('tv-chart'),'advanced-chart',{width:'100%',height:460,symbol:'FOREXCOM:NSXUSD',interval:'15',timezone:TZ,theme:'dark',style:'1',locale:'es',allow_symbol_change:true,hide_side_toolbar:true,support_host:'https://www.tradingview.com'});
+}
+
+/* ---------- resumen del día ---------- */
+function prox(d){const now=Date.now();return(d.agenda||[]).filter(a=>new Date(a.cuando)>now).sort((a,b)=>new Date(a.cuando)-new Date(b.cuando))[0];}
+function sinResumir(d){const upd=new Date(d.actualizado),now=new Date();return(d.agenda||[]).filter(a=>{const t=new Date(a.cuando);return t<=now&&t>upd&&!a.salio&&a.impacto!=='bajo';});}
+function cuando(a){const t=new Date(a.cuando);return isoDia(t)===isoDia(new Date())?hora(t):fmt(t,{day:'2-digit',month:'2-digit'})+' '+hora(t);}
+function datoTxt(a){const p=[];if(a.salio)p.push('salió '+a.salio);if(a.previsto)p.push('previsto '+a.previsto);if(a.anterior)p.push('anterior '+a.anterior);return p.join(' · ');}
+/* panel de cotizaciones: se crea una vez y se reubica, para no recargarlo en cada repintado */
+let panelVivo=null;
+function cotiza(){
+  if(panelVivo)return panelVivo;
+  panelVivo=el('div',{class:'tv'});
+  const g=GRUPOS.slice(1).map(n=>({name:n,symbols:Object.values(A).filter(a=>a[1]===n&&a[2]).map(a=>({name:a[2],displayName:a[0]}))}));
+  tv(panelVivo,'market-quotes',{...base,isTransparent:true,width:'100%',height:690,showSymbolLogo:true,symbolsGroups:g});
+  return panelVivo;
+}
+function pintar(d,box,archivo,anima){
+  const pend=archivo?[]:sinResumir(d),esHoy=d.fecha===isoDia(new Date()),top=medidas(d).sort((a,b)=>Math.abs(veces(b))-Math.abs(veces(a))).slice(0,6);
+  box.classList.toggle('in',!!anima);
+  const hero=el('div',{class:'hero'},
+    el('p',{class:'stamp'},diaLargo(d.fecha)+', resumen de las '+hora(new Date(d.actualizado)),archivo?null:el('span',{id:'hace'})),
+    el('h1',{class:'grad',text:d.titular}),el('p',{class:'lead',text:d.bajada}),
+    !archivo&&!esHoy&&el('p',{class:'warn',text:'Este es el último resumen disponible. Todavía no hay uno de hoy; los datos en vivo están en la pestaña En vivo.'}),
+    pend.length>0&&el('p',{class:'warn',text:'Ya se publicó o está por aparecer: '+pend.map(a=>a.evento).join(', ')+'. Todavía no está en este resumen; miralo en En vivo.'}));
+  const izq=el('div',{class:'stack'},
+    sec('Hacia dónde empuja a la Fed',el('div',{class:'thermo'},el('div',{class:'scale'},el('span',{text:'Aflojar'}),el('span',{text:'Frenar'})),
+      d.termometro.map(f=>el('div',{class:'factor'},el('header',{},el('h3',{text:f.factor}),el('span',{class:'num small',text:f.dato})),el('div',{class:'rail',role:'img','aria-label':f.factor+': '+f.texto},el('i',{style:'left:'+Math.max(4,Math.min(96,Number(f.posicion)||50))+'%'})),el('p',{class:'muted small',text:f.texto})))),
+      el('p',{class:'muted small',text:'Lectura cualitativa para aprender. No es un indicador estadístico.'})),
+    top.length>0&&el('section',{class:'glass'},el('h2',{text:'Los que más se movieron con el dato'}),el('p',{class:'muted small',text:'Foto fija: los 30 minutos después de las '+hora(new Date(d.reaccion.cuando))+' ('+d.reaccion.evento+'), en veces su movimiento habitual. Cambia cuando se mide otro dato.'}),ranking(d,top),!archivo&&el('div',{class:'btns'},el('a',{class:'btn',href:'#activos',text:'Ver todos los activos'}))),
+    !archivo&&sec('Cómo están ahora',el('p',{class:'muted small',text:'Precios en vivo. Cambian solos mientras cada mercado está abierto; el porcentaje es el del día.'}),cotiza()),
+    sec('Lo importante',el('div',{class:'ideas'},d.ideas.map(i=>el('div',{},el('h3',{text:i.titulo}),el('p',{class:'muted',text:i.texto}))))),
+    sec('Los números',el('div',{class:'scroll'},el('table',{},el('thead',{},el('tr',{},['Dato','Salió','Previsto','Anterior','Contra lo previsto'].map(t=>el('th',{scope:'col',text:t})))),
+      el('tbody',{},d.datos.map(r=>el('tr',{},el('td',{},r.nombre,r.nota?el('small',{text:r.nota}):null),el('td',{class:'num'},el('b',{text:r.salio})),el('td',{class:'num',text:r.previsto||'s/d'}),el('td',{class:'num',text:r.anterior||'s/d'}),el('td',{},el('span',{class:'chip '+(['mayor','menor'].includes(r.sorpresa)?r.sorpresa:''),text:{mayor:'Mayor',menor:'Menor',igual:'En línea'}[r.sorpresa]||'s/d'})))))))),
+    sec('Qué cambia para la Fed',el('p',{class:'lead',text:d.fed})),
+    sec('El mercado',d.mercado.map(t=>el('p',{class:'muted',text:t}))),
+    d.leccion&&el('section',{class:'glass'},el('h2',{text:'Lección del día'}),el('p',{text:d.leccion})),
+    sec('Fuentes',el('p',{class:'small muted'},d.fuentes.filter(f=>/^https:\/\//.test(f.url)).map((f,i)=>[i?', ':'',el('a',{href:f.url,target:'_blank',rel:'noopener',text:f.nombre})]).flat())));
+  const copiar=el('button',{class:'btn main',type:'button',text:'Copiar resumen',onclick:async e=>{const b=e.currentTarget;try{await navigator.clipboard.writeText(d.mensaje);b.textContent='Resumen copiado';}catch(x){b.textContent='No se pudo copiar';}setTimeout(()=>b.textContent='Copiar resumen',2200);}});
+  const der=el('div',{class:'stack'},
+    !archivo&&el('div',{class:'glass',id:'prox'}),
+    sec(archivo?'Agenda de ese día':'Agenda',el('ul',{class:'agenda'},[...d.agenda].sort((a,b)=>new Date(a.cuando)-new Date(b.cuando)).map(a=>el('li',{class:new Date(a.cuando)<new Date()?'past':''},el('span',{class:'num',text:cuando(a)}),el('div',{},a.evento,datoTxt(a)?el('div',{class:'muted small',text:datoTxt(a)}):null)))),el('p',{class:'muted small',text:'Horarios de Argentina.'})),
+    sec('Compartir',el('div',{class:'btns'},copiar,el('a',{class:'btn',href:'https://wa.me/?text='+encodeURIComponent(d.mensaje),target:'_blank',rel:'noopener',text:'Abrir en WhatsApp'}))));
+  box.replaceChildren(hero,el('div',{class:'cols'},izq,der),...(archivo?[]:[cta('macro-hoy','¿Querés llegar a esta lectura por tu cuenta?','Te enseñamos a leer un dato antes de operar.')]));
+}
+function tick(){
+  const now=new Date();$('clock').textContent=fmt(now,{hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false})+' ARG';
+  const hc=$('hace');if(hc&&hoy){const m=Math.max(0,Math.floor((now-new Date(hoy.actualizado))/60000));hc.textContent=m<2?'recién':m<60?'hace '+m+' min':m<1440?'hace '+Math.floor(m/60)+' h':'hace '+Math.floor(m/1440)+' d';}
+  const p=$('prox');if(!p||!hoy)return;
+  const ya=(hoy.agenda||[]).find(x=>{const t=now-new Date(x.cuando);return t>=0&&t<600000&&!x.salio;}),a=ya?null:prox(hoy),id=ya?'ya'+ya.cuando:a?a.cuando:'-';
+  if(ya&&p.dataset.id!==id){p.dataset.id=id;p.replaceChildren(el('p',{class:'stamp',text:'Saliendo ahora'}),el('h2',{text:ya.evento}),el('p',{class:'muted small',text:datoTxt(ya)||'El número aparece en el calendario en vivo.'}),el('div',{class:'btns'},el('a',{class:'btn main',href:'#en-vivo',text:'Ver el dato en vivo'})));}
+  if(ya)return;
+  if(p.dataset.id!==id){p.dataset.id=id;p.replaceChildren(...(a?[el('p',{class:'muted small',text:'Próximo dato'}),el('div',{class:'count',id:'count'}),el('h3',{text:a.evento}),el('p',{class:'muted small',text:cuando(a)+(datoTxt(a)?' · '+datoTxt(a):'')})]:[el('h3',{text:'Sin datos pendientes'}),el('p',{class:'muted small',text:'Mirá el calendario en la pestaña En vivo.'})]));}
+  if(a){const s=Math.max(0,Math.floor((new Date(a.cuando)-now)/1000)),dd=Math.floor(s/86400),h=Math.floor(s%86400/3600),m=Math.floor(s%3600/60),pad=x=>String(x).padStart(2,'0');$('count').textContent=dd?dd+' d '+pad(h)+' h':pad(h)+':'+pad(m)+':'+pad(s%60);}
+}
+const FECHA=/^\d{4}-\d{2}-\d{2}$/;
+/* Cada dato se busca en dos lugares y gana el más nuevo: si la publicación de la página se atrasa, el resumen llega igual. */
+const RAW='https://raw.githubusercontent.com/dalozyx-dot/valenttiel-macro/main/';
+const sello=j=>{const t=Date.parse(j&&(j.actualizado||(Array.isArray(j.dias)&&j.dias.map(x=>x.actualizado).sort().pop())));return Number.isFinite(t)?t:0;};
+async function conTope(u){const c=new AbortController(),t=setTimeout(()=>c.abort(),9000);try{const r=await fetch(u+'?t='+Math.floor(Date.now()/60000),{cache:'no-store',signal:c.signal});if(!r.ok)throw new Error(r.status);return await r.json();}finally{clearTimeout(t);}}
+async function leerNuevo(f){
+  const rs=(await Promise.allSettled([conTope(f),conTope(RAW+f)])).filter(x=>x.status==='fulfilled'&&sello(x.value)).map(x=>x.value);
+  if(!rs.length)throw new Error('sin datos');
+  return rs.sort((a,b)=>sello(b)-sello(a))[0];
+}
+async function cargar(){
+  try{
+    const ni=await leerNuevo('datos/index.json');if(!idx||sello(ni)>=sello(idx))idx=ni;
+    const u=idx.dias.filter(x=>FECHA.test(x.fecha)).sort((a,b)=>b.fecha.localeCompare(a.fecha))[0],clave=u.fecha+u.actualizado;
+    if(clave!==visto){const n=await leerNuevo('datos/'+u.fecha+'.json');
+      if(n.fecha!==u.fecha)throw new Error('fecha');
+      if(n.actualizado===u.actualizado)visto=clave; /* si el archivo del día todavía viene atrasado, se reintenta */
+      if(hoy&&hoy.fecha===n.fecha&&hoy.actualizado===n.actualizado){tick();return;}
+      hoy=n;pintar(hoy,$('v-hoy'),false,true);activos(hoy,!$('v-activos').hidden);historial();}
+    tick();
+  }catch(e){if(!hoy)$('v-hoy').replaceChildren(el('div',{class:'hero'},el('h1',{text:'No se pudo cargar el resumen'}),el('p',{class:'lead',text:'Revisá tu conexión. Se vuelve a intentar en un minuto; el calendario sigue en la pestaña En vivo.'})));}
+}
+let viendoDia=false;
+function historial(){
+  if(viendoDia)return;
+  const hoyF=isoDia(new Date());
+  $('days').replaceChildren(...idx.dias.filter(x=>FECHA.test(x.fecha)).sort((a,b)=>b.fecha.localeCompare(a.fecha)).map(x=>{
+    const nov=(Array.isArray(x.novedades)?x.novedades:[]).slice().sort((a,b)=>new Date(b.cuando)-new Date(a.cuando));
+    return el('article',{class:'dia'},
+      el('button',{type:'button',class:'row',onclick:async()=>{try{const d=await leerNuevo('datos/'+x.fecha+'.json'),b=el('div',{class:'view'});pintar(d,b,true,true);viendoDia=true;$('days').replaceChildren(el('div',{class:'btns',style:'margin-bottom:34px'},el('button',{class:'btn',type:'button',text:'Volver al historial',onclick:()=>{viendoDia=false;historial();}})),b);window.scrollTo(0,0);}catch(e){}}},
+        el('span',{class:'num muted',text:x.fecha.split('-').reverse().join('/')}),el('b',{text:x.titular})),
+      x.fecha===hoyF?el('p',{class:'stamp',text:'En curso, última actualización '+hora(new Date(x.actualizado))}):null,
+      nov.length?el('ul',{class:'agenda nov'},nov.map(n=>el('li',{},el('span',{class:'num',text:hora(new Date(n.cuando))}),el('div',{text:n.texto})))):null);
+  }));
+}
+const VISTAS=['hoy','activos','en-vivo','historial','aprender','sumate'];
+function pildora(){const a=document.querySelector('.tabs a[aria-current]');if(!a)$('pill').style.width='0';else{$('pill').style.width=a.offsetWidth+'px';$('pill').style.transform='translateX('+a.offsetLeft+'px)';a.scrollIntoView({block:'nearest',inline:'nearest'});}}
+function ruta(){
+  const v=VISTAS.includes(location.hash.slice(1))?location.hash.slice(1):'hoy';
+  const cambia=()=>{VISTAS.forEach(x=>$('v-'+x).hidden=x!==v);
+    document.querySelectorAll('.tabs a,.join').forEach(a=>a.getAttribute('href')==='#'+v?a.setAttribute('aria-current','page'):a.removeAttribute('aria-current'));
+    if(v==='historial'&&idx){viendoDia=false;historial();}
+    if(v==='en-vivo')enVivo();if(v==='sumate'&&!sDesde)sDesde=Date.now();if(v==='activos'){if(hoy)activos(hoy,true);else if(!vistaA)armarActivos();}
+    $('v-'+v).classList.add('in');window.scrollTo(0,0);pildora();};
+  cambia();
+}
+/* ---------- sumate ---------- */
+const API=['localhost','127.0.0.1'].includes(location.hostname)?'http://localhost:3100/api/sumate':'https://leads-vbm4.vercel.app/api/sumate';
+let sOrigen='macro-sumate',sDesde=0;
+document.querySelectorAll('.cta-slot').forEach(x=>x.replaceWith(cta(x.dataset.origen,'¿Querés practicarlo con guía?','Dejanos tus datos y te contamos cómo seguir.')));
+$('s-exp').append(...['Nunca operé','Menos de 1 año','De 1 a 3 años','Más de 3 años'].map((t,i)=>el('label',{for:'s-e'+i},el('input',{type:'radio',id:'s-e'+i,name:'experiencia',value:t}),t)));
+(()=>{
+  const f=$('f-sumate'),err=$('s-err'),btn=$('s-btn'),foco={nombre:'s-nombre',contacto:'s-contacto',experiencia:'s-e0',acepto:'s-acepto'};
+  const mal=(campo,t)=>{err.textContent=t;err.hidden=false;f.querySelectorAll('[aria-invalid]').forEach(n=>n.removeAttribute('aria-invalid'));const n=foco[campo]&&$(foco[campo]);if(n){n.setAttribute('aria-invalid','true');n.focus();}};
+  f.addEventListener('submit',async e=>{
+    e.preventDefault();const d=new FormData(f),v=k=>String(d.get(k)||'').trim();
+    if(v('nombre').length<2)return mal('nombre','Escribí tu nombre.');
+    if(v('contacto').length<3)return mal('contacto','Escribí un WhatsApp con código de país o tu usuario de Instagram.');
+    if(!v('experiencia'))return mal('experiencia','Elegí tu experiencia.');
+    if(!$('s-acepto').checked)return mal('acepto','Para contactarte necesitamos que aceptes.');
+    err.hidden=true;btn.disabled=true;btn.textContent='Enviando…';
+    const c=new AbortController(),t=setTimeout(()=>c.abort(),15000);
+    try{
+      const r=await fetch(API,{method:'POST',signal:c.signal,headers:{'Content-Type':'application/json'},body:JSON.stringify({nombre:v('nombre'),contacto:v('contacto'),experiencia:v('experiencia'),que_le_cuesta:v('que_le_cuesta'),sitio_web:v('sitio_web'),origen:sOrigen,acepto:true,segundos:sDesde?Math.round((Date.now()-sDesde)/1000):0})});
+      const j=await r.json().catch(()=>({}));
+      if(!r.ok||!j.ok){mal(j.campo,typeof j.error==='string'?j.error:'No pudimos guardar tus datos. Probá de nuevo en unos minutos.');return;}
+      f.replaceChildren(el('div',{class:'done',tabindex:'-1',id:'s-ok'},el('h2',{text:'Listo, recibimos tus datos'}),el('p',{class:'muted',text:'Te vamos a escribir a '+v('contacto')+'. Mientras tanto, seguí practicando con el resumen de hoy.'}),el('div',{class:'btns'},el('a',{class:'btn',href:'#hoy',text:'Ver el resumen de hoy'}))));$('s-ok').focus();
+    }catch(x){mal('','No hay conexión con el formulario. Tus respuestas siguen acá: probá de nuevo en un rato.');}
+    finally{clearTimeout(t);btn.disabled=false;btn.textContent='Quiero que me contacten';}
+  });
+})();
+addEventListener('hashchange',ruta);addEventListener('resize',pildora);if(document.fonts)document.fonts.ready.then(pildora);
+ruta();cargar();tick();
+setInterval(tick,1000);setInterval(cargar,45000);document.addEventListener('visibilitychange',()=>{if(!document.hidden)cargar();});
+let firma='';const firmar=()=>hoy?hoy.actualizado+'|'+sinResumir(hoy).map(x=>x.cuando).join()+'|'+(hoy.agenda||[]).filter(x=>new Date(x.cuando)<new Date()).length:'';
+setInterval(()=>{const f=firmar();if(hoy&&!$('v-hoy').hidden&&firma&&f!==firma){pintar(hoy,$('v-hoy'));tick();}firma=f;},60000);
+</script>
+</body>
+</html>

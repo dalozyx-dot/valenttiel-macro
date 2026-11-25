@@ -1,0 +1,27 @@
+{
+ "dias": [
+  {
+   "fecha": "2026-11-25",
+   "actualizado": "2026-11-25T14:01:14-03:00",
+   "titular": "La economía sigue fuerte y la inflación no afloja",
+   "novedades": [
+    {
+     "cuando": "2026-11-25T11:10:00-03:00",
+     "texto": "Primer resumen del día: PIB, PCE y subsidios."
+    },
+    {
+     "cuando": "2026-11-25T11:42:00-03:00",
+     "texto": "Se midió cómo se movieron 17 activos tras PIB, PCE y subsidios."
+    },
+    {
+     "cuando": "2026-11-25T12:50:16-03:00",
+     "texto": "Datos nuevos: Ventas de viviendas nuevas 701K; Inventarios de crudo 1,1M."
+    },
+    {
+     "cuando": "2026-11-25T14:01:14-03:00",
+     "texto": "Corrección: se retiraron las mediciones con Yahoo. Quedan Bitcoin, Ethereum y EUR/USD, verificados entre bolsas."
+    }
+   ]
+  }
+ ]
+}

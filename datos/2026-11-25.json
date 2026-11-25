@@ -1,0 +1,872 @@
+{
+ "fecha": "2026-11-25",
+ "actualizado": "2026-11-25T14:01:14-03:00",
+ "titular": "La economía sigue fuerte y la inflación no afloja",
+ "bajada": "Los datos respaldan a una Fed dura. El PIB sorprendió al alza, hay pocos despidos y la inflación subyacente subió a 3,3%. El punto flojo es el consumidor, que en octubre se estancó. A las 12:00, las ventas de viviendas nuevas dieron 701K contra 650K previsto, pero el mes anterior se revisó fuerte a la baja.",
+ "termometro": [
+  {
+   "factor": "Crecimiento",
+   "dato": "PIB 4,3%",
+   "posicion": 82,
+   "texto": "Muy por encima de lo previsto, aunque cubre de julio a septiembre."
+  },
+  {
+   "factor": "Empleo",
+   "dato": "Subsidios 189K",
+   "posicion": 78,
+   "texto": "Menos pedidos de los esperados: hay pocos despidos."
+  },
+  {
+   "factor": "Inflación",
+   "dato": "PCE subyacente 3,3%",
+   "posicion": 76,
+   "texto": "Apenas arriba de lo previsto y lejos del objetivo de 2%. El mensual salió en línea."
+  },
+  {
+   "factor": "Consumo",
+   "dato": "Consumo real 0,0%",
+   "posicion": 30,
+   "texto": "La gente gastó 0,3% más, pero los precios también subieron 0,3%."
+  }
+ ],
+ "ideas": [
+  {
+   "titulo": "El PIB fue la gran sorpresa, pero mira para atrás",
+   "texto": "Creció 4,3% contra 3,4% previsto. La revisión vino sobre todo de inversión (software) y consumo."
+  },
+  {
+   "titulo": "La inflación está alta, aunque no fue un shock",
+   "texto": "El PCE subyacente anual dio 3,3%, apenas 0,1 arriba de lo previsto. El mensual fue 0,3%, como se esperaba."
+  },
+  {
+   "titulo": "El consumidor se frenó en octubre",
+   "texto": "Descontando la inflación, el consumo quedó en 0,0%. Los ingresos subieron 0,7%, pero incluyen un reembolso único de primas de Medicare."
+  }
+ ],
+ "datos": [
+  {
+   "nombre": "PIB 3T",
+   "nota": "Anualizado",
+   "salio": "4,3%",
+   "previsto": "3,4%",
+   "anterior": "2,2%",
+   "sorpresa": "mayor"
+  },
+  {
+   "nombre": "PCE subyacente anual",
+   "salio": "3,3%",
+   "previsto": "3,2%",
+   "anterior": "3,1%",
+   "sorpresa": "mayor"
+  },
+  {
+   "nombre": "PCE subyacente mensual",
+   "salio": "0,3%",
+   "previsto": "0,3%",
+   "anterior": "0,3%",
+   "sorpresa": "igual"
+  },
+  {
+   "nombre": "PCE anual",
+   "salio": "3,8%",
+   "previsto": "3,8%",
+   "anterior": "3,7%",
+   "sorpresa": "igual"
+  },
+  {
+   "nombre": "Subsidios nuevos",
+   "nota": "Menos pedidos es empleo más firme",
+   "salio": "189K",
+   "previsto": "201K",
+   "anterior": "202K",
+   "sorpresa": "menor"
+  },
+  {
+   "nombre": "Renovaciones de subsidios",
+   "salio": "1.697K",
+   "previsto": "",
+   "anterior": "1.792K",
+   "sorpresa": "sd"
+  },
+  {
+   "nombre": "Gasto personal",
+   "salio": "0,3%",
+   "previsto": "0,4%",
+   "anterior": "0,6%",
+   "sorpresa": "menor"
+  },
+  {
+   "nombre": "Consumo real",
+   "salio": "0,0%",
+   "previsto": "",
+   "anterior": "0,1%",
+   "sorpresa": "sd"
+  },
+  {
+   "nombre": "Ingresos personales",
+   "salio": "0,7%",
+   "previsto": "0,4%",
+   "anterior": "0,3%",
+   "sorpresa": "mayor"
+  },
+  {
+   "nombre": "Bienes duraderos",
+   "salio": "0,2%",
+   "previsto": "0,7%",
+   "anterior": "2,0%",
+   "sorpresa": "menor"
+  },
+  {
+   "nombre": "Permisos de construcción",
+   "salio": "1,297M",
+   "previsto": "1,295M",
+   "anterior": "1,398M",
+   "sorpresa": "mayor"
+  },
+  {
+   "nombre": "Ventas de viviendas nuevas",
+   "nota": "Anterior revisado: era 676K",
+   "salio": "701K",
+   "previsto": "650K",
+   "anterior": "614K",
+   "sorpresa": "mayor"
+  },
+  {
+   "nombre": "Inventarios de crudo",
+   "nota": "Barriles, variación semanal",
+   "salio": "1,1M",
+   "previsto": "2,0M",
+   "anterior": "3,4M",
+   "sorpresa": "menor"
+  }
+ ],
+ "fed": "La tasa está en 3,75% a 4,00% y la próxima decisión es el 9 de diciembre. Antes de los datos de hoy, el mercado daba 97,5% a una suba de 0,25 puntos, según CME FedWatch citado por Fortune el 24/11. Después del PCE, Yahoo Finance citaba cerca de 98%, según CME (10:50 de Argentina). Con diciembre casi descontado, la atención pasa a enero.",
+ "mercado": [
+  "La baja del Nasdaq empezó antes de las 10:30. Ya perdía entre 2,4% (Reuters) y 2,8% (Bloomberg), por las ventas en IA y chips y por el temor a nuevos aranceles.",
+  "En los 30 minutos posteriores al dato, Bitcoin bajó cerca de 1,3% y Ethereum 1,2%, más que lo habitual a esa hora. EUR/USD bajó 0,04%, dentro de lo normal. Son precios de Kraken, Coinbase y Binance, según el activo. Que haya pasado después no prueba que el dato sea la causa.",
+  "Reuters vincula la baja con las ventas en IA y los aranceles propuestos; Yahoo Finance suma la inflación.",
+  "El dato de viviendas tiene mucho margen de error: el Census estima una suba de 14,2% en el mes, con un margen de 22,6 puntos, así que no es concluyente."
+ ],
+ "leccion": "El color del calendario suele leerse como bueno o malo para el dólar. Hoy los subsidios salieron en verde por ser menos que lo previsto, y el PCE subyacente por ser más. Para el Nasdaq, un PCE en verde puede ser mala noticia.",
+ "agenda": [
+  {
+   "cuando": "2026-11-25T10:30:00-03:00",
+   "evento": "PIB, PCE y subsidios",
+   "salio": "PIB 4,3%, PCE subyacente 3,3%",
+   "impacto": "alto"
+  },
+  {
+   "cuando": "2026-11-25T12:00:00-03:00",
+   "evento": "Ventas de viviendas nuevas",
+   "previsto": "650K",
+   "anterior": "614K (revisado)",
+   "impacto": "medio",
+   "salio": "701K"
+  },
+  {
+   "cuando": "2026-11-25T12:30:00-03:00",
+   "evento": "Inventarios de crudo",
+   "previsto": "2,0M",
+   "anterior": "3,4M",
+   "impacto": "bajo",
+   "salio": "1,1M"
+  },
+  {
+   "cuando": "2026-11-25T13:30:00-03:00",
+   "evento": "GDPNow de la Fed de Atlanta (4T)",
+   "previsto": "3,2%",
+   "anterior": "3,2%",
+   "impacto": "bajo"
+  },
+  {
+   "cuando": "2026-11-25T15:00:00-03:00",
+   "evento": "Subasta del Tesoro a 7 años",
+   "anterior": "4,894%",
+   "impacto": "medio"
+  },
+  {
+   "cuando": "2026-11-25T16:00:00-03:00",
+   "evento": "Libro Beige",
+   "impacto": "medio"
+  },
+  {
+   "cuando": "2026-11-26T10:00:00-03:00",
+   "evento": "Feriado en EE.UU. (Acción de Gracias)",
+   "impacto": "bajo"
+  },
+  {
+   "cuando": "2026-11-27T10:30:00-03:00",
+   "evento": "Balanza comercial de bienes",
+   "previsto": "-135,9B",
+   "anterior": "-134,9B",
+   "impacto": "bajo"
+  },
+  {
+   "cuando": "2026-11-30T11:45:00-03:00",
+   "evento": "PMI de Chicago",
+   "anterior": "55,3",
+   "impacto": "bajo"
+  },
+  {
+   "cuando": "2026-12-01T12:00:00-03:00",
+   "evento": "ISM manufacturero y vacantes JOLTS",
+   "impacto": "medio",
+   "anterior": "ISM 55,5, JOLTS 7,523M"
+  },
+  {
+   "cuando": "2026-12-02T10:15:00-03:00",
+   "evento": "Empleo privado ADP",
+   "anterior": "86K",
+   "impacto": "medio"
+  },
+  {
+   "cuando": "2026-12-04T10:30:00-03:00",
+   "evento": "Empleo: NFP y desempleo",
+   "previsto": "NFP 90K, desempleo 4,1%",
+   "anterior": "NFP 165K, desempleo 4,1%",
+   "impacto": "alto"
+  },
+  {
+   "cuando": "2026-12-08T10:30:00-03:00",
+   "evento": "Balanza comercial de octubre",
+   "impacto": "bajo"
+  },
+  {
+   "cuando": "2026-12-09T16:00:00-03:00",
+   "evento": "Decisión de tasas de la Fed",
+   "impacto": "alto"
+  },
+  {
+   "cuando": "2026-12-10T10:30:00-03:00",
+   "evento": "IPC de noviembre",
+   "impacto": "alto"
+  },
+  {
+   "cuando": "2026-12-23T10:30:00-03:00",
+   "evento": "PIB 3T (tercera estimación) y PCE de noviembre",
+   "impacto": "alto"
+  }
+ ],
+ "mensaje": "📊 *FUNDAMENTALES EE.UU. | 25/11*\n\n*La economía sigue fuerte y la inflación no afloja.*\n\n• PIB 3T: *4,3%* (previsto 3,4%)\n• PCE subyacente anual: *3,3%* (previsto 3,2%)\n• Subsidios: *189K* (previsto 201K)\n• Consumo real de octubre: *0,0%*\n• Ventas de viviendas nuevas: *701K* (previsto 650K, anterior revisado a 614K)\n\n🏦 Los datos respaldan a una Fed dura. Con diciembre casi descontado, la atención pasa a enero.\n\n📉 La baja del Nasdaq empezó antes del dato. Reuters la vincula con las ventas en IA y los aranceles propuestos. En los 30 minutos posteriores, Bitcoin bajó cerca de 1,3%, más que lo habitual.\n\n_Contenido educativo. No es asesoramiento financiero._",
+ "fuentes": [
+  {
+   "nombre": "BEA (PIB)",
+   "url": "https://www.bea.gov/news/2026/gdp-second-estimate-and-corporate-profits-3rd-quarter-2026"
+  },
+  {
+   "nombre": "BEA (PCE)",
+   "url": "https://www.bea.gov/news/2026/personal-income-and-outlays-october-2026"
+  },
+  {
+   "nombre": "Investing (calendario)",
+   "url": "https://es.investing.com/economic-calendar"
+  },
+  {
+   "nombre": "Reuters",
+   "url": "https://finance.yahoo.com/markets/stocks/articles/nasdaq-futures-slide-over-2-100822079.html"
+  },
+  {
+   "nombre": "Fortune",
+   "url": "https://fortune.com/2026/11/24/bill-ackman-recession-inflation-federal-reserve-target"
+  },
+  {
+   "nombre": "Census (viviendas nuevas)",
+   "url": "https://www.census.gov/construction/nrs/current/index.html"
+  },
+  {
+   "nombre": "EIA (crudo)",
+   "url": "https://www.eia.gov/petroleum/supply/weekly/"
+  },
+  {
+   "nombre": "Yahoo Finance",
+   "url": "https://finance.yahoo.com/markets/live/stock-market-today-wednesday-november-25-dow-sp-500-nasdaq-pce-inflation-data-091428237.html"
+  },
+  {
+   "nombre": "CNBC",
+   "url": "https://www.cnbc.com/2026/11/24/stock-market-today-live-updates-.html"
+  },
+  {
+   "nombre": "Bloomberg",
+   "url": "https://bloomberg.com/news/articles/2026-11-24/asian-stocks-to-slide-as-ai-trade-doubts-resurface-markets-wrap"
+  }
+ ],
+ "tasa10": {
+  "fecha": "2026-11-24",
+  "valor": 4.91,
+  "fuente": "Departamento del Tesoro de EE.UU."
+ },
+ "reaccion": {
+  "evento": "PIB, PCE y subsidios",
+  "cuando": "2026-11-25T10:30:00-03:00",
+  "medido": "2026-11-25T14:00:58-03:00",
+  "activos": [
+   {
+    "id": "eurusd",
+    "unidad": "%",
+    "antes": 0.069,
+    "r30": -0.039,
+    "normal30": 0.052,
+    "serie": [
+     [
+      -120,
+      -0.069
+     ],
+     [
+      -115,
+      -0.066
+     ],
+     [
+      -110,
+      -0.076
+     ],
+     [
+      -105,
+      -0.098
+     ],
+     [
+      -100,
+      -0.059
+     ],
+     [
+      -95,
+      -0.061
+     ],
+     [
+      -90,
+      -0.069
+     ],
+     [
+      -85,
+      -0.06
+     ],
+     [
+      -80,
+      -0.03
+     ],
+     [
+      -75,
+      0.005
+     ],
+     [
+      -70,
+      0.036
+     ],
+     [
+      -65,
+      0.034
+     ],
+     [
+      -60,
+      0.027
+     ],
+     [
+      -55,
+      -0.001
+     ],
+     [
+      -50,
+      0.0
+     ],
+     [
+      -45,
+      0.03
+     ],
+     [
+      -40,
+      0.023
+     ],
+     [
+      -35,
+      -0.013
+     ],
+     [
+      -30,
+      -0.013
+     ],
+     [
+      -25,
+      -0.013
+     ],
+     [
+      -20,
+      -0.082
+     ],
+     [
+      -15,
+      -0.015
+     ],
+     [
+      -10,
+      -0.03
+     ],
+     [
+      -5,
+      0.01
+     ],
+     [
+      0,
+      0.0
+     ],
+     [
+      5,
+      0.055
+     ],
+     [
+      10,
+      0.01
+     ],
+     [
+      15,
+      0.013
+     ],
+     [
+      20,
+      0.02
+     ],
+     [
+      25,
+      -0.037
+     ],
+     [
+      30,
+      -0.041
+     ],
+     [
+      35,
+      -0.029
+     ],
+     [
+      40,
+      0.03
+     ],
+     [
+      45,
+      0.03
+     ],
+     [
+      50,
+      -0.001
+     ],
+     [
+      55,
+      0.048
+     ],
+     [
+      60,
+      0.018
+     ],
+     [
+      65,
+      0.053
+     ],
+     [
+      70,
+      0.049
+     ],
+     [
+      75,
+      0.049
+     ],
+     [
+      80,
+      0.075
+     ],
+     [
+      85,
+      -0.005
+     ],
+     [
+      90,
+      -0.037
+     ]
+    ],
+    "fuente": "Kraken + Binance",
+    "fuentes": 2
+   },
+   {
+    "id": "bitcoin",
+    "unidad": "%",
+    "antes": 0.318,
+    "r30": -1.305,
+    "normal30": 0.386,
+    "serie": [
+     [
+      -120,
+      -0.317
+     ],
+     [
+      -115,
+      -0.362
+     ],
+     [
+      -110,
+      -0.446
+     ],
+     [
+      -105,
+      -0.406
+     ],
+     [
+      -100,
+      -0.16
+     ],
+     [
+      -95,
+      -0.097
+     ],
+     [
+      -90,
+      -0.329
+     ],
+     [
+      -85,
+      -0.538
+     ],
+     [
+      -80,
+      -0.563
+     ],
+     [
+      -75,
+      -0.482
+     ],
+     [
+      -70,
+      -0.589
+     ],
+     [
+      -65,
+      -0.372
+     ],
+     [
+      -60,
+      -0.266
+     ],
+     [
+      -55,
+      -0.198
+     ],
+     [
+      -50,
+      -0.218
+     ],
+     [
+      -45,
+      -0.241
+     ],
+     [
+      -40,
+      -0.223
+     ],
+     [
+      -35,
+      -0.271
+     ],
+     [
+      -30,
+      -0.174
+     ],
+     [
+      -25,
+      -0.201
+     ],
+     [
+      -20,
+      -0.377
+     ],
+     [
+      -15,
+      -0.136
+     ],
+     [
+      -10,
+      -0.274
+     ],
+     [
+      -5,
+      0.034
+     ],
+     [
+      0,
+      0.0
+     ],
+     [
+      5,
+      -0.687
+     ],
+     [
+      10,
+      -0.641
+     ],
+     [
+      15,
+      -0.948
+     ],
+     [
+      20,
+      -0.876
+     ],
+     [
+      25,
+      -1.14
+     ],
+     [
+      30,
+      -1.269
+     ],
+     [
+      35,
+      -1.294
+     ],
+     [
+      40,
+      -0.983
+     ],
+     [
+      45,
+      -0.828
+     ],
+     [
+      50,
+      -0.838
+     ],
+     [
+      55,
+      -0.735
+     ],
+     [
+      60,
+      -1.106
+     ],
+     [
+      65,
+      -1.839
+     ],
+     [
+      70,
+      -1.728
+     ],
+     [
+      75,
+      -2.477
+     ],
+     [
+      80,
+      -2.008
+     ],
+     [
+      85,
+      -1.882
+     ],
+     [
+      90,
+      -1.023
+     ]
+    ],
+    "fuente": "Kraken + Coinbase + Binance",
+    "fuentes": 3
+   },
+   {
+    "id": "ethereum",
+    "unidad": "%",
+    "antes": 0.642,
+    "r30": -1.24,
+    "normal30": 0.497,
+    "serie": [
+     [
+      -120,
+      -0.638
+     ],
+     [
+      -115,
+      -0.762
+     ],
+     [
+      -110,
+      -0.74
+     ],
+     [
+      -105,
+      -0.706
+     ],
+     [
+      -100,
+      -0.495
+     ],
+     [
+      -95,
+      -0.553
+     ],
+     [
+      -90,
+      -0.904
+     ],
+     [
+      -85,
+      -0.913
+     ],
+     [
+      -80,
+      -0.893
+     ],
+     [
+      -75,
+      -0.754
+     ],
+     [
+      -70,
+      -0.781
+     ],
+     [
+      -65,
+      -0.588
+     ],
+     [
+      -60,
+      -0.464
+     ],
+     [
+      -55,
+      -0.377
+     ],
+     [
+      -50,
+      -0.461
+     ],
+     [
+      -45,
+      -0.563
+     ],
+     [
+      -40,
+      -0.527
+     ],
+     [
+      -35,
+      -0.422
+     ],
+     [
+      -30,
+      -0.322
+     ],
+     [
+      -25,
+      -0.311
+     ],
+     [
+      -20,
+      -0.494
+     ],
+     [
+      -15,
+      -0.313
+     ],
+     [
+      -10,
+      -0.434
+     ],
+     [
+      -5,
+      -0.096
+     ],
+     [
+      0,
+      0.0
+     ],
+     [
+      5,
+      -0.762
+     ],
+     [
+      10,
+      -0.707
+     ],
+     [
+      15,
+      -1.196
+     ],
+     [
+      20,
+      -0.94
+     ],
+     [
+      25,
+      -1.104
+     ],
+     [
+      30,
+      -1.298
+     ],
+     [
+      35,
+      -1.381
+     ],
+     [
+      40,
+      -1.06
+     ],
+     [
+      45,
+      -0.947
+     ],
+     [
+      50,
+      -0.934
+     ],
+     [
+      55,
+      -0.828
+     ],
+     [
+      60,
+      -1.133
+     ],
+     [
+      65,
+      -1.981
+     ],
+     [
+      70,
+      -1.833
+     ],
+     [
+      75,
+      -2.557
+     ],
+     [
+      80,
+      -1.919
+     ],
+     [
+      85,
+      -1.476
+     ],
+     [
+      90,
+      -0.422
+     ]
+    ],
+    "fuente": "Kraken + Coinbase + Binance",
+    "fuentes": 3
+   }
+  ]
+ },
+ "novedades": [
+  {
+   "cuando": "2026-11-25T11:10:00-03:00",
+   "texto": "Primer resumen del día: PIB, PCE y subsidios."
+  },
+  {
+   "cuando": "2026-11-25T11:42:00-03:00",
+   "texto": "Se midió cómo se movieron 17 activos tras PIB, PCE y subsidios."
+  },
+  {
+   "cuando": "2026-11-25T12:50:16-03:00",
+   "texto": "Datos nuevos: Ventas de viviendas nuevas 701K; Inventarios de crudo 1,1M."
+  },
+  {
+   "cuando": "2026-11-25T14:01:14-03:00",
+   "texto": "Corrección: se retiraron las mediciones con Yahoo. Quedan Bitcoin, Ethereum y EUR/USD, verificados entre bolsas."
+  }
+ ]
+}
