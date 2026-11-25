@@ -48,7 +48,8 @@ button{cursor:pointer}
 .muted{color:var(--muted)}.small{font-size:14px}
 .num{font-family:var(--m);font-variant-numeric:tabular-nums;letter-spacing:-.02em;white-space:nowrap}
 .grad{background:linear-gradient(100deg,var(--ink) 35%,var(--mint) 78%,var(--aqua));-webkit-background-clip:text;background-clip:text;color:transparent}
-header.top{padding-block:20px 0}
+header.top{padding-block:20px 0;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:4px 16px}
+header.top a{font-size:14.5px;color:var(--muted);text-underline-offset:3px;text-decoration-color:var(--line)}header.top a:hover{color:var(--mint)}
 .brand{font-weight:600;font-size:17px;letter-spacing:-.03em}.brand span{color:var(--mint)}
 .intro{display:grid;gap:10px;padding-block:22px 24px}
 .intro p{color:var(--muted);max-width:58ch;font-size:17px}
@@ -157,7 +158,7 @@ footer{border-top:1px solid var(--line);padding-block:20px 34px;display:grid;gap
 <!--CUERPO-->
 <div class="aura" aria-hidden="true"></div>
 <div class="wrap">
-  <header class="top"><div class="brand">Valenttiel <span>Calculadora</span></div></header>
+  <header class="top"><div class="brand">Valenttiel <span>Calculadora</span></div><a href="https://dalozyx-dot.github.io/valenttiel-macro/">Ir a Valenttiel Macro</a></header>
   <div class="intro"><h1 class="grad">¿Con cuánto entro?</h1><p>Poné tu cuenta, tu riesgo y tu stop. Te dice cuántos contratos, micros, lotes o monedas, y con qué apalancamiento.</p></div>
   <div class="tabs" id="tabs" role="group" aria-label="Mercado"></div>
   <main class="cols">
