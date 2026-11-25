@@ -19,6 +19,7 @@
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" type="image/png" href="img/icono.png">
 <link rel="apple-touch-icon" href="img/icono.png">
+<link rel="manifest" href="manifest.webmanifest">
 <meta name="theme-color" content="#070B0A">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@300..700&family=Geist+Mono:wght@400..600&display=swap">
@@ -173,6 +174,16 @@ ol.q{padding-left:22px;display:grid;gap:9px}
 .tv{min-height:120px;border-radius:18px;overflow:hidden}
 .tradingview-widget-container{color-scheme:light}
 .tv-credit{font-size:12.5px;color:var(--muted);padding-block:4px}
+/* ver más */
+.mas{border:0}
+.mas>summary{cursor:pointer;list-style:none;display:inline-flex;align-items:center;gap:8px;font-size:14.5px;font-weight:500;color:var(--mint);padding:6px 0}
+.mas>summary::-webkit-details-marker{display:none}
+.mas>summary::after{content:"";width:7px;height:7px;border-right:1.8px solid;border-bottom:1.8px solid;transform:translateY(-2px) rotate(45deg)}
+.mas[open]>summary::after{transform:translateY(2px) rotate(225deg)}
+.mas>div{display:grid;gap:14px;padding-top:8px}
+.avisar{font-size:13px;display:inline-block;padding:5px 0}
+.saltar{position:absolute;left:12px;top:-60px;z-index:9;background:var(--mint);color:#06110C;padding:10px 16px;border-radius:999px;text-decoration:none;font-weight:500}
+.saltar:focus{top:12px}
 footer{border-top:1px solid var(--line);padding-block:24px 44px;font-size:13.5px;color:var(--muted)}
 footer .wrap{display:grid;gap:8px}
 
@@ -215,7 +226,7 @@ footer .wrap{display:grid;gap:8px}
   @supports (animation-timeline:view()){.in .stack>section{animation:rise2 linear both;animation-timeline:view();animation-range:entry 0% entry 35%}}
 }
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
-@keyframes rise{from{opacity:0;transform:translateY(26px);filter:blur(12px)}}
+@keyframes rise{from{opacity:.3;transform:translateY(16px)}}
 @keyframes rcard{from{opacity:.4;transform:translateY(16px)}}
 @keyframes rise2{from{opacity:.25;transform:translateY(30px)}}
 @keyframes sheen{from{background-position:100% 0}}
@@ -230,6 +241,7 @@ footer .wrap{display:grid;gap:8px}
 </style>
 </head>
 <body>
+<a class="saltar" href="#contenido">Ir al contenido</a>
 <div class="aura" aria-hidden="true"><i></i><i></i><i></i></div>
 <div class="top"><div class="wrap">
   <div class="brand">Valenttiel <span>Macro</span></div>
@@ -241,7 +253,7 @@ footer .wrap{display:grid;gap:8px}
 </div></div>
 <div class="tape" id="tape"></div>
 
-<main class="wrap">
+<main class="wrap" id="contenido" tabindex="-1">
   <div class="view" id="v-hoy"><p class="muted">Cargando el resumen…</p></div>
   <div class="view" id="v-activos" hidden></div>
   <div class="view" id="v-en-vivo" hidden>
@@ -325,6 +337,9 @@ const isoDia=d=>new Intl.DateTimeFormat('en-CA',{timeZone:TZ,year:'numeric',mont
 const diaLargo=s=>{const t=fmt(new Date(s+'T12:00:00-03:00'),{weekday:'long',day:'numeric',month:'long'});return t[0].toUpperCase()+t.slice(1);};
 const signo=(x,u,dec=2)=>(x>0?'+':x<0?'−':'')+Math.abs(x).toLocaleString('es-AR',{minimumFractionDigits:dec,maximumFractionDigits:dec})+(u==='pb'?' pb':'%');
 function el(t,p,...k){const n=document.createElement(t);for(const a in p||{}){if(a==='class')n.className=p[a];else if(a==='text')n.textContent=p[a];else if(a==='style')n.style.cssText=p[a];else if(a.startsWith('on'))n.addEventListener(a.slice(2),p[a]);else n.setAttribute(a,p[a]);}for(const c of k.flat())if(c!=null&&c!==false)n.append(c);return n;}
+const mas=(t,...k)=>el('details',{class:'mas'},el('summary',{text:t}),el('div',{},...k));
+/* Primeras frases a la vista, el resto plegado. */
+function partir(s,n){const f=String(s).split(/(?<=[.!?])\s+(?=[A-ZÁÉÍÓÚÑ¿¡])/);return f.length<=n+1?[s,'']:[f.slice(0,n).join(' '),f.slice(n).join(' ')];}
 const sec=(t,...k)=>el('section',{},el('h2',{text:t}),...k);
 let idx=null,hoy=null,visto='',grupo='Todos';
 
@@ -347,6 +362,7 @@ const A={
  alphabet:['Alphabet','Acciones','NASDAQ:GOOGL','Vive en gran parte de la publicidad, que sigue el ciclo de la economía.'],
  meta:['Meta','Acciones','NASDAQ:META','Publicidad e inversión en IA. Sensible al crecimiento y al costo del dinero.'],
  tesla:['Tesla','Acciones','NASDAQ:TSLA','Muchos autos se compran a crédito, así que la tasa pesa en la demanda. Es muy volátil.']};
+const CALC={nasdaq:'fut-NQ',sp500:'fut-ES',dow:'fut-YM',oro:'fut-GC',petroleo:'fut-CL',eurusd:'fx-EURUSD',bitcoin:'cri-BTC',ethereum:'cri-ETH'};
 const GRUPOS=['Todos','Índices','Materias primas','Dólar y tasas','Cripto','Acciones'];
 const veces=r=>r.normal30>0?r.r30/r.normal30:0;
 function fuerza(r){const v=Math.abs(veces(r));return v>=2?['Movimiento fuerte','mayor']:v>=1.2?['Más que lo habitual','mayor']:['Dentro de lo habitual',''];}
@@ -378,7 +394,7 @@ function abrir(d,r,id){
     ...(r?[el('dl',{class:'facts'},el('div',{},el('dt',{text:'30 min después'}),el('dd',{class:clase(r.r30),text:signo(r.r30,r.unidad)})),el('div',{},el('dt',{text:'2 horas antes'}),el('dd',{class:clase(r.antes||0),text:Number.isFinite(r.antes)?signo(r.antes,r.unidad):'s/d'})),el('div',{},el('dt',{text:'Habitual en 30 min'}),el('dd',{text:signo(r.normal30,r.unidad).replace('+','±')}))),
     el('div',{},curva(r,130),eje(d,r)),el('p',{text:frase(r)}),el('p',{class:'small'},el('span',{class:'chip'+(r.fuentes>=2?' ok':''),text:r.fuentes>=2?'Verificado en '+r.fuentes+' bolsas':'Una sola fuente'}),' ',el('span',{class:'muted',text:'Fuente: '+(typeof r.fuente==='string'?r.fuente:'sin identificar')}))]:[el('p',{class:'muted',text:id==='tasa10'?'Es un dato oficial diario del Tesoro: no se mide minuto a minuto.':'Todavía no hay una fuente verificada para medir la reacción de este activo al dato. Abajo está su precio en vivo.'})]),
     el('div',{},el('h3',{text:'Cómo suele afectarle un dato'}),el('p',{class:'muted',text:a[3]})),
-    r?el('p',{class:'muted small',text:'La medida muestra qué pasó después del dato. No prueba que el dato haya sido la causa.'}):null,a[2]?box:null,cta('macro-activo','¿Querés aprender a leer esto?','Dejanos tus datos y te contamos cómo seguir.')));
+    r?el('p',{class:'muted small',text:'La medida muestra qué pasó después del dato. No prueba que el dato haya sido la causa.'}):null,a[2]?box:null,a[1]==='Acciones'||CALC[id||r.id]?el('div',{class:'btns'},el('a',{class:'btn',href:'calculadora/#'+(CALC[id||r.id]||'acc'),text:'Calcular mi tamaño'})):null,cta('macro-activo','¿Querés aprender a leer esto?','Dejanos tus datos y te contamos cómo seguir.')));
   D.showModal();D.scrollTop=0;
   if(a[2])tv(box,'mini-symbol-overview',{...base,symbol:a[2],width:'100%',height:210,dateRange:'1D',autosize:false});
 }
@@ -449,31 +465,39 @@ function cotiza(){
   tv(panelVivo,'market-quotes',{...base,isTransparent:true,width:'100%',height:690,showSymbolLogo:true,symbolsGroups:g});
   return panelVivo;
 }
+function tabla(rs){return el('div',{class:'scroll',tabindex:'0',role:'region','aria-label':'Datos publicados'},el('table',{},el('thead',{},el('tr',{},['Dato','Salió','Previsto','Anterior','Contra lo previsto'].map(t=>el('th',{scope:'col',text:t})))),
+  el('tbody',{},rs.map(r=>el('tr',{},el('td',{},r.nombre,r.nota?el('small',{text:r.nota}):null),el('td',{class:'num'},el('b',{text:r.salio})),el('td',{class:'num',text:r.previsto||'s/d'}),el('td',{class:'num',text:r.anterior||'s/d'}),el('td',{},el('span',{class:'chip '+(['mayor','menor'].includes(r.sorpresa)?r.sorpresa:''),text:{mayor:'Mayor',menor:'Menor',igual:'En línea'}[r.sorpresa]||'s/d'})))))));}
+/* Recordatorios: un enlace por dato y un archivo con todos. */
+const nomEv=a=>/EE\.UU\./.test(a.evento)?a.evento:a.evento+' (EE.UU.)';
+const utc=d=>new Date(d).toISOString().replace(/[-:]|\.\d{3}/g,'');
+function google(a){const t=new Date(a.cuando);return'https://calendar.google.com/calendar/render?action=TEMPLATE&text='+encodeURIComponent(nomEv(a))+'&dates='+utc(t)+'/'+utc(+t+15*6e4)+'&details='+encodeURIComponent('Ver el dato en vivo: https://dalozyx-dot.github.io/valenttiel-macro/#en-vivo');}
+function ics(l){const x=s=>String(s).replace(/([\\,;])/g,'\\$1').replace(/\n/g,' ');
+  const t=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Valenttiel Macro//ES',...l.flatMap(a=>['BEGIN:VEVENT','UID:'+utc(a.cuando)+'-'+a.evento.replace(/[^a-z0-9]/gi,'').slice(0,20)+'@valenttiel-macro','DTSTAMP:'+utc(Date.now()),'DTSTART:'+utc(a.cuando),'DTEND:'+utc(+new Date(a.cuando)+15*6e4),'SUMMARY:'+x(nomEv(a)),'BEGIN:VALARM','ACTION:DISPLAY','DESCRIPTION:'+x(a.evento),'TRIGGER:-PT15M','END:VALARM','END:VEVENT']),'END:VCALENDAR',''].join('\r\n');
+  const u=URL.createObjectURL(new Blob([t],{type:'text/calendar;charset=utf-8'})),k=el('a',{href:u,download:'datos-valenttiel-macro.ics'});document.body.append(k);k.click();k.remove();setTimeout(()=>URL.revokeObjectURL(u),4000);}
 function pintar(d,box,archivo,anima){
   const pend=archivo?[]:sinResumir(d),esHoy=d.fecha===isoDia(new Date()),top=medidas(d).sort((a,b)=>Math.abs(veces(b))-Math.abs(veces(a))).slice(0,6);
   box.classList.toggle('in',!!anima);
   const hero=el('div',{class:'hero'},
     el('p',{class:'stamp'},diaLargo(d.fecha)+', resumen de las '+hora(new Date(d.actualizado)),archivo?null:el('span',{id:'hace'})),
-    el('h1',{class:'grad',text:d.titular}),el('p',{class:'lead',text:d.bajada}),
+    el('h1',{class:'grad',text:d.titular}),el('p',{class:'lead',text:partir(d.bajada,3)[0]}),partir(d.bajada,3)[1]&&mas('Seguir leyendo',el('p',{class:'lead',text:partir(d.bajada,3)[1]})),
     !archivo&&!esHoy&&el('p',{class:'warn',text:'Este es el último resumen disponible. Todavía no hay uno de hoy; los datos en vivo están en la pestaña En vivo.'}),
     pend.length>0&&el('p',{class:'warn',text:'Ya se publicó o está por aparecer: '+pend.map(a=>a.evento).join(', ')+'. Todavía no está en este resumen; miralo en En vivo.'}));
   const izq=el('div',{class:'stack'},
+    sec('Lo importante',el('div',{class:'ideas'},d.ideas.map(i=>el('div',{},el('h3',{text:i.titulo}),el('p',{class:'muted',text:i.texto}))))),
     sec('Hacia dónde empuja a la Fed',el('div',{class:'thermo'},el('div',{class:'scale'},el('span',{text:'Aflojar'}),el('span',{text:'Frenar'})),
       d.termometro.map(f=>el('div',{class:'factor'},el('header',{},el('h3',{text:f.factor}),el('span',{class:'num small',text:f.dato})),el('div',{class:'rail',role:'img','aria-label':f.factor+': '+f.texto},el('i',{style:'left:'+Math.max(4,Math.min(96,Number(f.posicion)||50))+'%'})),el('p',{class:'muted small',text:f.texto})))),
       el('p',{class:'muted small',text:'Lectura cualitativa para aprender. No es un indicador estadístico.'})),
     top.length>0&&el('section',{class:'glass'},el('h2',{text:'Los que más se movieron con el dato'}),el('p',{class:'muted small',text:'Foto fija: los 30 minutos después de las '+hora(new Date(d.reaccion.cuando))+' ('+d.reaccion.evento+'), en veces su movimiento habitual. Cambia cuando se mide otro dato.'}),ranking(d,top),!archivo&&el('div',{class:'btns'},el('a',{class:'btn',href:'#activos',text:'Ver todos los activos'}))),
     !archivo&&sec('Cómo están ahora',el('p',{class:'muted small',text:'Precios en vivo. Cambian solos mientras cada mercado está abierto; el porcentaje es el del día.'}),cotiza()),
-    sec('Lo importante',el('div',{class:'ideas'},d.ideas.map(i=>el('div',{},el('h3',{text:i.titulo}),el('p',{class:'muted',text:i.texto}))))),
-    sec('Los números',el('div',{class:'scroll'},el('table',{},el('thead',{},el('tr',{},['Dato','Salió','Previsto','Anterior','Contra lo previsto'].map(t=>el('th',{scope:'col',text:t})))),
-      el('tbody',{},d.datos.map(r=>el('tr',{},el('td',{},r.nombre,r.nota?el('small',{text:r.nota}):null),el('td',{class:'num'},el('b',{text:r.salio})),el('td',{class:'num',text:r.previsto||'s/d'}),el('td',{class:'num',text:r.anterior||'s/d'}),el('td',{},el('span',{class:'chip '+(['mayor','menor'].includes(r.sorpresa)?r.sorpresa:''),text:{mayor:'Mayor',menor:'Menor',igual:'En línea'}[r.sorpresa]||'s/d'})))))))),
+    sec('Los números',tabla(d.datos.slice(0,d.datos.length>10?8:10)),d.datos.length>10?mas('Ver los otros '+(d.datos.length-8)+' datos',tabla(d.datos.slice(8))):null),
     sec('Qué cambia para la Fed',el('p',{class:'lead',text:d.fed})),
-    sec('El mercado',d.mercado.map(t=>el('p',{class:'muted',text:t}))),
+    sec('El mercado',d.mercado.slice(0,d.mercado.length>5?3:5).map(t=>el('p',{class:'muted',text:t})),d.mercado.length>5?mas('Leer las otras '+(d.mercado.length-3)+' notas',d.mercado.slice(3).map(t=>el('p',{class:'muted',text:t}))):null),
     d.leccion&&el('section',{class:'glass'},el('h2',{text:'Lección del día'}),el('p',{text:d.leccion})),
     sec('Fuentes',el('p',{class:'small muted'},d.fuentes.filter(f=>/^https:\/\//.test(f.url)).map((f,i)=>[i?', ':'',el('a',{href:f.url,target:'_blank',rel:'noopener',text:f.nombre})]).flat())));
   const copiar=el('button',{class:'btn main',type:'button',text:'Copiar resumen',onclick:async e=>{const b=e.currentTarget;try{await navigator.clipboard.writeText(d.mensaje);b.textContent='Resumen copiado';}catch(x){b.textContent='No se pudo copiar';}setTimeout(()=>b.textContent='Copiar resumen',2200);}});
   const der=el('div',{class:'stack'},
     !archivo&&el('div',{class:'glass',id:'prox'}),
-    sec(archivo?'Agenda de ese día':'Agenda',el('ul',{class:'agenda'},[...d.agenda].sort((a,b)=>new Date(a.cuando)-new Date(b.cuando)).map(a=>el('li',{class:new Date(a.cuando)<new Date()?'past':''},el('span',{class:'num',text:cuando(a)}),el('div',{},a.evento,datoTxt(a)?el('div',{class:'muted small',text:datoTxt(a)}):null)))),el('p',{class:'muted small',text:'Horarios de Argentina.'})),
+    sec(archivo?'Agenda de ese día':'Agenda',el('ul',{class:'agenda'},[...d.agenda].sort((a,b)=>new Date(a.cuando)-new Date(b.cuando)).map(a=>el('li',{class:new Date(a.cuando)<new Date()?'past':''},el('span',{class:'num',text:cuando(a)}),el('div',{},a.evento,datoTxt(a)?el('div',{class:'muted small',text:datoTxt(a)}):null,!archivo&&new Date(a.cuando)>new Date()?el('div',{},el('a',{class:'avisar',href:google(a),target:'_blank',rel:'noopener',text:'Recordarme en Google Calendar','aria-label':'Recordarme '+a.evento+' en Google Calendar'})):null)))),el('p',{class:'muted small',text:'Horarios de Argentina.'}),!archivo&&prox(d)?el('div',{class:'btns'},el('button',{class:'btn',type:'button',text:'Agregar todos a mi calendario',onclick:()=>ics((d.agenda||[]).filter(a=>new Date(a.cuando)>new Date()))})):null),
     sec('Compartir',el('div',{class:'btns'},copiar,el('a',{class:'btn',href:'https://wa.me/?text='+encodeURIComponent(d.mensaje),target:'_blank',rel:'noopener',text:'Abrir en WhatsApp'}))));
   box.replaceChildren(hero,el('div',{class:'cols'},izq,der),...(archivo?[]:[cta('macro-hoy','¿Querés llegar a esta lectura por tu cuenta?','Te enseñamos a leer un dato antes de operar.')]));
 }
@@ -484,7 +508,7 @@ function tick(){
   const ya=(hoy.agenda||[]).find(x=>{const t=now-new Date(x.cuando);return t>=0&&t<600000&&!x.salio;}),a=ya?null:prox(hoy),id=ya?'ya'+ya.cuando:a?a.cuando:'-';
   if(ya&&p.dataset.id!==id){p.dataset.id=id;p.replaceChildren(el('p',{class:'stamp',text:'Saliendo ahora'}),el('h2',{text:ya.evento}),el('p',{class:'muted small',text:datoTxt(ya)||'El número aparece en el calendario en vivo.'}),el('div',{class:'btns'},el('a',{class:'btn main',href:'#en-vivo',text:'Ver el dato en vivo'})));}
   if(ya)return;
-  if(p.dataset.id!==id){p.dataset.id=id;p.replaceChildren(...(a?[el('p',{class:'muted small',text:'Próximo dato'}),el('div',{class:'count',id:'count'}),el('h3',{text:a.evento}),el('p',{class:'muted small',text:cuando(a)+(datoTxt(a)?' · '+datoTxt(a):'')})]:[el('h3',{text:'Sin datos pendientes'}),el('p',{class:'muted small',text:'Mirá el calendario en la pestaña En vivo.'})]));}
+  if(p.dataset.id!==id){p.dataset.id=id;p.replaceChildren(...(a?[el('p',{class:'muted small',text:'Próximo en la agenda'}),el('div',{class:'count',id:'count'}),el('h3',{text:a.evento}),el('p',{class:'muted small',text:cuando(a)+(datoTxt(a)?' · '+datoTxt(a):'')})]:[el('h3',{text:'Sin datos pendientes'}),el('p',{class:'muted small',text:'Mirá el calendario en la pestaña En vivo.'})]));}
   if(a){const s=Math.max(0,Math.floor((new Date(a.cuando)-now)/1000)),dd=Math.floor(s/86400),h=Math.floor(s%86400/3600),m=Math.floor(s%3600/60),pad=x=>String(x).padStart(2,'0');$('count').textContent=dd?dd+' d '+pad(h)+' h':pad(h)+':'+pad(m)+':'+pad(s%60);}
 }
 const FECHA=/^\d{4}-\d{2}-\d{2}$/;
@@ -525,9 +549,11 @@ function historial(){
 const VISTAS=['hoy','activos','en-vivo','historial','aprender','sumate'];
 function pildora(){const a=document.querySelector('.tabs a[aria-current]');if(!a)$('pill').style.width='0';else{$('pill').style.width=a.offsetWidth+'px';$('pill').style.transform='translateX('+a.offsetLeft+'px)';a.scrollIntoView({block:'nearest',inline:'nearest'});}}
 function ruta(){
+  if(location.hash==='#contenido'){$('contenido').focus();return;}
   const v=VISTAS.includes(location.hash.slice(1))?location.hash.slice(1):'hoy';
   const cambia=()=>{VISTAS.forEach(x=>$('v-'+x).hidden=x!==v);
     document.querySelectorAll('.tabs a,.join').forEach(a=>a.getAttribute('href')==='#'+v?a.setAttribute('aria-current','page'):a.removeAttribute('aria-current'));
+    document.title=(v==='hoy'?'':({activos:'Activos','en-vivo':'En vivo',historial:'Historial',aprender:'Aprender',sumate:'Sumate'})[v]+' | ')+'Valenttiel Macro';
     if(v==='historial'&&idx){viendoDia=false;historial();}
     if(v==='en-vivo')enVivo();if(v==='sumate'&&!sDesde)sDesde=Date.now();if(v==='activos'){if(hoy)activos(hoy,true);else if(!vistaA)armarActivos();}
     $('v-'+v).classList.add('in');window.scrollTo(0,0);pildora();};
@@ -535,7 +561,7 @@ function ruta(){
 }
 /* ---------- sumate ---------- */
 const API=['localhost','127.0.0.1'].includes(location.hostname)?'http://localhost:3100/api/sumate':'https://leads-vbm4.vercel.app/api/sumate';
-let sOrigen='macro-sumate',sDesde=0;
+let sOrigen=new URLSearchParams(location.search).get('de')==='calculadora'?'calculadora':'macro-sumate',sDesde=0;
 document.querySelectorAll('.cta-slot').forEach(x=>x.replaceWith(cta(x.dataset.origen,'¿Querés practicarlo con guía?','Dejanos tus datos y te contamos cómo seguir.')));
 $('s-exp').append(...['Nunca operé','Menos de 1 año','De 1 a 3 años','Más de 3 años'].map((t,i)=>el('label',{for:'s-e'+i},el('input',{type:'radio',id:'s-e'+i,name:'experiencia',value:t}),t)));
 (()=>{
@@ -564,6 +590,7 @@ ruta();cargar();tick();
 setInterval(tick,1000);setInterval(cargar,45000);document.addEventListener('visibilitychange',()=>{if(!document.hidden)cargar();});
 let firma='';const firmar=()=>hoy?hoy.actualizado+'|'+sinResumir(hoy).map(x=>x.cuando).join()+'|'+(hoy.agenda||[]).filter(x=>new Date(x.cuando)<new Date()).length:'';
 setInterval(()=>{const f=firmar();if(hoy&&!$('v-hoy').hidden&&firma&&f!==firma){pintar(hoy,$('v-hoy'));tick();}firma=f;},60000);
+if('serviceWorker' in navigator&&location.hostname==='dalozyx-dot.github.io')navigator.serviceWorker.register('sw.js').catch(()=>{});
 </script>
 </body>
 </html>
