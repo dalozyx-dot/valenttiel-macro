@@ -51,6 +51,7 @@ button{cursor:pointer}
 .num{font-family:var(--m);font-variant-numeric:tabular-nums;letter-spacing:-.02em;white-space:nowrap}
 .grad{background:linear-gradient(100deg,var(--ink) 35%,var(--mint) 78%,var(--aqua));-webkit-background-clip:text;background-clip:text;color:transparent}
 header.top{padding-block:20px 0;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:4px 16px}
+header.top nav{display:flex;gap:18px}
 header.top a{font-size:14.5px;color:var(--muted);text-underline-offset:3px;text-decoration-color:var(--line)}header.top a:hover{color:var(--mint)}
 .brand{font-weight:600;font-size:17px;letter-spacing:-.03em}.brand span{color:var(--mint)}
 .intro{display:grid;gap:10px;padding-block:22px 24px}
@@ -175,7 +176,7 @@ footer{border-top:1px solid var(--line);padding-block:20px 34px;display:grid;gap
 <!--CUERPO-->
 <div class="aura" aria-hidden="true"></div>
 <div class="wrap">
-  <header class="top"><div class="brand">Valenttiel <span>Calculadora</span></div><a href="https://dalozyx-dot.github.io/valenttiel-macro/">Ir a Valenttiel Macro</a></header>
+  <header class="top"><div class="brand">Valenttiel <span>Calculadora</span></div><nav aria-label="Secciones"><a href="https://dalozyx-dot.github.io/valenttiel-macro/">Macro</a> <a href="https://dalozyx-dot.github.io/valenttiel-macro/reto/">Reto 20</a></nav></header>
   <div class="intro"><h1 class="grad">¿Con cuánto entro?</h1><p>Poné tu cuenta, tu riesgo y tu stop. Te dice cuántos contratos, micros, lotes o monedas, y con qué apalancamiento.</p></div>
   <div class="tabs" id="tabs" role="group" aria-label="Mercado"></div>
   <div class="aviso" id="aviso" role="status" hidden></div>
@@ -691,7 +692,7 @@ function diario(){
     h+='<ul class="diario">'+D.slice(0,50).map(function(x){var f=new Date(x.t);
       return '<li><div><b>'+txt(x.n)+', '+txt(x.st)+'</b><div class="muted small">'+f.toLocaleDateString('es-AR',{day:'2-digit',month:'2-digit'})+' '+f.toLocaleTimeString('es-AR',{hour:'2-digit',minute:'2-digit',hour12:false})+'. Riesgo '+usd(x.risk)+', objetivo '+(x.gain>=0?'+':'')+usd(x.gain)+'</div></div><div class="btns">'+[['g','Ganó'],['p','Perdió'],['e','Empate']].map(function(o){return '<button type="button" class="chipb '+o[0]+'" data-e="'+o[0]+'" data-i="'+x.t+'" aria-pressed="'+(x.e===o[0])+'">'+o[1]+'</button>'}).join('')+'<button type="button" class="chipb" data-b="'+x.t+'">Borrar</button></div></li>'}).join('')+'</ul>';
     if(D.length>50)h+='<p class="muted small">Se muestran las últimas 50 de '+nf(D.length)+'.</p>';
-    h+='<div class="btns"><button type="button" class="btn" id="csv">Copiar para Excel</button></div><p class="muted small">Queda solo en este navegador: si borrás sus datos o cambiás de dispositivo, se pierde. Ganó cuenta el objetivo completo, con comisiones.</p>';
+    h+='<p class="muted small">¿Cumpliste tu plan? <a href="https://dalozyx-dot.github.io/valenttiel-macro/reto/?desde=diario">Anotalo en el Reto 20</a> y medí tu disciplina.</p><div class="btns"><button type="button" class="btn" id="csv">Copiar para Excel</button></div><p class="muted small">Queda solo en este navegador: si borrás sus datos o cambiás de dispositivo, se pierde. Ganó cuenta el objetivo completo, con comisiones.</p>';
   }
   $('diario').innerHTML=h;
 }

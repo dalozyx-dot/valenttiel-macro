@@ -6,7 +6,7 @@ var local=/^(localhost|127\.0\.0\.1)$/.test(location.hostname);
 if(!local&&location.hostname!=='dalozyx-dot.github.io')return;
 var API=local?'http://localhost:3100/api/visita':'https://leads-vbm4.vercel.app/api/visita';
 var K='vt-visita',KP='vt-persona',KN='vt-no-contar',CADA=60000,CORTE=30*60000,QUIETO=10*60000;
-var q=new URLSearchParams(location.search),calc=/\/calculadora\//.test(location.pathname);
+var q=new URLSearchParams(location.search),calc=/\/calculadora\//.test(location.pathname)?'calculadora':/\/reto\//.test(location.pathname)?'reto':'';
 function leer(s,k){try{return s.getItem(k)}catch(e){return null}}
 function poner(s,k,v){try{s.setItem(k,v)}catch(e){}}
 function sacar(s,k){try{s.removeItem(k)}catch(e){}}
@@ -48,7 +48,7 @@ function enviar(cierra){
   try{fetch(API,{method:'POST',keepalive:true,credentials:'omit',headers:{'Content-Type':'text/plain'},body:JSON.stringify({id:v.id,persona:v.persona,vuelve:v.vuelve,pasos:v.pasos,acciones:v.acciones,ref:v.ref,etiqueta:v.etiqueta,segundos:Math.round(v.ms/1000),cerrada:!!cierra})}).catch(function(){})}catch(e){}
 }
 function paso(p){if(v&&v.pasos[v.pasos.length-1]!==p){v.pasos.push(p);v.pasos=v.pasos.slice(-40)}}
-function seccion(){var h=location.hash.slice(1);return calc?'calculadora':['activos','en-vivo','historial','aprender','sumate'].indexOf(h)>=0?h:'hoy'}
+function seccion(){var h=location.hash.slice(1);return calc?calc:['activos','en-vivo','historial','aprender','sumate'].indexOf(h)>=0?h:'hoy'}
 function accion(a){if(v&&v.acciones.indexOf(a)<0){v.acciones.push(a);enviar()}}
 function parar(){clearInterval(reloj);reloj=0;v=null}
 function arrancar(){

@@ -246,7 +246,7 @@ footer .wrap{display:grid;gap:8px}
 <div class="top"><div class="wrap">
   <div class="brand">Valenttiel <span>Macro</span></div>
   <nav class="tabs" aria-label="Secciones"><span class="pill" id="pill"></span>
-    <a href="#hoy">Hoy</a><a href="#activos">Activos</a><a href="calculadora/">Calculadora</a><a href="#en-vivo">En vivo</a><a href="#historial">Historial</a><a href="#aprender">Aprender</a>
+    <a href="#hoy">Hoy</a><a href="#activos">Activos</a><a href="calculadora/">Calculadora</a><a href="reto/">Reto 20</a><a href="#en-vivo">En vivo</a><a href="#historial">Historial</a><a href="#aprender">Aprender</a>
   </nav>
   <div class="clock num" id="clock"></div>
   <a class="join" href="#sumate">Sumate</a>
@@ -498,6 +498,7 @@ function pintar(d,box,archivo,anima){
   const der=el('div',{class:'stack'},
     !archivo&&el('div',{class:'glass',id:'prox'}),
     sec(archivo?'Agenda de ese día':'Agenda',el('ul',{class:'agenda'},[...d.agenda].sort((a,b)=>new Date(a.cuando)-new Date(b.cuando)).map(a=>el('li',{class:new Date(a.cuando)<new Date()?'past':''},el('span',{class:'num',text:cuando(a)}),el('div',{},a.evento,datoTxt(a)?el('div',{class:'muted small',text:datoTxt(a)}):null,!archivo&&new Date(a.cuando)>new Date()?el('div',{},el('a',{class:'avisar',href:google(a),target:'_blank',rel:'noopener',text:'Recordarme en Google Calendar','aria-label':'Recordarme '+a.evento+' en Google Calendar'})):null)))),el('p',{class:'muted small',text:'Horarios de Argentina.'}),!archivo&&prox(d)?el('div',{class:'btns'},el('button',{class:'btn',type:'button',text:'Agregar todos a mi calendario',onclick:()=>ics((d.agenda||[]).filter(a=>new Date(a.cuando)>new Date()))})):null),
+    !archivo&&el('section',{class:'glass'},el('h2',{text:'Reto 20'}),el('p',{class:'muted small',text:'20 operaciones cumpliendo tu plan, solo o con tu equipo. Mide disciplina, no ganancias.'}),el('div',{class:'btns'},el('a',{class:'btn main',href:'reto/?desde=hoy',text:'Entrar al reto'}))),
     sec('Compartir',el('div',{class:'btns'},copiar,el('a',{class:'btn',href:'https://wa.me/?text='+encodeURIComponent(d.mensaje),target:'_blank',rel:'noopener',text:'Abrir en WhatsApp'}))));
   box.replaceChildren(hero,el('div',{class:'cols'},izq,der),...(archivo?[]:[cta('macro-hoy','¿Querés llegar a esta lectura por tu cuenta?','Te enseñamos a leer un dato antes de operar.')]));
 }
@@ -561,7 +562,7 @@ function ruta(){
 }
 /* ---------- sumate ---------- */
 const API=['localhost','127.0.0.1'].includes(location.hostname)?'http://localhost:3100/api/sumate':'https://leads-vbm4.vercel.app/api/sumate';
-let sOrigen=new URLSearchParams(location.search).get('de')==='calculadora'?'calculadora':'macro-sumate',sDesde=0;
+let sOrigen=['calculadora','reto'].find(x=>x===new URLSearchParams(location.search).get('de'))||'macro-sumate',sDesde=0;
 document.querySelectorAll('.cta-slot').forEach(x=>x.replaceWith(cta(x.dataset.origen,'¿Querés practicarlo con guía?','Dejanos tus datos y te contamos cómo seguir.')));
 $('s-exp').append(...['Nunca operé','Menos de 1 año','De 1 a 3 años','Más de 3 años'].map((t,i)=>el('label',{for:'s-e'+i},el('input',{type:'radio',id:'s-e'+i,name:'experiencia',value:t}),t)));
 (()=>{
