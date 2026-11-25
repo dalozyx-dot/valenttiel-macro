@@ -312,8 +312,10 @@ footer .wrap{display:grid;gap:8px}
 <footer><div class="wrap">
   <p>Contenido educativo. No es asesoramiento financiero ni una recomendación de compra o venta.</p>
   <p>Precios y calendario en vivo de TradingView. La fuente de cada dato está en la pestaña Aprender. Pueden tener demora.</p>
+  <p data-medir></p>
 </div></footer>
 
+<script src="medir.js" defer></script>
 <script>
 'use strict';
 const TZ='America/Argentina/Buenos_Aires',$=id=>document.getElementById(id),CALMA=matchMedia('(prefers-reduced-motion:reduce)');
@@ -551,6 +553,7 @@ $('s-exp').append(...['Nunca operé','Menos de 1 año','De 1 a 3 años','Más de
       const r=await fetch(API,{method:'POST',signal:c.signal,headers:{'Content-Type':'application/json'},body:JSON.stringify({nombre:v('nombre'),contacto:v('contacto'),experiencia:v('experiencia'),que_le_cuesta:v('que_le_cuesta'),sitio_web:v('sitio_web'),origen:sOrigen,acepto:true,segundos:sDesde?Math.round((Date.now()-sDesde)/1000):0})});
       const j=await r.json().catch(()=>({}));
       if(!r.ok||!j.ok){mal(j.campo,typeof j.error==='string'?j.error:'No pudimos guardar tus datos. Probá de nuevo en unos minutos.');return;}
+      if(window.medirAccion)medirAccion('se-anoto');
       f.replaceChildren(el('div',{class:'done',tabindex:'-1',id:'s-ok'},el('h2',{text:'Listo, recibimos tus datos'}),el('p',{class:'muted',text:'Te vamos a escribir a '+v('contacto')+'. Mientras tanto, seguí practicando con el resumen de hoy.'}),el('div',{class:'btns'},el('a',{class:'btn',href:'#hoy',text:'Ver el resumen de hoy'}))));$('s-ok').focus();
     }catch(x){mal('','No hay conexión con el formulario. Tus respuestas siguen acá: probá de nuevo en un rato.');}
     finally{clearTimeout(t);btn.disabled=false;btn.textContent='Quiero que me contacten';}
