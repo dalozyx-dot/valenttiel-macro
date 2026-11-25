@@ -1,32 +1,32 @@
 {
  "fecha": "2026-11-25",
- "actualizado": "2026-11-25T15:27:25-03:00",
+ "actualizado": "2026-11-25T16:24:42-03:00",
  "titular": "La economía sigue fuerte y la inflación no afloja",
- "bajada": "Los datos respaldan a una Fed dura. El PIB sorprendió al alza, hay pocos despidos y la inflación subyacente subió a 3,3%. El punto flojo es el consumidor, que en octubre se estancó. A las 12:00, las ventas de viviendas nuevas dieron 701K contra 650K previsto, pero el mes anterior se revisó fuerte a la baja. A las 13:30, el Tesoro vendió bonos a 7 años al 4,708%, contra 4,894% en la subasta anterior. Y la Fed de Atlanta bajó su estimación de crecimiento del 4T a 2,9%.",
+ "bajada": "Los datos respaldan a una Fed dura. El PIB sorprendió al alza, hay pocos despidos y la inflación subyacente subió a 3,3%. El punto flojo es el consumidor, que en octubre se estancó. A las 12:00, las ventas de viviendas nuevas dieron 701K contra 650K previsto, pero el mes anterior se revisó fuerte a la baja. A las 13:30, el Tesoro vendió bonos a 7 años al 4,708%, contra 4,894% en la subasta anterior. Y la Fed de Atlanta bajó su estimación de crecimiento del 4T a 2,9%. A las 16:00 salió el Libro Beige: 8 de los 12 distritos de la Fed informan crecimiento (9 en octubre) y los salarios pasaron de subir en forma modesta a moderada.",
  "termometro": [
   {
    "factor": "Crecimiento",
    "dato": "PIB 4,3%",
    "posicion": 82,
-   "texto": "Muy por encima de lo previsto, aunque cubre de julio a septiembre. Para el 4T, el GDPNow bajó a 2,9%."
+   "texto": "Muy por encima de lo previsto, aunque cubre de julio a septiembre. Para el 4T, el GDPNow bajó a 2,9%. En el Libro Beige crecen 8 de 12 distritos (9 en octubre)."
   },
   {
    "factor": "Empleo",
    "dato": "Subsidios 189K",
    "posicion": 78,
-   "texto": "Menos pedidos de los esperados: hay pocos despidos."
+   "texto": "Menos pedidos de los esperados: hay pocos despidos. Según el Libro Beige, el empleo subió apenas y los salarios subieron más que en el informe anterior."
   },
   {
    "factor": "Inflación",
    "dato": "PCE subyacente 3,3%",
    "posicion": 76,
-   "texto": "Apenas arriba de lo previsto y lejos del objetivo de 2%. El mensual salió en línea."
+   "texto": "Apenas arriba de lo previsto y lejos del objetivo de 2%. El mensual salió en línea. En el Libro Beige, los precios subieron en forma moderada, igual que en el informe anterior."
   },
   {
    "factor": "Consumo",
    "dato": "Consumo real 0,0%",
    "posicion": 30,
-   "texto": "La gente gastó 0,3% más, pero los precios también subieron 0,3%."
+   "texto": "La gente gastó 0,3% más, pero los precios también subieron 0,3%. El Libro Beige también ve el gasto casi sin cambios."
   }
  ],
  "ideas": [
@@ -170,10 +170,20 @@
    "previsto": "-19B",
    "anterior": "20B",
    "sorpresa": "menor"
+  },
+  {
+   "nombre": "Libro Beige",
+   "nota": "Distritos de la Fed con crecimiento. Los otros 4, sin cambios",
+   "salio": "8 de 12",
+   "previsto": "",
+   "anterior": "9 de 12",
+   "sorpresa": "sd"
   }
  ],
- "fed": "La tasa está en 3,75% a 4,00% y la próxima decisión es el 9 de diciembre. Antes de los datos de hoy, el mercado daba 97,5% a una suba de 0,25 puntos, según CME FedWatch citado por Fortune el 24/11. Después del PCE, Yahoo Finance citaba cerca de 98%, según CME (10:50 de Argentina). Con diciembre casi descontado, la atención pasa a enero.",
+ "fed": "La tasa está en 3,75% a 4,00% y la próxima decisión es el 9 de diciembre. Antes de los datos de hoy, el mercado daba 97,5% a una suba de 0,25 puntos, según CME FedWatch citado por Fortune el 24/11. Después del PCE, Yahoo Finance citaba cerca de 98%, según CME (10:50 de Argentina). Con diciembre casi descontado, la atención pasa a enero. El Libro Beige de hoy reúne comentarios de empresas y contactos hasta el 16/11, antes de los datos de hoy, y no es la opinión de la Fed.",
  "mercado": [
+  "A las 15:55, con el mercado todavía abierto, las bolsas habían recuperado buena parte de la caída, según AP: el S&P 500 bajaba 0,2% (llegó a perder 3,2%), el Nasdaq bajaba 0,9% (llegó a perder 4,6%) y el Dow subía 0,7%. Cerca de tres de cada cuatro acciones del S&P 500 subían, pero las tecnológicas lo mantenían en baja.",
+  "La tasa del bono a 10 años bajaba a 4,84% desde 4,91% del martes, según la misma nota de AP.",
   "La baja del Nasdaq empezó antes de las 10:30. Ya perdía entre 2,4% (Reuters) y 2,8% (Bloomberg), por las ventas en IA y chips y por el temor a nuevos aranceles.",
   "En los 30 minutos posteriores al dato, Bitcoin bajó cerca de 1,3% y Ethereum 1,2%, más que lo habitual a esa hora. EUR/USD bajó 0,04%, dentro de lo normal. Son precios de Kraken, Coinbase y Binance, según el activo. Que haya pasado después no prueba que el dato sea la causa.",
   "Reuters vincula la baja con las ventas en IA y los aranceles propuestos; Yahoo Finance suma la inflación.",
@@ -181,7 +191,9 @@
   "Subasta a 7 años: se vendieron 44.000 millones de dólares al 4,708%, por debajo del 4,894% del 29/10. Hubo pedidos por 2,43 veces lo ofrecido, contra 2,46 en la anterior (Tesoro) y 2,48 de promedio en las últimas seis, según Newsquawk. La demanda fue algo menor en esa medida.",
   "La tasa de corte quedó 0,01 puntos por encima de lo que se negociaba justo antes (4,698%), según Newsquawk e investingLIVE. En la subasta anterior esa diferencia había sido cero, según Newsquawk.",
   "El Tesoro también colocó letras hoy: 4 semanas al 4,115% (anterior 4,050%), 8 semanas al 4,120% (4,110%) y 17 semanas al 4,250% (4,230%).",
-  "El GDPNow pasó de 3,2% a 2,9%. La Fed de Atlanta lo explica por una menor estimación de consumo y de exportaciones netas, compensada en parte por más inversión y gasto público."
+  "El GDPNow pasó de 3,2% a 2,9%. La Fed de Atlanta lo explica por una menor estimación de consumo y de exportaciones netas, compensada en parte por más inversión y gasto público.",
+  "Libro Beige, actividad: 8 distritos crecieron entre leve y moderado y 4 no tuvieron cambios. El consumo casi no cambió, con hogares sensibles al precio. Las ventas de autos aflojaron; los contactos lo atribuyen al combustible caro y a las tasas más altas. La vivienda se debilitó y la construcción bajó. La industria creció en forma modesta.",
+  "Libro Beige, empleo y precios: el empleo subió levemente, sobre todo para reemplazar a quienes se van. Los salarios subieron en forma moderada, contra modesta en el informe anterior. Los precios subieron en forma moderada, con presión de energía, transporte, salud, seguros y aranceles. Los contactos esperan que costos y precios sigan subiendo."
  ],
  "leccion": "El color del calendario suele leerse como bueno o malo para el dólar. Hoy los subsidios salieron en verde por ser menos que lo previsto, y el PCE subyacente por ser más. Para el Nasdaq, un PCE en verde puede ser mala noticia.",
  "agenda": [
@@ -225,7 +237,9 @@
   {
    "cuando": "2026-11-25T16:00:00-03:00",
    "evento": "Libro Beige",
-   "impacto": "medio"
+   "impacto": "medio",
+   "anterior": "9 de 12 distritos crecen",
+   "salio": "8 de 12 distritos crecen"
   },
   {
    "cuando": "2026-11-26T10:00:00-03:00",
@@ -237,6 +251,11 @@
    "evento": "Balanza comercial de bienes",
    "previsto": "-135,9B",
    "anterior": "-134,9B",
+   "impacto": "bajo"
+  },
+  {
+   "cuando": "2026-11-27T15:00:00-03:00",
+   "evento": "Cierre anticipado de la bolsa de EE.UU.",
    "impacto": "bajo"
   },
   {
@@ -285,7 +304,7 @@
    "impacto": "alto"
   }
  ],
- "mensaje": "📊 *FUNDAMENTALES EE.UU. | 25/11*\n\n*La economía sigue fuerte y la inflación no afloja.*\n\n• PIB 3T: *4,3%* (previsto 3,4%)\n• PCE subyacente anual: *3,3%* (previsto 3,2%)\n• Subsidios: *189K* (previsto 201K)\n• Consumo real de octubre: *0,0%*\n• Ventas de viviendas nuevas: *701K* (previsto 650K, anterior revisado a 614K)\n• Subasta del Tesoro a 7 años: *4,708%* (anterior 4,894%). Demanda: 2,43 veces lo ofrecido (anterior 2,46)\n• GDPNow del 4T: *2,9%* (anterior 3,2%)\n\n🏦 Los datos respaldan a una Fed dura. Con diciembre casi descontado, la atención pasa a enero.\n\n📉 La baja del Nasdaq empezó antes del dato. Reuters la vincula con las ventas en IA y los aranceles propuestos. En los 30 minutos posteriores, Bitcoin bajó cerca de 1,3%, más que lo habitual.\n\n_Contenido educativo. No es asesoramiento financiero._",
+ "mensaje": "📊 *FUNDAMENTALES EE.UU. | 25/11*\n\n*La economía sigue fuerte y la inflación no afloja.*\n\n• PIB 3T: *4,3%* (previsto 3,4%)\n• PCE subyacente anual: *3,3%* (previsto 3,2%)\n• Subsidios: *189K* (previsto 201K)\n• Consumo real de octubre: *0,0%*\n• Ventas de viviendas nuevas: *701K* (previsto 650K, anterior revisado a 614K)\n• Subasta del Tesoro a 7 años: *4,708%* (anterior 4,894%). Demanda: 2,43 veces lo ofrecido (anterior 2,46)\n• GDPNow del 4T: *2,9%* (anterior 3,2%)\n• Libro Beige: crecen *8 de 12* distritos (antes 9). Salarios: suba moderada (antes modesta). Precios: suba moderada, como antes\n\n🏦 Los datos respaldan a una Fed dura. Con diciembre casi descontado, la atención pasa a enero.\n\n📉 La baja del Nasdaq empezó antes del dato. Reuters la vincula con las ventas en IA y los aranceles propuestos. En los 30 minutos posteriores, Bitcoin bajó cerca de 1,3%, más que lo habitual.\n\n🕓 A las 15:55, con el mercado abierto, las bolsas recortaban la caída, según AP: S&P 500 -0,2% (llegó a -3,2%), Nasdaq -0,9% (llegó a -4,6%) y Dow +0,7%.\n\n_Contenido educativo. No es asesoramiento financiero._",
  "fuentes": [
   {
    "nombre": "BEA (PIB)",
@@ -354,6 +373,18 @@
   {
    "nombre": "investingLIVE",
    "url": "https://investinglive.com/news/us-treasury-sells-44-billion-of-70-or-notes-at-a-high-yield-of-4-708/"
+  },
+  {
+   "nombre": "Fed (Libro Beige de noviembre)",
+   "url": "https://www.federalreserve.gov/monetarypolicy/beigebook202611-summary.htm"
+  },
+  {
+   "nombre": "Fed (Libro Beige de octubre)",
+   "url": "https://www.federalreserve.gov/monetarypolicy/beigebook202610-summary.htm"
+  },
+  {
+   "nombre": "AP (vía Local 10)",
+   "url": "https://www.local10.com/news/2026/11/25/anxiety-over-the-ai-boom-inflation-and-tariffs-drag-wall-street-lower-and-the-sp-500-slumps-22/"
   }
  ],
  "tasa10": {
@@ -937,6 +968,10 @@
   {
    "cuando": "2026-11-25T15:27:25-03:00",
    "texto": "Datos nuevos: subasta del Tesoro a 7 años 4,708% (demanda 2,43); GDPNow 2,9%; reservas de gas natural -24B. Se corrigió el horario de la subasta: fue a las 13:30."
+  },
+  {
+   "cuando": "2026-11-25T16:24:42-03:00",
+   "texto": "Libro Beige: 8 de 12 distritos crecen (9 en octubre) y los salarios suben más que antes. Se actualizó cómo estaba el mercado a las 15:55, con las bolsas todavía abiertas."
   }
  ]
 }

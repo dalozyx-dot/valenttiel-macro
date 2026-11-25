@@ -2,7 +2,7 @@
  "dias": [
   {
    "fecha": "2026-11-25",
-   "actualizado": "2026-11-25T15:27:25-03:00",
+   "actualizado": "2026-11-25T16:24:42-03:00",
    "titular": "La economía sigue fuerte y la inflación no afloja",
    "novedades": [
     {
@@ -24,6 +24,10 @@
     {
      "cuando": "2026-11-25T15:27:25-03:00",
      "texto": "Datos nuevos: subasta del Tesoro a 7 años 4,708% (demanda 2,43); GDPNow 2,9%; reservas de gas natural -24B. Se corrigió el horario de la subasta: fue a las 13:30."
+    },
+    {
+     "cuando": "2026-11-25T16:24:42-03:00",
+     "texto": "Libro Beige: 8 de 12 distritos crecen (9 en octubre) y los salarios suben más que antes. Se actualizó cómo estaba el mercado a las 15:55, con las bolsas todavía abiertas."
     }
    ]
   }
