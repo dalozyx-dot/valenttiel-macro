@@ -185,6 +185,8 @@ ol.q{padding-left:22px;display:grid;gap:9px}
 .saltar{position:absolute;left:12px;top:-60px;z-index:9;background:var(--mint);color:#06110C;padding:10px 16px;border-radius:999px;text-decoration:none;font-weight:500}
 .saltar:focus{top:12px}
 .lideres{padding:0;margin:0;display:grid}.lideres li{list-style:none;display:grid;grid-template-columns:34px minmax(0,1fr) auto;gap:10px;padding:8px 0;border-top:1px solid var(--line)}.lideres b{font-weight:500;overflow-wrap:anywhere}
+.que{display:inline-block;margin-left:8px;font-size:12.5px;color:var(--mint);text-decoration:none;border-radius:999px;padding:1px 8px;box-shadow:inset 0 0 0 1px rgba(95,208,160,.4);white-space:nowrap;vertical-align:1px}.que:hover{background:rgba(95,208,160,.14)}
+td small+.que,td .que{margin-left:0;margin-top:4px}
 footer{border-top:1px solid var(--line);padding-block:24px 44px;font-size:13.5px;color:var(--muted)}
 footer .wrap{display:grid;gap:8px}
 
@@ -247,7 +249,7 @@ footer .wrap{display:grid;gap:8px}
 <div class="top"><div class="wrap">
   <div class="brand">Valenttiel <span>Macro</span></div>
   <nav class="tabs" aria-label="Secciones"><span class="pill" id="pill"></span>
-    <a href="#hoy">Hoy</a><a href="#activos">Activos</a><a href="calculadora/">Calculadora</a><a href="reto/">Liga</a><a href="#en-vivo">En vivo</a><a href="#historial">Historial</a><a href="#aprender">Aprender</a>
+    <a href="#hoy">Hoy</a><a href="#activos">Activos</a><a href="calculadora/">Calculadora</a><a href="reto/">Liga</a><a href="#en-vivo">En vivo</a><a href="#historial">Historial</a><a href="academia/">Academia</a>
   </nav>
   <div class="clock num" id="clock"></div>
   <a class="join" href="#sumate">Sumate</a>
@@ -268,6 +270,7 @@ footer .wrap{display:grid;gap:8px}
   </div>
   <div class="view" id="v-aprender" hidden>
     <div class="hero"><h1 class="grad">Cómo leer un dato</h1><p class="lead">Pensá en la Fed como alguien que maneja un auto. Si la economía va rápido y los precios suben, pisa el freno y sube las tasas. Si se enfría, afloja. Cada dato le dice a qué velocidad va.</p></div>
+    <a class="glass door" href="academia/" style="text-decoration:none;color:inherit"><div><h2>Academia de fundamentales</h2><p class="muted">Doce lecciones animadas de un minuto: qué es cada dato y cómo mueve a los pares, los índices y el oro.</p></div><span class="btn main">Ver las lecciones</span></a>
     <section class="glass"><h2>Tres preguntas antes de operar</h2><ol class="q"><li>¿Salió distinto a lo esperado?</li><li>¿Cambia lo que va a hacer la Fed?</li><li>¿El precio confirma esa lectura?</li></ol><p class="muted">Si no podés responder las tres, no hay apuro. Mirar también es operar bien.</p></section>
     <section><h2>Reaccionó después no es reaccionó por</h2><p class="lead">La pestaña Activos mide qué hizo el precio después del dato. A la misma hora pueden pesar otras noticias, así que la medida muestra coincidencia en el tiempo y no prueba la causa.</p></section>
     <section><h2>De dónde salen los datos</h2><div class="ideas">
@@ -329,6 +332,7 @@ footer .wrap{display:grid;gap:8px}
 </div></footer>
 
 <script src="medir.js" defer></script>
+<script src="academia/lecciones.js"></script>
 <script>
 'use strict';
 const TZ='America/Argentina/Buenos_Aires',$=id=>document.getElementById(id),CALMA=matchMedia('(prefers-reduced-motion:reduce)');
@@ -466,8 +470,10 @@ function cotiza(){
   tv(panelVivo,'market-quotes',{...base,isTransparent:true,width:'100%',height:690,showSymbolLogo:true,symbolsGroups:g});
   return panelVivo;
 }
+/* Cada dato enlaza a su lección animada. */
+function leccion(n){const l=window.ACADEMIA&&ACADEMIA.buscar(n);return l?el('a',{class:'que',href:'academia/#'+l.id,'aria-label':'Qué es: '+l.n,text:'¿Qué es?'}):null}
 function tabla(rs){return el('div',{class:'scroll',tabindex:'0',role:'region','aria-label':'Datos publicados'},el('table',{},el('thead',{},el('tr',{},['Dato','Salió','Previsto','Anterior','Contra lo previsto'].map(t=>el('th',{scope:'col',text:t})))),
-  el('tbody',{},rs.map(r=>el('tr',{},el('td',{},r.nombre,r.nota?el('small',{text:r.nota}):null),el('td',{class:'num'},el('b',{text:r.salio})),el('td',{class:'num',text:r.previsto||'s/d'}),el('td',{class:'num',text:r.anterior||'s/d'}),el('td',{},el('span',{class:'chip '+(['mayor','menor'].includes(r.sorpresa)?r.sorpresa:''),text:{mayor:'Mayor',menor:'Menor',igual:'En línea'}[r.sorpresa]||'s/d'})))))));}
+  el('tbody',{},rs.map(r=>el('tr',{},el('td',{},r.nombre,r.nota?el('small',{text:r.nota}):null,leccion(r.nombre)),el('td',{class:'num'},el('b',{text:r.salio})),el('td',{class:'num',text:r.previsto||'s/d'}),el('td',{class:'num',text:r.anterior||'s/d'}),el('td',{},el('span',{class:'chip '+(['mayor','menor'].includes(r.sorpresa)?r.sorpresa:''),text:{mayor:'Mayor',menor:'Menor',igual:'En línea'}[r.sorpresa]||'s/d'})))))));}
 /* Recordatorios: un enlace por dato y un archivo con todos. */
 const nomEv=a=>/EE\.UU\./.test(a.evento)?a.evento:a.evento+' (EE.UU.)';
 const utc=d=>new Date(d).toISOString().replace(/[-:]|\.\d{3}/g,'');
@@ -510,7 +516,7 @@ function pintar(d,box,archivo,anima){
   const copiar=el('button',{class:'btn main',type:'button',text:'Copiar resumen',onclick:async e=>{const b=e.currentTarget;try{await navigator.clipboard.writeText(d.mensaje);b.textContent='Resumen copiado';}catch(x){b.textContent='No se pudo copiar';}setTimeout(()=>b.textContent='Copiar resumen',2200);}});
   const der=el('div',{class:'stack'},
     !archivo&&el('div',{class:'glass',id:'prox'}),
-    sec(archivo?'Agenda de ese día':'Agenda',el('ul',{class:'agenda'},[...d.agenda].sort((a,b)=>new Date(a.cuando)-new Date(b.cuando)).map(a=>el('li',{class:new Date(a.cuando)<new Date()?'past':''},el('span',{class:'num',text:cuando(a)}),el('div',{},a.evento,datoTxt(a)?el('div',{class:'muted small',text:datoTxt(a)}):null,!archivo&&new Date(a.cuando)>new Date()?el('div',{},el('a',{class:'avisar',href:google(a),target:'_blank',rel:'noopener',text:'Recordarme en Google Calendar','aria-label':'Recordarme '+a.evento+' en Google Calendar'})):null)))),el('p',{class:'muted small',text:'Horarios de Argentina.'}),!archivo&&prox(d)?el('div',{class:'btns'},el('button',{class:'btn',type:'button',text:'Agregar todos a mi calendario',onclick:()=>ics((d.agenda||[]).filter(a=>new Date(a.cuando)>new Date()))})):null),
+    sec(archivo?'Agenda de ese día':'Agenda',el('ul',{class:'agenda'},[...d.agenda].sort((a,b)=>new Date(a.cuando)-new Date(b.cuando)).map(a=>el('li',{class:new Date(a.cuando)<new Date()?'past':''},el('span',{class:'num',text:cuando(a)}),el('div',{},a.evento,leccion(a.evento),datoTxt(a)?el('div',{class:'muted small',text:datoTxt(a)}):null,!archivo&&new Date(a.cuando)>new Date()?el('div',{},el('a',{class:'avisar',href:google(a),target:'_blank',rel:'noopener',text:'Recordarme en Google Calendar','aria-label':'Recordarme '+a.evento+' en Google Calendar'})):null)))),el('p',{class:'muted small',text:'Horarios de Argentina.'}),!archivo&&prox(d)?el('div',{class:'btns'},el('button',{class:'btn',type:'button',text:'Agregar todos a mi calendario',onclick:()=>ics((d.agenda||[]).filter(a=>new Date(a.cuando)>new Date()))})):null),
     !archivo&&cajaLiga(),
     sec('Compartir',el('div',{class:'btns'},copiar,el('a',{class:'btn',href:'https://wa.me/?text='+encodeURIComponent(d.mensaje),target:'_blank',rel:'noopener',text:'Abrir en WhatsApp'}))));
   box.replaceChildren(hero,el('div',{class:'cols'},izq,der),...(archivo?[]:[cta('macro-hoy','¿Querés llegar a esta lectura por tu cuenta?','Te enseñamos a leer un dato antes de operar.')]));

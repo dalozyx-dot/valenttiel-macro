@@ -1,0 +1,254 @@
+<!doctype html>
+<html lang="es-AR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Academia | Valenttiel Macro</title>
+<meta name="description" content="12 lecciones animadas para entender cada dato económico y cómo mueve a los pares, los índices y el oro.">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#070B0A">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Valenttiel Macro">
+<meta property="og:locale" content="es_AR">
+<meta property="og:title" content="Academia de fundamentales">
+<meta property="og:description" content="12 lecciones animadas de un minuto: qué es cada dato y cómo mueve a los pares, los índices y el oro. Gratis.">
+<meta property="og:url" content="https://dalozyx-dot.github.io/valenttiel-macro/academia/">
+<meta property="og:image" content="https://dalozyx-dot.github.io/valenttiel-macro/img/icono-512.png">
+<meta name="twitter:card" content="summary">
+<link rel="icon" type="image/png" href="../img/icono.png">
+<link rel="apple-touch-icon" href="../img/icono.png">
+<link rel="manifest" href="../manifest.webmanifest">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@300..700&family=Geist+Mono:wght@400..600&display=swap">
+<script src="../medir.js" defer></script>
+<style>
+/* Layout: la pantalla de video manda. La pieza propia es el motor: cada lección se dibuja en vivo, nada está grabado. */
+:root{
+  --bg:#070B0A;--ink:#F1F6F3;--muted:#94A69E;--line:rgba(210,240,226,.12);--glass:rgba(17,26,22,.6);--glass2:rgba(28,41,35,.66);
+  --mint:#5FD0A0;--aqua:#5CC6D6;--amber:#EBB24A;--down:#F08A7B;--on:#06110C;--a:#5FD0A0;--b:#5CC6D6;
+  --f:'Geist',ui-sans-serif,system-ui,-apple-system,sans-serif;--m:'Geist Mono',ui-monospace,SFMono-Regular,Menlo,monospace;--ease:cubic-bezier(.2,.8,.2,1);color-scheme:dark;
+}
+*{box-sizing:border-box}[hidden]{display:none!important}
+html{background:var(--bg)}
+body{margin:0;isolation:isolate;min-height:100vh;background:var(--bg);color:var(--ink);font:400 16px/1.55 var(--f);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+h1,h2,h3,p,ul,ol,dl,dd{margin:0}h1,h2,h3{text-wrap:balance;font-weight:600;letter-spacing:-.028em}
+h1{font-size:clamp(38px,7vw,82px);line-height:1;letter-spacing:-.05em}h2{font-size:clamp(21px,2.6vw,28px);line-height:1.15}h3{font-size:18px;line-height:1.25}
+a{color:var(--mint)}button{font:inherit;color:inherit;cursor:pointer}:focus-visible{outline:2px solid var(--mint);outline-offset:3px}
+.wrap{max-width:1180px;margin-inline:auto;padding-left:max(20px,env(safe-area-inset-left,0px));padding-right:max(20px,env(safe-area-inset-right,0px))}
+.aura{position:fixed;inset:0;z-index:-1;background:radial-gradient(60vw 50vw at 0% -12%,rgba(60,180,130,.3),transparent 70%),radial-gradient(56vw 50vw at 104% 10%,rgba(58,150,178,.26),transparent 70%),radial-gradient(60vw 40vw at 50% 116%,rgba(212,150,52,.16),transparent 70%)}
+.muted{color:var(--muted)}.small{font-size:14.5px;line-height:1.5}.num{font-family:var(--m);font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+.grad{background:linear-gradient(100deg,var(--ink) 30%,var(--mint) 70%,var(--aqua));-webkit-background-clip:text;background-clip:text;color:transparent}
+header.top{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:4px 18px;padding-block:20px 0}.brand{font-weight:600;font-size:17px;letter-spacing:-.03em;color:inherit;text-decoration:none}.brand span{color:var(--mint)}
+header.top nav{display:flex;gap:18px}header.top nav a{font-size:14.5px;color:var(--muted);text-underline-offset:3px;text-decoration-color:var(--line)}header.top nav a:hover{color:var(--mint)}
+main{display:grid;gap:clamp(26px,4vw,46px);padding-block:clamp(26px,5vw,54px) 60px}main>*{min-width:0}
+.hero{display:grid;gap:18px;max-width:860px}.lead{font-size:clamp(17px,1.9vw,20px);line-height:1.5;color:var(--muted);max-width:58ch}
+.btns{display:flex;flex-wrap:wrap;gap:10px}.btn{border:0;background:rgba(210,240,226,.07);box-shadow:inset 0 0 0 1px var(--line);border-radius:999px;padding:12px 20px;font-size:15px;font-weight:500;text-decoration:none;color:var(--ink)}.btn:hover{background:rgba(210,240,226,.13)}.btn.main{background:linear-gradient(110deg,var(--mint),var(--aqua));color:var(--on)}
+.glass{background:linear-gradient(160deg,var(--glass2),var(--glass));border:1px solid var(--line);border-radius:22px;padding:26px;display:grid;gap:18px;align-content:start;min-width:0}
+.prog{display:grid;gap:8px;max-width:420px}.prog>div{height:8px;border-radius:8px;background:rgba(210,240,226,.09);overflow:hidden}.prog i{display:block;height:100%;border-radius:8px;background:linear-gradient(90deg,var(--mint),var(--aqua));transition:width .8s var(--ease)}
+.filtros{display:flex;flex-wrap:wrap;gap:8px}.filtros button{border:0;background:none;box-shadow:inset 0 0 0 1px var(--line);border-radius:999px;padding:9px 16px;font-size:15px;color:var(--muted)}.filtros button:hover{color:var(--ink)}.filtros button[aria-pressed=true]{color:var(--on);background:linear-gradient(110deg,var(--mint),var(--aqua));font-weight:500}
+.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;padding:0}.grid li{list-style:none;min-width:0}
+.card{position:relative;display:grid;gap:4px;height:100%;align-content:start;text-decoration:none;color:inherit;border-radius:22px;border:1px solid var(--line);padding:18px 20px 20px;overflow:hidden;background:linear-gradient(165deg,color-mix(in srgb,var(--a) 13%,#111a16),#0b110e 62%);transition:transform .45s var(--ease),border-color .35s}
+.card:hover{transform:translateY(-6px);border-color:color-mix(in srgb,var(--a) 55%,transparent)}.card canvas{display:block;width:100%;aspect-ratio:1.5;margin-bottom:8px;transition:transform .6s var(--ease)}.card:hover canvas{transform:scale(1.05)}
+.card h2{font-size:21px}.card .pie{display:flex;flex-wrap:wrap;gap:6px 12px;font-size:13.5px;color:var(--muted);padding-top:8px}.card .ok{color:var(--mint)}
+.aviso{border-radius:18px;padding:16px 20px;background:rgba(235,178,74,.1);box-shadow:inset 0 0 0 1px rgba(235,178,74,.42);display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:8px 18px}.aviso b{font-weight:600}
+
+/* pantalla */
+.player{position:relative;border-radius:26px;overflow:hidden;background:#070B0A;border:1px solid var(--line);box-shadow:0 40px 120px -50px color-mix(in srgb,var(--a) 70%,transparent);user-select:none;-webkit-user-select:none}
+.player canvas{display:block;width:100%;aspect-ratio:16/9;cursor:pointer}
+.sub{position:absolute;left:0;right:0;bottom:74px;padding:0 6%;text-align:center;font-size:clamp(17px,2.35vw,27px);line-height:1.32;font-weight:500;letter-spacing:-.018em;text-wrap:balance;pointer-events:none;text-shadow:0 2px 18px #070B0A,0 0 4px #070B0A}
+.sub span{color:rgba(241,246,243,.42);transition:color .2s}.sub span.ya{color:var(--ink)}
+.ctl{position:absolute;left:0;right:0;bottom:0;display:flex;align-items:center;gap:8px;padding:30px 16px 13px;background:linear-gradient(0deg,rgba(7,11,10,.94),transparent)}
+.ctl button{border:0;background:rgba(241,246,243,.1);border-radius:999px;min-width:42px;height:42px;padding:0 12px;display:grid;place-items:center;font:500 14px var(--m)}.ctl button:hover{background:rgba(241,246,243,.2)}.ctl svg{width:17px;height:17px;display:block;fill:currentColor}
+.segs{flex:1;display:flex;gap:5px;height:42px;align-items:center;min-width:0}.ctl .segs button{flex:1;min-width:0;height:100%;padding:0;background:none;display:flex;align-items:center}.segs b{display:block;width:100%;height:5px;border-radius:5px;background:rgba(241,246,243,.2);overflow:hidden}.segs i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--a),var(--b))}
+.tapa{position:absolute;inset:0;display:grid;place-items:center;align-content:center;gap:16px;background:rgba(7,11,10,.34);text-align:center;padding:20px 20px 84px}
+.tapa.fin{background:rgba(7,11,10,.8)}.gran{border:0;width:92px;height:92px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(120deg,var(--a),var(--b));color:var(--on);transition:transform .35s var(--ease)}.gran:hover{transform:scale(1.08)}.gran svg{width:34px;height:34px;fill:currentColor;margin-left:5px}
+@media(prefers-reduced-motion:no-preference){.gran{animation:late 2.4s ease-out infinite}}@keyframes late{0%{box-shadow:0 0 0 0 color-mix(in srgb,var(--a) 60%,transparent)}80%,100%{box-shadow:0 0 0 26px transparent}}
+.player:fullscreen{border-radius:0;display:grid;place-items:center;background:#000}.player:fullscreen canvas{width:100vw;height:100vh;aspect-ratio:auto}
+
+.ficha{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px}.ficha dt{font-size:13.5px;color:var(--muted)}.ficha dd{font-weight:500;line-height:1.35}
+.cols{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:22px;align-items:start}.stack{display:grid;gap:22px;min-width:0}.cols>*{min-width:0}
+.seg{display:flex;background:rgba(6,10,9,.6);border:1px solid var(--line);border-radius:14px;padding:3px;gap:2px}.seg button{flex:1;min-width:0;border:0;background:none;border-radius:11px;padding:10px 6px;font-size:15px;line-height:1.25;color:var(--muted)}.seg button[aria-pressed=true]{background:linear-gradient(110deg,var(--a),var(--b));color:var(--on);font-weight:500}
+.fld{display:grid;gap:7px}.fld>p{font-size:14px;color:var(--muted)}
+.imp{display:grid;gap:13px;padding:0}.imp li{list-style:none;display:grid;grid-template-columns:118px minmax(0,1fr);gap:3px 14px;align-items:center;font-size:15.5px}
+.imp .eje{position:relative;height:26px}.imp .eje::before{content:"";position:absolute;left:50%;top:-5px;bottom:-5px;width:1px;background:var(--line)}
+.imp .eje i{position:absolute;top:6px;height:14px;border-radius:14px;width:0;transition:width .7s var(--ease),left .7s var(--ease),background .4s;left:50%}.imp .eje b{position:absolute;top:0;font:600 17px/26px var(--f);transition:left .7s var(--ease),color .4s}
+.imp small{grid-column:2;font-size:13.5px;color:var(--muted);line-height:1.35}.up{color:var(--mint)}.down{color:var(--down)}
+.claves{display:grid;gap:12px;padding:0}.claves li{list-style:none;border-top:1px solid var(--line);padding-top:12px}.claves li:first-child{border-top:0;padding-top:0}
+.trampa{border-radius:18px;padding:18px;background:rgba(240,138,123,.09);box-shadow:inset 0 0 0 1px rgba(240,138,123,.4);display:grid;gap:5px}
+.ops{display:grid;gap:9px}.ops button{border:0;text-align:left;border-radius:15px;padding:14px 17px;background:rgba(210,240,226,.05);box-shadow:inset 0 0 0 1px var(--line);font-size:16px}.ops button:hover:not(:disabled){background:rgba(210,240,226,.1)}.ops button:disabled{cursor:default}.ops .bien{background:rgba(95,208,160,.17);box-shadow:inset 0 0 0 1.5px var(--mint)}.ops .mal{background:rgba(240,138,123,.14);box-shadow:inset 0 0 0 1.5px var(--down)}
+.dato{display:flex;flex-wrap:wrap;gap:6px 30px;align-items:baseline}.dato .big{font:600 44px/1 var(--f);letter-spacing:-.045em}
+.sig{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px}
+footer{border-top:1px solid var(--line);padding-block:20px 40px;display:grid;gap:6px}
+@media(prefers-reduced-motion:no-preference){.entra>*{animation:sube .7s var(--ease) backwards}.entra>:nth-child(2){animation-delay:.06s}.entra>:nth-child(3){animation-delay:.12s}.entra>:nth-child(n+4){animation-delay:.18s}}
+@keyframes sube{from{opacity:.35;transform:translateY(18px)}}
+@media(max-width:980px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:860px){.cols{grid-template-columns:minmax(0,1fr)}.ficha{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:620px){.player{border-radius:20px;margin-inline:-8px}.player canvas{aspect-ratio:4/5}.sub{position:static;min-height:5.4em;padding:14px 18px 4px;font-size:18px;text-shadow:none}.ctl{position:static;background:none;padding:6px 10px 12px;gap:6px}.tapa{padding-bottom:20px}.ctl .vel{display:none}.segs{gap:3px}.glass{padding:20px}.imp li{grid-template-columns:104px minmax(0,1fr)}header.top nav{gap:14px}}
+@media(max-width:520px){.grid{grid-template-columns:minmax(0,1fr)}.card canvas{aspect-ratio:1.9}}
+</style>
+</head>
+<body>
+<div class="aura" aria-hidden="true"></div>
+<div class="wrap">
+  <header class="top"><a class="brand" href="#">Valenttiel <span>Academia</span></a><nav aria-label="Secciones"><a href="../">Macro</a><a href="../calculadora/">Calculadora</a><a href="../reto/">Liga</a></nav></header>
+  <main id="app"></main>
+  <footer class="small muted"><p>Contenido educativo, no es asesoramiento financiero. Los impactos son tendencias habituales: el precio puede hacer lo contrario.</p><p><a href="../#aprender">Fuentes y glosario</a></p><p data-medir></p></footer>
+</div>
+<script src="lecciones.js"></script>
+<script src="motor.js"></script>
+<script>
+(function(){
+'use strict';
+var A=ACADEMIA,app=document.getElementById('app'),CALMA=matchMedia('(prefers-reduced-motion:reduce)'),KA='valenttiel-academia',P={v:{},t:{}},cat='todas',datos=null,TZ='America/Argentina/Buenos_Aires';
+try{var g=JSON.parse(localStorage.getItem(KA));if(g&&g.v&&g.t)P=g}catch(e){}
+function guardar(){try{localStorage.setItem(KA,JSON.stringify(P))}catch(e){}}
+function medir(a){if(window.medirAccion)window.medirAccion(a)}
+function el(t,p){var n=document.createElement(t),k=[].slice.call(arguments,2);for(var a in p||{}){if(a==='class')n.className=p[a];else if(a==='text')n.textContent=p[a];else if(a==='style')n.style.cssText=p[a];else if(a.slice(0,2)==='on')n.addEventListener(a.slice(2),p[a]);else n.setAttribute(a,p[a])}k.flat().forEach(function(c){if(c!=null&&c!==false)n.append(c)});return n}
+function poner(){app.replaceChildren.apply(app,[].slice.call(arguments).filter(Boolean));app.className='entra';}
+function svg(d){var s=document.createElementNS('http://www.w3.org/2000/svg','svg');s.setAttribute('viewBox','0 0 24 24');s.setAttribute('aria-hidden','true');var q=document.createElementNS('http://www.w3.org/2000/svg','path');q.setAttribute('d',d);s.append(q);return s}
+var IC={play:'M7 4.5v15l13-7.5z',pausa:'M6 4h4.5v16H6zM13.5 4H18v16h-4.5z',voz:'M4 9v6h4l5 5V4L8 9zm12.5 3a4.5 4.5 0 0 0-2.5-4v8a4.5 4.5 0 0 0 2.5-4zM14 3.2v2.1a7 7 0 0 1 0 13.4v2.1a9 9 0 0 0 0-17.6z',mudo:'M4 9v6h4l5 5V4L8 9zm17.5.9L20.1 8.5 18 10.6l-2.1-2.1-1.4 1.4 2.1 2.1-2.1 2.1 1.4 1.4 2.1-2.1 2.1 2.1 1.4-1.4-2.1-2.1z',full:'M4 4h6v2H6v4H4zm10 0h6v6h-2V6h-4zM4 14h2v4h4v2H4zm14 0h2v6h-6v-2h4z'};
+function dur(l,i){return l.t[i].split(/\s+/).length/2.45+1.9}
+function total(l){return l.t.reduce(function(a,_,i){return a+dur(l,i)},0)}
+function mmss(s){s=Math.round(s);return Math.floor(s/60)+':'+String(s%60).padStart(2,'0')}
+function color(n,l){var k=A.CAT[l.cat];n.style.setProperty('--a',k[1]);n.style.setProperty('--b',k[2])}
+// De hora de Nueva York a hora de Argentina, según la época del año.
+function horaArg(h){if(!h)return null;var d=new Date(),ny=new Date(d.toLocaleString('en-US',{timeZone:'America/New_York'})),ar=new Date(d.toLocaleString('en-US',{timeZone:TZ})),dif=Math.round((ar-ny)/36e5),f=function(x){return((x%24)+24)%24+':'+String(h[1]).padStart(2,'0')};return f(h[0]+dif)+' de Argentina ('+f(h[0])+' de Nueva York)'}
+
+/* ---- inicio ---- */
+var minis=[],vis=new IntersectionObserver(function(es){es.forEach(function(e){e.target._ve=e.isIntersecting})},{rootMargin:'80px'}),ultimo=0;
+function talla(c){var r=c.getBoundingClientRect(),d=Math.min(2,devicePixelRatio||1),w=Math.round(r.width*d),h=Math.round(r.height*d);if(w&&h&&(c.width!==w||c.height!==h)){c.width=w;c.height=h}return d}
+function bucleMinis(t){
+  if(!minis.length)return;requestAnimationFrame(bucleMinis);if(t-ultimo<33)return;ultimo=t;
+  minis.forEach(function(m,i){if(!m.c.isConnected||m.c._ve===false&&m.hecha)return;var d=talla(m.c);if(!m.c.width)return;var x=m.c.getContext('2d');x.setTransform(d,0,0,d,0,0);MOTOR.miniatura(x,m.c.width/d,m.c.height/d,m.l,CALMA.matches?5.2:t/1000+i*.9);m.hecha=true});
+  if(CALMA.matches&&minis.every(function(m){return m.hecha}))minis=[];
+}
+function inicio(){
+  detener();document.title='Academia | Valenttiel Macro';
+  var n=A.L.filter(function(l){return P.v[l.id]}).length,T=A.L.filter(function(l){return P.t[l.id]>=0}).length,xs=A.L.filter(function(l){return cat==='todas'||l.cat===cat});
+  minis=[];
+  var li=xs.map(function(l){var c=el('canvas',{'aria-hidden':'true'});minis.push({c:c,l:l});vis.observe(c);var a=el('a',{class:'card',href:'#'+l.id},c,el('h2',{text:l.n}),el('p',{class:'muted',text:l.sub}),el('p',{class:'pie'},el('span',{text:mmss(total(l))}),el('span',{text:['','Impacto bajo','Impacto medio','Impacto alto'][l.peso]}),P.v[l.id]?el('span',{class:'ok',text:P.t[l.id]>=0?'✓ Vista, test '+P.t[l.id]+'/3':'✓ Vista'}):null));color(a,l);return el('li',{},a)});
+  poner(
+    el('div',{class:'hero'},el('h1',{class:'grad',text:'Mirá cómo se mueve el mercado por dentro'}),el('p',{class:'lead',text:'Doce lecciones animadas de un minuto. Qué es cada dato, por qué importa y qué suele hacer con el dólar, los pares, los índices y el oro.'}),
+      n?el('div',{class:'prog'},el('p',{class:'small muted',text:n===A.L.length?'Viste las '+A.L.length+' lecciones'+(T===A.L.length?' y completaste todos los tests.':'. Te faltan '+(A.L.length-T)+' tests.'):n+' de '+A.L.length+' lecciones vistas'}),el('div',{},el('i',{style:'width:'+n/A.L.length*100+'%'}))):el('div',{class:'btns'},el('a',{class:'btn main',href:'#fed',text:'Empezar por la Fed'}))),
+    proximo(),
+    n===A.L.length&&T===A.L.length?el('section',{class:'glass'},el('h2',{text:'Terminaste la Academia'}),el('p',{class:'muted',text:'Ya sabés leer los datos. El paso siguiente es cumplir un plan con eso.'}),el('div',{class:'btns'},el('a',{class:'btn main',href:'../reto/?desde=academia',text:'Entrar a la Liga'}),el('a',{class:'btn',href:'../?de=academia#sumate',text:'Quiero aprender con guía'}))):null,
+    el('div',{class:'filtros',role:'group','aria-label':'Tema'},[['todas','Todas']].concat(Object.keys(A.CAT).map(function(k){return[k,A.CAT[k][0]]})).map(function(x){return el('button',{type:'button',id:'f-'+x[0],'aria-pressed':String(cat===x[0]),text:x[1],onclick:function(){cat=x[0];inicio();document.getElementById('f-'+x[0]).focus({preventScroll:true})}})})),
+    el('ul',{class:'grid'},li));
+  requestAnimationFrame(bucleMinis);
+}
+function proximo(){
+  if(!datos)return null;var ah=Date.now(),a=(datos.agenda||[]).filter(function(x){return Date.parse(x.cuando)>ah&&A.buscar(x.evento)}).sort(function(x,y){return Date.parse(x.cuando)-Date.parse(y.cuando)})[0];if(!a)return null;
+  var l=A.buscar(a.evento),d=new Date(a.cuando);
+  return el('div',{class:'aviso'},el('span',{},el('b',{text:'Lo próximo: '+a.evento+'. '}),d.toLocaleDateString('es-AR',{timeZone:TZ,weekday:'long',day:'numeric',month:'long'})+' a las '+d.toLocaleTimeString('es-AR',{timeZone:TZ,hour:'2-digit',minute:'2-digit',hour12:false})+' de Argentina.'),el('a',{class:'btn',href:'#'+l.id,text:'Ver la lección antes'}));
+}
+
+/* ---- voz ---- */
+var VOZ=window.speechSynthesis||null,quiereVoz=true,vel=1;
+try{quiereVoz=localStorage.getItem('valenttiel-voz')!=='0'}catch(e){}
+function voz(){if(!VOZ)return null;var v=VOZ.getVoices().filter(function(x){return/^es[-_]/i.test(x.lang)});if(!v.length)return null;var pt=function(x){return(/es[-_]AR/i.test(x.lang)?40:/es[-_](419|US|MX|CO|CL)/i.test(x.lang)?30:10)+(/natural|neural|premium|enhanced|mejorada|google/i.test(x.name)?25:0)+(/eddy|flo|grand|reed|rocko|sandy|shelley/i.test(x.name)?-20:0)};return v.sort(function(a,b){return pt(b)-pt(a)})[0]}
+if(VOZ&&VOZ.addEventListener)VOZ.addEventListener('voiceschanged',function(){if(pl)pl.iconos()});
+
+/* ---- reproductor ---- */
+var pl=null;
+function detener(){if(pl){pl.parar();pl=null}minis=[]}
+function Reproductor(l,alFin){
+  var cv=el('canvas',{role:'img','aria-label':'Lección animada: '+l.n}),sub=el('div',{class:'sub'}),bP=el('button',{type:'button'}),bV=el('button',{type:'button'}),bS=el('button',{type:'button',class:'vel'}),bF=el('button',{type:'button','aria-label':'Pantalla completa'},svg(IC.full)),tapa=el('div',{class:'tapa'}),
+      segs=el('div',{class:'segs',role:'group','aria-label':'Escenas'},l.t.map(function(_,i){return el('button',{type:'button','aria-label':'Escena '+(i+1)+' de '+l.t.length,onclick:function(){ir(i);if(!S.on)tocar()}},el('b',{},el('i')))})),
+      caja=el('div',{class:'player',tabindex:'-1'},cv,sub,el('div',{class:'ctl'},bP,segs,bV,bS,bF),tapa),S={i:0,e:0,on:false,fin:false,T:0,d:dur(l,0),vf:true,vivo:true,habla:0},ult=0;
+  color(caja,l);if(!caja.requestFullscreen)bF.hidden=true;
+  function subt(){var ws=l.t[S.i].split(' ');sub.replaceChildren.apply(sub,ws.map(function(w,i){return el('span',{text:(i?' ':'')+w})}))}
+  function decir(){
+    var v=quiereVoz&&voz();S.vf=true;if(VOZ)VOZ.cancel();if(!v||!S.on)return;
+    var u=new SpeechSynthesisUtterance(l.t[S.i]),id=++S.habla;u.voice=v;u.lang=v.lang;u.rate=1.02*vel;S.vf=false;
+    u.onend=u.onerror=function(){if(id!==S.habla)return;S.vf=true;if(S.on)S.d=Math.min(S.d,Math.max(S.e+.55,S.d*.55))};VOZ.speak(u);
+  }
+  function ir(i){S.emp=true;S.i=i;S.e=0;S.d=dur(l,i)/vel;S.fin=false;subt();tapa.hidden=S.on;if(S.on)decir();pinta()}
+  function tocar(){if(S.fin)ir(0);if(!S.emp){S.emp=true;S.e=0}S.on=true;tapa.hidden=true;tapa.className='tapa';minis=[];if(quiereVoz&&voz())S.e=0;S.d=dur(l,S.i)/vel;decir();iconos();ult=performance.now();requestAnimationFrame(cuadro)}
+  function pausar(){S.on=false;S.habla++;if(VOZ)VOZ.cancel();iconos()}
+  function acabar(){S.fin=true;pausar();P.v[l.id]=1;guardar();medir('vio-leccion');tapa.className='tapa fin';tapa.replaceChildren(el('h2',{text:'¿Lo entendiste?'}),el('div',{class:'btns',style:'justify-content:center'},el('button',{class:'btn main',type:'button',text:'Hacer el test',onclick:function(){document.getElementById('test').scrollIntoView({behavior:CALMA.matches?'auto':'smooth',block:'start'})}}),el('button',{class:'btn',type:'button',text:'Ver de nuevo',onclick:tocar})));tapa.hidden=false;alFin()}
+  function pinta(){
+    var d=talla(cv);if(!cv.width)return;var x=cv.getContext('2d'),W=cv.width/d,H=cv.height/d,p=Math.min(1,S.e/S.d);x.setTransform(d,0,0,d,0,0);MOTOR.dibujar(x,W,H,l,S.i,p,S.T);
+    var ws=sub.children,n=Math.ceil(ws.length*Math.min(1,p*1.12+.04));for(var k=0;k<ws.length;k++)ws[k].className=k<n?'ya':'';
+    [].forEach.call(segs.querySelectorAll('i'),function(b,k){b.style.width=(k<S.i?100:k===S.i?p*100:0)+'%'});
+  }
+  function cuadro(t){
+    if(!S.on||!S.vivo)return;var dt=Math.min(.1,(t-ult)/1000);ult=t;S.T+=dt;S.e+=dt;
+    if(S.e>=S.d){if(!S.vf&&S.e<S.d+7){S.e=Math.max(S.d,S.e)}else if(S.i<l.t.length-1){S.i++;S.e=0;S.d=dur(l,S.i)/vel;subt();decir()}else{S.e=S.d;pinta();return acabar()}}
+    pinta();requestAnimationFrame(cuadro);
+  }
+  function iconos(){bP.replaceChildren(svg(S.on?IC.pausa:IC.play));bP.setAttribute('aria-label',S.on?'Pausar':'Reproducir');var hay=!!voz();bV.hidden=!VOZ;bV.replaceChildren(svg(quiereVoz&&hay?IC.voz:IC.mudo));bV.setAttribute('aria-label',!hay?'Este dispositivo no tiene voz en español':quiereVoz?'Quitar la voz':'Activar la voz');bV.disabled=!hay;bS.textContent=vel.toLocaleString('es-AR')+'x';bS.setAttribute('aria-label','Velocidad '+vel)}
+  function alterna(){if(S.on)pausar();else tocar()}
+  bP.addEventListener('click',alterna);cv.addEventListener('click',alterna);
+  bV.addEventListener('click',function(){quiereVoz=!quiereVoz;try{localStorage.setItem('valenttiel-voz',quiereVoz?'1':'0')}catch(e){}if(S.on){if(quiereVoz){S.e=0;decir()}else{S.habla++;S.vf=true;VOZ.cancel()}}iconos()});
+  bS.addEventListener('click',function(){var v=[.75,1,1.25,1.5];vel=v[(v.indexOf(vel)+1)%4];S.d=dur(l,S.i)/vel;if(S.on&&quiereVoz){S.e=0;decir()}iconos()});
+  bF.addEventListener('click',function(){if(document.fullscreenElement)document.exitFullscreen();else caja.requestFullscreen().catch(function(){})});
+  caja.addEventListener('keydown',function(e){if(e.target.tagName==='BUTTON'&&(e.key===' '||e.key==='Enter'))return;if(e.key===' '||e.key==='k'){e.preventDefault();alterna()}else if(e.key==='ArrowRight'&&S.i<l.t.length-1){e.preventDefault();ir(S.i+1)}else if(e.key==='ArrowLeft'){e.preventDefault();ir(Math.max(0,S.i-1))}});
+  var oc=function(){if(document.hidden&&S.on)pausar()},rs=new ResizeObserver(function(){if(S.vivo)pinta()});document.addEventListener('visibilitychange',oc);rs.observe(cv);
+  tapa.append(el('button',{class:'gran',type:'button','aria-label':'Reproducir la lección',onclick:tocar},svg(IC.play)),el('p',{class:'small',text:mmss(total(l))+(voz()||VOZ?', con voz y subtítulos':', con subtítulos')}));
+  S.e=S.d*.5;subt();iconos();var listo=function(){if(S.vivo&&!S.on)pinta()};requestAnimationFrame(listo);if(document.fonts)document.fonts.ready.then(function(){if(!S.emp)S.e=S.d*.5;listo()});
+  return{caja:caja,iconos:iconos,parar:function(){S.vivo=false;pausar();document.removeEventListener('visibilitychange',oc);rs.disconnect()},tocarDesdeCero:function(){S.e=0;tocar()},estado:S};
+}
+
+/* ---- simulador ---- */
+var RZ={eurusd:['el dólar afloja','el dólar se fortalece'],gbpusd:['el dólar afloja','el dólar se fortalece'],dxy:['tener dólares paga más','tener dólares paga menos'],usdjpy:['crece la diferencia de tasas con Japón','se achica la diferencia de tasas con Japón'],us10:['se pide más rendimiento','se pide menos rendimiento'],oro:['no paga interés, y las tasas aflojan','no paga interés, y las tasas suben']};
+var RM={eurusd:['el euro paga más','el euro paga menos'],dxy:['el euro afloja y pesa mucho en el índice','el euro sube y pesa mucho en el índice'],gbpusd:['suele acompañar al euro','suele acompañar al euro'],oro:['el dólar afloja','el dólar se afirma'],wti:['falta oferta','sobra oferta']};
+function razon(l,x,s,reg){
+  var k=x.v>0?0:1;if((l.over||{})[x.id]&&RM[x.id])return RM[x.id][k];
+  var a=A.ACT.filter(function(q){return q[0]===x.id})[0],r=a[2]*l.tasas*s*(reg==='recesion'?.45:1),c=a[3]*l.crec*s*(reg==='recesion'?1:.4);
+  if(RZ[x.id]&&Math.abs(r)>=Math.abs(c))return RZ[x.id][k];
+  return Math.abs(c)>Math.abs(r)?(x.v>0?(x.id==='oro'?'se busca refugio por menos crecimiento':'ayuda el crecimiento'):(x.id==='oro'?'hay menos necesidad de refugio':'pesa el menor crecimiento')):(x.v>0?'ayudan tasas más bajas':'pesan tasas más altas');
+}
+function simulador(l){
+  var s=1,reg='inflacion',ul=el('ul',{class:'imp'}),msg=el('p',{class:'muted small',role:'status'}),filas=A.ACT.map(function(a){var i=el('i'),b=el('b',{'aria-hidden':'true'}),t=el('small'),li=el('li',{},el('span',{text:a[1]}),el('div',{class:'eje'},i,b),t);ul.append(li);return{id:a[0],i:i,b:b,t:t,li:li}});
+  function seg(xs,cur,cb,rot){var d=el('div',{class:'seg',role:'group','aria-label':rot});xs.forEach(function(x){d.append(el('button',{type:'button','aria-pressed':String(x[0]===cur),text:x[1],onclick:function(e){[].forEach.call(d.children,function(c){c.setAttribute('aria-pressed',String(c===e.currentTarget))});cb(x[0]);pinta()}}))});return d}
+  function pinta(){
+    var R=A.impacto(l,s,reg),m={};R.forEach(function(x){m[x.id]=x});
+    filas.forEach(function(f){var x=m[f.id],w=Math.abs(x.v)*23;f.i.style.width=w+'%';f.i.style.left=(x.v<0?50-w:50)+'%';f.i.style.background=x.v>0?'linear-gradient(90deg,rgba(95,208,160,.35),#5FD0A0)':'linear-gradient(270deg,rgba(240,138,123,.35),#F08A7B)';f.b.textContent=x.v===0?'':x.v>0?'↑'.repeat(x.v):'↓'.repeat(-x.v);f.b.style.left=x.v>0?'calc('+(50+w)+'% - '+(x.v*17+6)+'px)':'calc('+(50-w)+'% + 8px)';f.b.style.color='#06110C';f.t.textContent=x.v===0?(s===0?'':'sin dirección clara'):(x.v>0?'Suele subir: ':'Suele bajar: ')+razon(l,x,s,reg)});
+    msg.textContent=s===0?'Sin sorpresa, la reacción suele ser más chica: ya estaba en el precio.':reg==='recesion'?'Cuando preocupa el crecimiento, una buena noticia económica suele ayudar a las bolsas.':'Cuando preocupa la inflación, una buena noticia económica puede pesarle a las bolsas.';
+  }
+  var sec=el('section',{class:'glass'},el('h2',{text:'Simulá el impacto'}),el('div',{class:'fld'},el('p',{text:'El dato sale'}),seg([[1,'Mayor'],[0,'En línea'],[-1,'Menor']],1,function(v){s=v},'El dato sale')),el('div',{class:'fld'},el('p',{text:'Al mercado le preocupa más'}),seg([['inflacion','La inflación'],['recesion','El crecimiento']],'inflacion',function(v){reg=v},'Preocupación del mercado')),msg,ul,el('p',{class:'muted small',text:'Modelo simple para aprender, con tendencias habituales. No predice precios.'}));
+  pinta();return sec;
+}
+
+/* ---- test ---- */
+function test(l){
+  var sec=el('section',{class:'glass',id:'test'}),i=0,bien=0;
+  function una(){
+    var q=l.q[i],fb=el('p',{role:'status'}),ops=el('div',{class:'ops'},q[1].map(function(t,k){return el('button',{type:'button',text:t,onclick:function(){
+      [].forEach.call(ops.children,function(b,j){b.disabled=true;if(j===q[2])b.classList.add('bien')});if(k===q[2])bien++;else ops.children[k].classList.add('mal');
+      fb.textContent=(k===q[2]?'Correcto. ':'No. ')+q[3];var s=el('button',{class:'btn main',type:'button',text:i<2?'Siguiente':'Ver resultado',onclick:function(){i++;if(i<3){una();sec.querySelector('.ops button').focus({preventScroll:true})}else fin()}});sec.append(el('div',{class:'btns'},s));s.focus({preventScroll:true});
+    }})}));
+    sec.replaceChildren(el('h2',{text:'Probá lo que aprendiste'}),el('p',{class:'muted small',text:'Pregunta '+(i+1)+' de 3'}),el('h3',{text:q[0]}),ops,fb);
+  }
+  function fin(){P.t[l.id]=Math.max(P.t[l.id]||0,bien);guardar();medir('test-leccion');
+    sec.replaceChildren(el('h2',{text:bien===3?'Perfecto: 3 de 3':bien+' de 3'}),el('p',{class:'muted',text:bien===3?'Este dato ya lo tenés.':bien===2?'Muy bien. Mirá de nuevo la que fallaste y lo cerrás.':'Volvé a ver la lección: es un minuto.'}),el('div',{class:'btns'},bien<3?el('button',{class:'btn main',type:'button',text:'Intentar de nuevo',onclick:function(){i=0;bien=0;una()}}):null,sigLink(l,1,bien===3?'btn main':'btn')))}
+  una();return sec;
+}
+function sigLink(l,d,c){var k=A.L.indexOf(l)+d,x=A.L[k];return x?el('a',{class:c,href:'#'+x.id,text:(d>0?'Siguiente: ':'Anterior: ')+x.corto}):d>0?el('a',{class:c,href:'#',text:'Ver todas las lecciones'}):null}
+
+/* ---- lección ---- */
+function ultimoDato(l){
+  if(!datos)return null;var d=(datos.datos||[]).filter(function(x){return A.buscar(x.nombre)===l})[0];if(!d)return null;
+  return el('section',{class:'glass'},el('h2',{text:'El último, en la vida real'}),el('div',{class:'dato'},el('span',{class:'big',text:d.salio}),el('span',{},el('b',{style:'font-weight:500',text:d.nombre}),el('br'),el('span',{class:'muted small',text:(d.previsto?'Previsto '+d.previsto+'. ':'')+(d.anterior?'Anterior '+d.anterior+'.':'')}))),d.nota?el('p',{class:'muted small',text:d.nota}):null,el('div',{class:'btns'},el('a',{class:'btn',href:'../#hoy',text:'Ver el resumen del '+datos.fecha.split('-').reverse().slice(0,2).join('/')})));
+}
+function leccion(l){
+  detener();document.title=l.n+' | Academia Valenttiel';
+  pl=Reproductor(l,function(){});
+  var h=horaArg(l.hora),R=[['Quién lo publica',l.quien],['Cada cuánto',l.frec],['A qué hora suele salir',h||'Varía según el banco'],['Cuánto mueve',['','Poco','Bastante','Mucho'][l.peso]]];
+  var sim=simulador(l),cl=el('section',{class:'glass'},el('h2',{text:'Para no olvidarte'}),el('ul',{class:'claves'},l.claves.map(function(c){return el('li',{text:c})})),el('div',{class:'trampa'},el('h3',{text:'La trampa común'}),el('p',{text:l.trampa})));color(sim,l);
+  poner(el('div',{class:'hero'},el('p',{},el('a',{href:'#',text:'Todas las lecciones'})),el('h1',{style:'font-size:clamp(32px,5vw,58px)',text:l.n})),pl.caja,
+    el('section',{class:'glass'},el('dl',{class:'ficha'},R.map(function(x){return el('div',{},el('dt',{text:x[0]}),el('dd',{text:x[1]}))}))),
+    el('div',{class:'cols'},el('div',{class:'stack'},sim,test(l)),el('div',{class:'stack'},ultimoDato(l),cl,el('section',{class:'glass'},el('h2',{text:'Llevalo a la práctica'}),el('p',{class:'muted small',text:'Antes de un dato fuerte, calculá tu tamaño y sellá tu plan.'}),el('div',{class:'btns'},el('a',{class:'btn',href:'../calculadora/',text:'Calculadora'}),el('a',{class:'btn',href:'../reto/?desde=academia',text:'Liga'}))))),
+    el('nav',{class:'sig','aria-label':'Otras lecciones'},sigLink(l,-1,'btn')||el('span'),sigLink(l,1,'btn main')));
+  scrollTo(0,0);
+}
+function ruta(){var id=location.hash.slice(1),l=A.L.filter(function(x){return x.id===id})[0];if(l)leccion(l);else inicio()}
+addEventListener('hashchange',ruta);addEventListener('pagehide',function(){if(VOZ)VOZ.cancel()});
+ruta();
+fetch('../datos/index.json',{cache:'no-store'}).then(function(r){return r.json()}).then(function(j){var u=j.dias.map(function(x){return x.fecha}).filter(function(f){return/^\d{4}-\d{2}-\d{2}$/.test(f)}).sort().pop();return fetch('../datos/'+u+'.json',{cache:'no-store'})}).then(function(r){return r.json()}).then(function(d){datos=d;if(!pl)ruta();else{var l=A.L.filter(function(x){return x.id===location.hash.slice(1)})[0],u=l&&ultimoDato(l),st=document.querySelectorAll('.cols>.stack')[1];if(u&&st)st.prepend(u)}}).catch(function(){});
+if('serviceWorker' in navigator&&location.hostname==='dalozyx-dot.github.io')navigator.serviceWorker.register('../sw.js',{scope:'../'}).catch(function(){});
+window.__academia={pl:function(){return pl}};
+})();
+</script>
+</body>
+</html>

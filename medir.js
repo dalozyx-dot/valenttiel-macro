@@ -6,7 +6,7 @@ var local=/^(localhost|127\.0\.0\.1)$/.test(location.hostname);
 if(!local&&location.hostname!=='dalozyx-dot.github.io')return;
 var API=local?'http://localhost:3100/api/visita':'https://leads-vbm4.vercel.app/api/visita';
 var K='vt-visita',KP='vt-persona',KN='vt-no-contar',CADA=60000,CORTE=30*60000,QUIETO=10*60000;
-var q=new URLSearchParams(location.search),calc=/\/calculadora\//.test(location.pathname)?'calculadora':/\/reto\//.test(location.pathname)?'reto':'';
+var q=new URLSearchParams(location.search),calc=/\/calculadora\//.test(location.pathname)?'calculadora':/\/reto\//.test(location.pathname)?'reto':/\/academia\//.test(location.pathname)?'academia':'';
 function leer(s,k){try{return s.getItem(k)}catch(e){return null}}
 function poner(s,k,v){try{s.setItem(k,v)}catch(e){}}
 function sacar(s,k){try{s.removeItem(k)}catch(e){}}
