@@ -2,7 +2,7 @@
  "dias": [
   {
    "fecha": "2026-11-25",
-   "actualizado": "2026-11-25T14:01:14-03:00",
+   "actualizado": "2026-11-25T15:27:25-03:00",
    "titular": "La economía sigue fuerte y la inflación no afloja",
    "novedades": [
     {
@@ -20,6 +20,10 @@
     {
      "cuando": "2026-11-25T14:01:14-03:00",
      "texto": "Corrección: se retiraron las mediciones con Yahoo. Quedan Bitcoin, Ethereum y EUR/USD, verificados entre bolsas."
+    },
+    {
+     "cuando": "2026-11-25T15:27:25-03:00",
+     "texto": "Datos nuevos: subasta del Tesoro a 7 años 4,708% (demanda 2,43); GDPNow 2,9%; reservas de gas natural -24B. Se corrigió el horario de la subasta: fue a las 13:30."
     }
    ]
   }

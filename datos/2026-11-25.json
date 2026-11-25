@@ -1,14 +1,14 @@
 {
  "fecha": "2026-11-25",
- "actualizado": "2026-11-25T14:01:14-03:00",
+ "actualizado": "2026-11-25T15:27:25-03:00",
  "titular": "La economía sigue fuerte y la inflación no afloja",
- "bajada": "Los datos respaldan a una Fed dura. El PIB sorprendió al alza, hay pocos despidos y la inflación subyacente subió a 3,3%. El punto flojo es el consumidor, que en octubre se estancó. A las 12:00, las ventas de viviendas nuevas dieron 701K contra 650K previsto, pero el mes anterior se revisó fuerte a la baja.",
+ "bajada": "Los datos respaldan a una Fed dura. El PIB sorprendió al alza, hay pocos despidos y la inflación subyacente subió a 3,3%. El punto flojo es el consumidor, que en octubre se estancó. A las 12:00, las ventas de viviendas nuevas dieron 701K contra 650K previsto, pero el mes anterior se revisó fuerte a la baja. A las 13:30, el Tesoro vendió bonos a 7 años al 4,708%, contra 4,894% en la subasta anterior. Y la Fed de Atlanta bajó su estimación de crecimiento del 4T a 2,9%.",
  "termometro": [
   {
    "factor": "Crecimiento",
    "dato": "PIB 4,3%",
    "posicion": 82,
-   "texto": "Muy por encima de lo previsto, aunque cubre de julio a septiembre."
+   "texto": "Muy por encima de lo previsto, aunque cubre de julio a septiembre. Para el 4T, el GDPNow bajó a 2,9%."
   },
   {
    "factor": "Empleo",
@@ -138,6 +138,38 @@
    "previsto": "2,0M",
    "anterior": "3,4M",
    "sorpresa": "menor"
+  },
+  {
+   "nombre": "Subasta del Tesoro a 7 años",
+   "nota": "Tasa de corte. Sin previsto",
+   "salio": "4,708%",
+   "previsto": "",
+   "anterior": "4,894%",
+   "sorpresa": "sd"
+  },
+  {
+   "nombre": "Subasta a 7 años: demanda",
+   "nota": "Pedidos por cada dólar ofrecido",
+   "salio": "2,43",
+   "previsto": "",
+   "anterior": "2,46",
+   "sorpresa": "sd"
+  },
+  {
+   "nombre": "GDPNow de la Fed de Atlanta (4T)",
+   "nota": "Estimación de un modelo, no es el PIB oficial",
+   "salio": "2,9%",
+   "previsto": "3,2%",
+   "anterior": "3,2%",
+   "sorpresa": "menor"
+  },
+  {
+   "nombre": "Reservas de gas natural",
+   "nota": "Pies cúbicos, variación semanal",
+   "salio": "-24B",
+   "previsto": "-19B",
+   "anterior": "20B",
+   "sorpresa": "menor"
   }
  ],
  "fed": "La tasa está en 3,75% a 4,00% y la próxima decisión es el 9 de diciembre. Antes de los datos de hoy, el mercado daba 97,5% a una suba de 0,25 puntos, según CME FedWatch citado por Fortune el 24/11. Después del PCE, Yahoo Finance citaba cerca de 98%, según CME (10:50 de Argentina). Con diciembre casi descontado, la atención pasa a enero.",
@@ -145,7 +177,11 @@
   "La baja del Nasdaq empezó antes de las 10:30. Ya perdía entre 2,4% (Reuters) y 2,8% (Bloomberg), por las ventas en IA y chips y por el temor a nuevos aranceles.",
   "En los 30 minutos posteriores al dato, Bitcoin bajó cerca de 1,3% y Ethereum 1,2%, más que lo habitual a esa hora. EUR/USD bajó 0,04%, dentro de lo normal. Son precios de Kraken, Coinbase y Binance, según el activo. Que haya pasado después no prueba que el dato sea la causa.",
   "Reuters vincula la baja con las ventas en IA y los aranceles propuestos; Yahoo Finance suma la inflación.",
-  "El dato de viviendas tiene mucho margen de error: el Census estima una suba de 14,2% en el mes, con un margen de 22,6 puntos, así que no es concluyente."
+  "El dato de viviendas tiene mucho margen de error: el Census estima una suba de 14,2% en el mes, con un margen de 22,6 puntos, así que no es concluyente.",
+  "Subasta a 7 años: se vendieron 44.000 millones de dólares al 4,708%, por debajo del 4,894% del 29/10. Hubo pedidos por 2,43 veces lo ofrecido, contra 2,46 en la anterior (Tesoro) y 2,48 de promedio en las últimas seis, según Newsquawk. La demanda fue algo menor en esa medida.",
+  "La tasa de corte quedó 0,01 puntos por encima de lo que se negociaba justo antes (4,698%), según Newsquawk e investingLIVE. En la subasta anterior esa diferencia había sido cero, según Newsquawk.",
+  "El Tesoro también colocó letras hoy: 4 semanas al 4,115% (anterior 4,050%), 8 semanas al 4,120% (4,110%) y 17 semanas al 4,250% (4,230%).",
+  "El GDPNow pasó de 3,2% a 2,9%. La Fed de Atlanta lo explica por una menor estimación de consumo y de exportaciones netas, compensada en parte por más inversión y gasto público."
  ],
  "leccion": "El color del calendario suele leerse como bueno o malo para el dólar. Hoy los subsidios salieron en verde por ser menos que lo previsto, y el PCE subyacente por ser más. Para el Nasdaq, un PCE en verde puede ser mala noticia.",
  "agenda": [
@@ -173,16 +209,18 @@
   },
   {
    "cuando": "2026-11-25T13:30:00-03:00",
+   "evento": "Subasta del Tesoro a 7 años",
+   "anterior": "4,894%",
+   "impacto": "medio",
+   "salio": "4,708%"
+  },
+  {
+   "cuando": "2026-11-25T13:40:00-03:00",
    "evento": "GDPNow de la Fed de Atlanta (4T)",
    "previsto": "3,2%",
    "anterior": "3,2%",
-   "impacto": "bajo"
-  },
-  {
-   "cuando": "2026-11-25T15:00:00-03:00",
-   "evento": "Subasta del Tesoro a 7 años",
-   "anterior": "4,894%",
-   "impacto": "medio"
+   "impacto": "bajo",
+   "salio": "2,9%"
   },
   {
    "cuando": "2026-11-25T16:00:00-03:00",
@@ -247,7 +285,7 @@
    "impacto": "alto"
   }
  ],
- "mensaje": "📊 *FUNDAMENTALES EE.UU. | 25/11*\n\n*La economía sigue fuerte y la inflación no afloja.*\n\n• PIB 3T: *4,3%* (previsto 3,4%)\n• PCE subyacente anual: *3,3%* (previsto 3,2%)\n• Subsidios: *189K* (previsto 201K)\n• Consumo real de octubre: *0,0%*\n• Ventas de viviendas nuevas: *701K* (previsto 650K, anterior revisado a 614K)\n\n🏦 Los datos respaldan a una Fed dura. Con diciembre casi descontado, la atención pasa a enero.\n\n📉 La baja del Nasdaq empezó antes del dato. Reuters la vincula con las ventas en IA y los aranceles propuestos. En los 30 minutos posteriores, Bitcoin bajó cerca de 1,3%, más que lo habitual.\n\n_Contenido educativo. No es asesoramiento financiero._",
+ "mensaje": "📊 *FUNDAMENTALES EE.UU. | 25/11*\n\n*La economía sigue fuerte y la inflación no afloja.*\n\n• PIB 3T: *4,3%* (previsto 3,4%)\n• PCE subyacente anual: *3,3%* (previsto 3,2%)\n• Subsidios: *189K* (previsto 201K)\n• Consumo real de octubre: *0,0%*\n• Ventas de viviendas nuevas: *701K* (previsto 650K, anterior revisado a 614K)\n• Subasta del Tesoro a 7 años: *4,708%* (anterior 4,894%). Demanda: 2,43 veces lo ofrecido (anterior 2,46)\n• GDPNow del 4T: *2,9%* (anterior 3,2%)\n\n🏦 Los datos respaldan a una Fed dura. Con diciembre casi descontado, la atención pasa a enero.\n\n📉 La baja del Nasdaq empezó antes del dato. Reuters la vincula con las ventas en IA y los aranceles propuestos. En los 30 minutos posteriores, Bitcoin bajó cerca de 1,3%, más que lo habitual.\n\n_Contenido educativo. No es asesoramiento financiero._",
  "fuentes": [
   {
    "nombre": "BEA (PIB)",
@@ -288,6 +326,34 @@
   {
    "nombre": "Bloomberg",
    "url": "https://bloomberg.com/news/articles/2026-11-24/asian-stocks-to-slide-as-ai-trade-doubts-resurface-markets-wrap"
+  },
+  {
+   "nombre": "Tesoro (subasta a 7 años de hoy)",
+   "url": "https://www.treasurydirect.gov/instit/annceresult/press/preanre/2026/R_20261125_3.pdf"
+  },
+  {
+   "nombre": "Tesoro (subasta a 7 años del 29/10)",
+   "url": "https://www.treasurydirect.gov/instit/annceresult/press/preanre/2026/R_20261029_3.pdf"
+  },
+  {
+   "nombre": "Tesoro (subastas recientes)",
+   "url": "https://www.treasurydirect.gov/TA_WS/securities/auctioned?format=json&days=8"
+  },
+  {
+   "nombre": "Fed de Atlanta (GDPNow)",
+   "url": "https://www.atlantafed.org/research-and-data/data/gdpnow/current-and-past-gdpnow-commentaries"
+  },
+  {
+   "nombre": "EIA (gas natural)",
+   "url": "https://ir.eia.gov/ngs/ngs.html"
+  },
+  {
+   "nombre": "Newsquawk",
+   "url": "https://www.newsquawk.com/headlines/us-sells-usd-44bln-of-7-year-notes-tail-1bps"
+  },
+  {
+   "nombre": "investingLIVE",
+   "url": "https://investinglive.com/news/us-treasury-sells-44-billion-of-70-or-notes-at-a-high-yield-of-4-708/"
   }
  ],
  "tasa10": {
@@ -867,6 +933,10 @@
   {
    "cuando": "2026-11-25T14:01:14-03:00",
    "texto": "Corrección: se retiraron las mediciones con Yahoo. Quedan Bitcoin, Ethereum y EUR/USD, verificados entre bolsas."
+  },
+  {
+   "cuando": "2026-11-25T15:27:25-03:00",
+   "texto": "Datos nuevos: subasta del Tesoro a 7 años 4,708% (demanda 2,43); GDPNow 2,9%; reservas de gas natural -24B. Se corrigió el horario de la subasta: fue a las 13:30."
   }
  ]
 }
