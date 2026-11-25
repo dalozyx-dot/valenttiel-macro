@@ -66,7 +66,7 @@ main>*{min-width:0}
 .barra{display:grid;gap:6px;font-size:14.5px}.barra div{display:flex;justify-content:space-between;gap:12px}
 .barra b{display:block;height:6px;border-radius:6px;background:rgba(210,240,226,.09);overflow:hidden}.barra i{display:block;height:100%;border-radius:6px;background:linear-gradient(90deg,var(--mint),var(--aqua))}
 .fld{display:grid;gap:8px;min-width:0}.fld label,.fld legend{font-size:15px;font-weight:500}.fld legend{margin-bottom:8px}
-input[type=text]{width:100%;background:var(--field);border:1px solid rgba(210,240,226,.2);border-radius:13px;padding:12px 14px;font-size:16px}
+input[type=text]{width:100%;min-width:0;background:var(--field);border:1px solid rgba(210,240,226,.2);border-radius:13px;padding:12px 14px;font-size:16px}
 input[type=text]:focus{outline:none;border-color:var(--mint);box-shadow:0 0 0 4px rgba(95,208,160,.16)}
 .trap{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
 .opts{display:flex;flex-wrap:wrap;gap:8px}
@@ -92,6 +92,28 @@ ol.rank li.yo b,ol.rank li.yo .num{color:var(--mint)}
 details summary{cursor:pointer;font-size:15px;font-weight:500}details>div{display:grid;gap:14px;padding-top:14px}
 footer{border-top:1px solid var(--line);padding-block:20px 40px;display:grid;gap:6px}
 
+.tabs{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;padding-block:2px}.tabs::-webkit-scrollbar{display:none}
+.tabs button{flex:none;border:0;border-radius:999px;background:none;box-shadow:inset 0 0 0 1px var(--line);padding:10px 18px;font-size:15px;color:var(--muted)}
+.tabs button:hover{color:var(--ink)}.tabs button[aria-pressed=true]{color:var(--on);background:linear-gradient(110deg,var(--mint),var(--aqua));font-weight:500}
+select{width:100%;appearance:none;-webkit-appearance:none;border:1px solid rgba(210,240,226,.2);border-radius:13px;padding:12px 38px 12px 14px;font:inherit;font-size:16px;color:inherit;background:var(--field) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none' stroke='%2394A69E' stroke-width='1.8'%3E%3Cpath d='M1 1.5 6 6.5 11 1.5'/%3E%3C/svg%3E") no-repeat right 14px center}
+option{background:#101815;color:#F1F6F3}
+.dos{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.rap{display:flex;flex-wrap:wrap;gap:6px}.rap button{border:0;background:none;box-shadow:inset 0 0 0 1px var(--line);border-radius:999px;padding:6px 13px;font:500 13.5px var(--m);color:var(--muted)}.rap button:hover{color:var(--mint);box-shadow:inset 0 0 0 1px rgba(95,208,160,.5)}
+.plan{border-radius:18px;padding:18px;background:rgba(95,208,160,.08);box-shadow:inset 0 0 0 1px rgba(95,208,160,.4);display:grid;gap:14px}
+.plan header{display:flex;flex-wrap:wrap;justify-content:space-between;gap:2px 14px;align-items:baseline}.plan h3{font-size:19px}
+.mision{display:grid;gap:8px;border-top:1px solid var(--line);padding-top:16px}.mision>div{display:flex;flex-wrap:wrap;justify-content:space-between;gap:2px 14px;font-size:14.5px}
+.mision b.r,.logro b.r{display:block;height:8px;border-radius:8px;background:rgba(210,240,226,.09);overflow:hidden}.mision b.r i,.logro b.r i{display:block;height:100%;border-radius:8px;background:linear-gradient(90deg,var(--mint),var(--aqua))}
+.hall{display:grid;gap:8px;border-radius:18px;padding:20px;background:rgba(240,138,123,.09);box-shadow:inset 0 0 0 1px rgba(240,138,123,.4)}.hall.bien{background:rgba(95,208,160,.09);box-shadow:inset 0 0 0 1px rgba(95,208,160,.4)}
+.hall p:first-child{font-size:13.5px;color:var(--muted)}.hall h3{font-size:21px;line-height:1.25}
+.compara{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.compara dt{font-size:14px;color:var(--muted)}.compara dd{font:600 34px/1.15 var(--f);letter-spacing:-.04em;font-variant-numeric:tabular-nums}.compara small{display:block;font-size:13.5px;font-weight:400;letter-spacing:0;color:var(--muted)}
+.grupo{display:grid;gap:11px}.grupo h3{font-size:15.5px}.grupo li{list-style:none;display:grid;gap:5px;font-size:14.5px}.grupo ul{padding:0;display:grid;gap:11px}
+.grupo li>div{display:flex;justify-content:space-between;gap:12px}.grupo li b{display:block;height:7px;border-radius:7px;background:rgba(210,240,226,.08);overflow:hidden}.grupo li b i{display:block;height:100%;border-radius:7px;background:var(--mint)}
+.cal{display:grid;grid-template-rows:repeat(7,minmax(0,1fr));grid-auto-flow:column;grid-auto-columns:minmax(0,1fr);gap:4px;padding:0;margin:0}
+.cal li{list-style:none;aspect-ratio:1;border-radius:26%;background:rgba(210,240,226,.06)}.cal .f{visibility:hidden}.cal .c1{background:rgba(95,208,160,.22)}.cal .c2{background:rgba(95,208,160,.45)}.cal .c3{background:rgba(95,208,160,.7)}.cal .c4{background:#5FD0A0}
+.calp{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--muted)}.calp i{width:13px;height:13px;border-radius:4px}
+.logros{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;padding:0}
+.logro{list-style:none;border-radius:18px;padding:18px;display:grid;gap:7px;align-content:start;box-shadow:inset 0 0 0 1px var(--line)}.logro.si{background:rgba(235,178,74,.1);box-shadow:inset 0 0 0 1px rgba(235,178,74,.5)}.logro.si h3{color:var(--amber)}
+.hist{padding:0;display:grid}.hist li{list-style:none;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:3px 14px;border-top:1px solid var(--line);padding:11px 0;font-size:15px}.hist li:first-child{border-top:0}.hist .num{text-align:right}.up{color:var(--mint)}.down{color:var(--down)}
 .stamp{display:inline-flex;align-items:center;gap:10px;font:500 13.5px/1.4 var(--m);color:var(--muted)}.stamp::before{content:"";flex:none;width:8px;height:8px;border-radius:50%;background:var(--mint)}
 .semana{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:10px;padding:0;margin:0}
 .semana li{list-style:none;display:grid;gap:7px;text-align:center;font-size:13.5px;color:var(--muted)}
@@ -117,8 +139,8 @@ footer{border-top:1px solid var(--line);padding-block:20px 40px;display:grid;gap
 @media(prefers-reduced-motion:reduce){.conf{display:none}}
 @keyframes llena{from{opacity:.55;transform:translateY(12%)}}
 @media(prefers-reduced-motion:no-preference){.semana .col i{animation:llena .7s cubic-bezier(.2,.8,.2,1) backwards;animation-delay:calc(var(--i)*60ms)}.pista li i{animation:llena .7s cubic-bezier(.2,.8,.2,1) backwards;animation-delay:calc(var(--i)*35ms)}}
-@media(max-width:860px){.cols{grid-template-columns:minmax(0,1fr)}.cols>.stack{display:contents}.reglas{grid-template-columns:minmax(0,1fr);gap:14px}}
-@media(max-width:560px){.semana{gap:6px}.semana .col{height:96px;border-radius:11px}.semana .col b{font-size:12px}.pista{grid-template-columns:repeat(5,minmax(0,1fr))}.cifras{grid-template-columns:repeat(2,minmax(0,1fr))}.glass{padding:20px}.btns .btn{flex:1 1 auto}}
+@media(max-width:860px){.logros{grid-template-columns:repeat(2,minmax(0,1fr))}.cols{grid-template-columns:minmax(0,1fr)}.cols>.stack{display:contents}.reglas{grid-template-columns:minmax(0,1fr);gap:14px}}
+@media(max-width:560px){.logros{grid-template-columns:minmax(0,1fr)}.cal{gap:3px}.semana{gap:6px}.semana .col{height:96px;border-radius:11px}.semana .col b{font-size:12px}.pista{grid-template-columns:repeat(5,minmax(0,1fr))}.cifras{grid-template-columns:repeat(2,minmax(0,1fr))}.glass{padding:20px}.btns .btn{flex:1 1 auto}}
 </style>
 </head>
 <body>
@@ -157,6 +179,7 @@ function link(){return BASE+'?por='+E.yo.codigo+'&desde=desafio'}
 function textoInv(){return(E.puesto?'Voy '+E.puesto+'.º en la Liga de Disciplina con '+pts(E.yo.puntos)+'. ¿Me ganás?':'Entré a la Liga de Disciplina: gana el que más cumple su plan. ¿Me ganás?')+'\n'+link()}
 function queda(){var s=Math.max(0,Math.floor((new Date(E.cierra)-Date.now())/1000)),d=Math.floor(s/86400),h=Math.floor(s%86400/3600),m=Math.floor(s%3600/60);return d?d+' d '+h+' h':h?h+' h '+m+' min':m+' min'}
 function reloj(){return el('p',{class:'stamp',id:'reloj',text:'La semana cierra en '+queda()})}
+app.addEventListener('input',function(e){var f=e.target.form,x=f&&f.querySelector('.err');if(x)x.hidden=true});
 setInterval(function(){var r=document.getElementById('reloj');if(r&&E)r.textContent='La semana cierra en '+queda()},30000);
 
 /* ---- tabla ---- */
@@ -170,10 +193,11 @@ function tabla(){
   return s;
 }
 function reglas(){
-  return el('section',{class:'glass'},el('details',{},el('summary',{text:'Cómo se cuentan los puntos'}),el('div',{},el('ul',{class:'small muted',style:'padding-left:20px;display:grid;gap:7px'},['Cada día vale hasta 100 puntos: es el promedio de las tres reglas en tus operaciones. Una buena vale lo mismo que tres.','Suman hasta 3 operaciones por día. Cada una de más resta 20.','Si no hubo entrada de tu plan, anotás "Hoy no operé" y sumás 50.','Racha: cada día seguido suma 5 más, hasta 25. Sábado y domingo no la cortan.','Cuentan tus mejores 5 días de la semana. El lunes a las 0 de Argentina todos vuelven a cero.','El nivel (Bronce, Plata, Oro, Diamante, Leyenda) usa todos tus puntos y no se pierde.'].map(function(x){return el('li',{text:x})})))));
+  return el('section',{class:'glass'},el('details',{},el('summary',{text:'Cómo se cuentan los puntos'}),el('div',{},el('ul',{class:'small muted',style:'padding-left:20px;display:grid;gap:7px'},['Cada operación tiene tres reglas: plan sellado antes de entrar, riesgo definido y stop respetado. Cada día vale hasta 100: es el promedio de esas reglas. Una buena vale lo mismo que tres.','El plan se sella con la hora del servidor y se puede cerrar desde un minuto después. No se edita.','Riesgo: hasta 2% de la cuenta y sin agregar tamaño. Stop: sin moverlo en contra y sin perder más de 1,1R.','Suman hasta 3 operaciones por día. Cada una de más resta 20.','Si no hubo entrada, anotás "Hoy no operé" y sumás 50.','Racha: cada día seguido suma 5 más, hasta 25. Sábado y domingo no la cortan.','Cuentan tus mejores 5 días, más 50 si completás la misión. El lunes a las 0 de Argentina todos vuelven a cero.','El nivel usa todos tus puntos y no se pierde. El resultado en R no suma puntos y solo lo ves vos.'].map(function(x){return el('li',{text:x})})))));
 }
 
 /* ---- entrada ---- */
+function ejemplo(){return el('section',{class:'glass'},el('p',{class:'muted small',text:'Ejemplo de radiografía, con datos inventados'}),hallazgo({k:'Después de perder',n:9,disciplina:48,resto:89,nResto:22},false),comparaR({cumplidas:{n:22,promedio:.6},rotas:{n:9,promedio:-1.1}}))}
 function campo(id,rot,attrs,ayuda){return el('div',{class:'fld'},el('label',{for:id,text:rot}),el('input',Object.assign({type:'text',id:id,autocomplete:'off'},attrs)),ayuda?el('p',{class:'muted small',text:ayuda}):null)}
 function entrada(){
   var d=E.desafio,err=el('p',{class:'err',role:'alert',hidden:''}),rot=d?'Aceptar el desafío':'Entrar a la Liga',b=el('button',{class:'btn main',type:'submit',text:rot});
@@ -181,7 +205,7 @@ function entrada(){
     d?el('p',{class:'aviso ok',text:d.puntos?'Lleva '+pts(d.puntos)+' esta semana. A ver si le ganás.':'Todavía no sumó esta semana. Es tu oportunidad.'}):null,
     campo('apodo','Elegí tu apodo',{maxlength:'20',value:borrador,required:''},'Es lo único que se ve en la tabla. No pongas tu nombre completo.'),
     el('div',{class:'trap','aria-hidden':'true'},el('label',{for:'web',text:'Sitio web'}),el('input',{id:'web',tabindex:'-1',autocomplete:'off'})),
-    el('label',{class:'chk',for:'acepto'},el('input',{type:'checkbox',id:'acepto'}),el('span',{text:'Tengo 18 años o más y acepto que se guarden mi apodo y lo que anote, y que mi apodo y mis puntos se vean en la tabla. Puedo borrarlo cuando quiera.'})),err,b,
+    el('label',{class:'chk',for:'acepto'},el('input',{type:'checkbox',id:'acepto'}),el('span',{text:'Tengo 18 años o más y acepto que se guarden mi apodo y lo que anote, que mi apodo y mis puntos se vean en la tabla, y que lo demás se use solo sumado al de todos, sin mi apodo. Puedo borrarlo cuando quiera.'})),err,b,
     el('details',{},el('summary',{text:'Ya participo, tengo mi clave'}),el('div',{},campo('clave','Tu clave',{maxlength:'64'}),el('div',{class:'btns'},el('button',{class:'btn',type:'button',id:'usar',text:'Recuperar mi lugar',onclick:recuperar})))));
   function mal(t,id){err.textContent=t;err.hidden=false;if(id)document.getElementById(id).focus()}
   function recuperar(){var k=document.getElementById('clave').value.trim();if(!/^[A-Za-z0-9_-]{24,64}$/.test(k))return mal('Esa clave no es válida.','clave');pedir({accion:'estado',secreto:k}).then(function(j){guardar(k);E=j;pintar()}).catch(function(x){mal(x.message,'clave')})}
@@ -190,46 +214,104 @@ function entrada(){
     if(a.length<3)return mal('El apodo tiene que tener al menos 3 letras.','apodo');
     if(!document.getElementById('acepto').checked)return mal('Para entrar necesitamos que aceptes.','acepto');
     err.hidden=true;b.disabled=true;b.textContent='Entrando…';
-    pedir({accion:'unirse',apodo:a,por:por,origen:origen,acepto:true,sitio_web:document.getElementById('web').value}).then(function(j){if(!j.secreto)throw new Error('No se pudo entrar.');guardar(j.secreto);E=j;medir('entro-reto');nota='Ya estás dentro. Anotá tu primera operación para aparecer en la tabla.';pintar(true)}).catch(function(x){mal(x.message);b.disabled=false;b.textContent=rot});
+    pedir({accion:'unirse',apodo:a,por:por,origen:origen,acepto:true,sitio_web:document.getElementById('web').value}).then(function(j){if(!j.secreto)throw new Error('No se pudo entrar.');guardar(j.secreto);E=j;medir('entro-reto');nota='Ya estás dentro. Sellá tu primer plan antes de tu próxima entrada.';pintar(true)}).catch(function(x){mal(x.message);b.disabled=false;b.textContent=rot});
   });
   poner(
-    el('div',{class:'hero'},reloj(),el('h1',{class:'grad',text:'¿Quién cumple más su plan?'}),el('p',{class:'lead',text:'Todos contra todos, cada semana. Ganás hasta 100 puntos por día por hacer lo que dijiste que ibas a hacer. No importa cuánta plata ganes.'})),
-    el('div',{class:'cols'},el('div',{class:'stack'},ord(2,tabla())),ord(1,f)),
-    el('ol',{class:'reglas'},[['1. Operá como siempre','En tu cuenta, real o demo. Acá no se opera ni se apuesta nada.'],['2. Anotá y respondé tres preguntas','¿Estaba en tu plan? ¿Arriesgaste lo definido? ¿Respetaste el stop?'],['3. Sumá y subí','Cuanto más cumplís, más alto llegás. El lunes todos arrancan de cero.']].map(function(x){return el('li',{},el('h3',{text:x[0]}),el('p',{class:'muted small',text:x[1]}))})),reglas());
+    el('div',{class:'hero'},reloj(),el('h1',{class:'grad',text:'¿Quién cumple más su plan?'}),el('p',{class:'lead',text:'Sellás tu plan antes de entrar, operás y lo cerrás. La Liga te dice cuánto lo cumpliste, dónde te equivocás siempre y en qué puesto estás. No importa cuánta plata ganes.'})),
+    el('div',{class:'cols'},el('div',{class:'stack'},ord(2,ejemplo()),ord(3,tabla())),ord(1,f)),
+    el('ol',{class:'reglas'},[['1. Sellá tu plan','Activo, riesgo, objetivo y cómo estás. Queda con hora y no se puede cambiar.'],['2. Operá como siempre','En tu cuenta, real o demo. Acá no se opera ni se apuesta nada.'],['3. Cerralo y sumá','Hasta 100 puntos por día. El lunes todos arrancan de cero.']].map(function(x){return el('li',{},el('h3',{text:x[0]}),el('p',{class:'muted small',text:x[1]}))})),reglas());
 }
 function guardar(k){secreto=k;try{localStorage.setItem(KL,k)}catch(e){}}
 function olvidar(){secreto=null;E=null;try{localStorage.removeItem(KL)}catch(e){}}
 
-/* ---- tablero ---- */
-function sino(id,rot){return el('fieldset',{class:'fld'},el('legend',{text:rot}),el('div',{class:'opts'},[['si','Sí',''],['no','No','no']].map(function(o){return el('label',{class:o[2]},el('input',{type:'radio',name:id,value:o[0]}),o[1])})))}
-function anotar(){
-  var h=E.yo.hoy,err=el('p',{class:'err',role:'alert',hidden:''}),b=el('button',{class:'btn main',type:'submit',text:'Anotar operación'}),id=uuid();
-  var f=el('form',{class:'glass',novalidate:'',id:'anotar'},el('h2',{text:'Anotá tu operación'}),
-    h.suman>=h.maximo?el('p',{class:'aviso',text:'Ya sumaste tus '+h.maximo+' de hoy. Si anotás otra, resta 20 puntos. Quizás es momento de cerrar la plataforma.'}):el('p',{class:'muted small',text:h.operaciones||h.pausa?'Hoy llevás '+pts(h.puntos)+'.':'Cuando la cierres, respondé con honestidad. Son tres preguntas.'}),
-    sino('plan','¿Estaba en tu plan antes de entrar?'),sino('riesgo','¿Arriesgaste lo que habías definido?'),sino('stop','¿Respetaste tu stop?'),
-    err,el('div',{class:'btns'},b,h.operaciones||h.pausa?null:el('button',{class:'btn',type:'button',text:'Hoy no operé (+50)',onclick:function(e){hacer({accion:'pausa'},e.currentTarget,err)}}),E.yo.deshacer?el('button',{class:'btn',type:'button',text:'Deshacer lo último',onclick:function(e){hacer({accion:'deshacer'},e.currentTarget,err)}}):null));
-  f.addEventListener('submit',function(e){
-    e.preventDefault();var d=new FormData(f);
-    if(!['plan','riesgo','stop'].every(function(k){return d.get(k)})){err.textContent='Respondé las tres preguntas.';err.hidden=false;return}
-    hacer({accion:'registrar',id:id,plan:d.get('plan')==='si',riesgo:d.get('riesgo')==='si',stop:d.get('stop')==='si'},b,err);
+/* ---- operar ---- */
+var vista='operar',cerrando=null,sinPlan=false,KF='valenttiel-liga-form',pref={};
+try{pref=JSON.parse(localStorage.getItem(KF))||{}}catch(e){}
+(function(){var s=q.get('sellar');if(!s)return;var r=parseFloat(q.get('riesgo')),o=parseFloat(q.get('r')),d=q.get('dir');pref.activo=s;if(r>0)pref.riesgo=r;if(o>0)pref.objetivo=o;if(d==='1'||d==='-1')pref.dir=+d})();
+function dec(s){s=String(s).replace(/\s/g,'').replace('−','-').replace(',','.');return/^[+-]?\d{0,3}(\.\d+)?$/.test(s)&&/\d/.test(s)?parseFloat(s):null}
+function conSigno(n){return(n>0?'+':n<0?'−':'')+Math.abs(n).toLocaleString('es-AR',{maximumFractionDigits:2})}
+function rad(nombre,rot,ops,cur){return el('fieldset',{class:'fld'},el('legend',{text:rot}),el('div',{class:'opts'},ops.map(function(o){var i=el('input',{type:'radio',name:nombre,value:String(o[0])});if(String(cur)===String(o[0]))i.checked=true;return el('label',{class:o[2]||''},i,o[1])})))}
+function sel(id,rot,xs,cur){var s=el('select',{id:id,name:id},el('option',{value:'',text:'Elegí'}),xs.map(function(x){return el('option',{value:x,text:x})}));s.value=xs.indexOf(cur)>=0?cur:cur&&xs.indexOf('Otro')>=0?'Otro':'';return el('div',{class:'fld'},el('label',{for:id,text:rot}),s)}
+function numero(id,rot,cur,rapidos,ayuda,fmt){var i=el('input',{type:'text',id:id,name:id,inputmode:rapidos&&rapidos[0]<0?'text':'decimal',autocomplete:'off',maxlength:'7'});if(cur!=null)i.value=String(cur).replace('.',',');return el('div',{class:'fld'},el('label',{for:id,text:rot}),i,rapidos?el('div',{class:'rap'},rapidos.map(function(v){return el('button',{type:'button',text:fmt(v),onclick:function(){i.value=String(v).replace('.',',')}})})):null,ayuda?el('p',{class:'muted small',text:ayuda}):null)}
+function errP(){return el('p',{class:'err',role:'alert',hidden:''})}
+function falla(e,t){e.textContent=t;e.hidden=false}
+function siNo(nombre,rot){return rad(nombre,rot,[['si','Sí','no'],['no','No','']],null)}
+function dirTxt(d){return d===1?'long':d===-1?'short':''}
+
+function formSellar(){
+  var e=errP(),b=el('button',{class:'btn main',type:'submit',text:'Sellar mi plan'}),id=uuid(),o=E.opciones;
+  var f=el('form',{class:'glass',novalidate:'',id:'sellar'},el('h2',{text:E.abiertos.length?'Sellar otro plan':'Sellá tu plan antes de entrar'}),
+    el('div',{class:'dos'},sel('activo','Activo',o.activos,pref.activo),rad('dir','Dirección',[[1,'Compra'],[-1,'Venta']],pref.dir)),
+    el('div',{class:'dos'},numero('riesgo','Riesgo, % de tu cuenta',pref.riesgo,[.25,.5,1],null,function(v){return v.toLocaleString('es-AR')+'%'}),numero('objetivo','Objetivo en R',pref.objetivo,[1,2,3],null,function(v){return v+'R'})),
+    rad('animo','¿Cómo estás ahora?',o.animos.map(function(x){return[x,x]}),null),
+    el('div',{class:'fld'},el('label',{for:'setup'},'Tu setup ',el('span',{class:'muted small',text:'(opcional, solo lo ves vos)'})),el('input',{type:'text',id:'setup',name:'setup',maxlength:'24',list:'setups',autocomplete:'off',placeholder:'Por ejemplo: ruptura de apertura'}),el('datalist',{id:'setups'},E.yo.setups.map(function(x){return el('option',{value:x})}))),
+    e,el('div',{class:'btns'},b));
+  f.addEventListener('submit',function(ev){
+    ev.preventDefault();var d=new FormData(f),r=dec(d.get('riesgo')),ob=dec(d.get('objetivo'));
+    if(!d.get('activo'))return falla(e,'Elegí el activo.');if(!d.get('dir'))return falla(e,'Elegí compra o venta.');
+    if(!(r>0))return falla(e,'Escribí cuánto vas a arriesgar, en % de tu cuenta.');if(!(ob>0))return falla(e,'Escribí tu objetivo en R, por ejemplo 2.');if(!d.get('animo'))return falla(e,'Elegí cómo estás.');
+    pref={activo:d.get('activo'),riesgo:r,objetivo:ob};try{localStorage.setItem(KF,JSON.stringify(pref))}catch(x){}
+    hacer({accion:'sellar',id:id,activo:d.get('activo'),dir:+d.get('dir'),riesgo:r,objetivo:ob,animo:d.get('animo'),setup:d.get('setup')},b,e,'Plan sellado.'+(r>E.opciones.riesgoMax?' Ojo: con más de '+E.opciones.riesgoMax+'% no suma la regla de riesgo.':'')+(d.get('animo')==='Revancha'?' Marcaste revancha: pensalo dos veces antes de entrar.':''));
   });
   return f;
 }
-function hacer(d,b,err){
+function preguntasCierre(objetivo){return[numero('r','¿Cómo cerró? Resultado en R',null,objetivo?[-1,0,1,objetivo].filter(function(v,i,a){return a.indexOf(v)===i}):[-1,0,1,2],'1R es lo que arriesgabas. Stop completo: −1. No suma puntos y solo lo ves vos.',function(v){return conSigno(v)+'R'}),siNo('movio','¿Moviste el stop en contra?'),siNo('agrego','¿Agregaste tamaño o arriesgaste más?')]}
+function leerCierre(f,e){
+  var d=new FormData(f),r=dec(d.get('r')||'');
+  if(r===null||r<-20||r>50){falla(e,'Escribí el resultado en R. Si perdiste el stop completo es -1.');return null}
+  if(!d.get('movio')||!d.get('agrego')){falla(e,'Respondé las dos preguntas.');return null}
+  return{r:r,movio:d.get('movio')==='si',agrego:d.get('agrego')==='si'};
+}
+function tarjetaPlan(x){
+  var e=errP(),falta=Math.ceil((Date.parse(x.creado)+60000-Date.now())/1000),espera=falta>0&&falta<120;
+  var c=el('article',{class:'plan'},el('header',{},el('h3',{text:x.activo+' '+dirTxt(x.dir)}),el('span',{class:'small muted',text:'Sellado a las '+new Date(x.creado).toLocaleTimeString('es-AR',{hour:'2-digit',minute:'2-digit',hour12:false})})),
+    el('p',{class:'small muted',text:'Riesgo '+x.riesgo.toLocaleString('es-AR')+'%, objetivo '+x.objetivo.toLocaleString('es-AR')+'R, '+x.animo.toLowerCase()+(x.setup?', '+x.setup:'')}));
+  if(cerrando===x.id){
+    var b=el('button',{class:'btn main',type:'submit',text:'Cerrar y sumar'}),f=el('form',{class:'stack',style:'gap:18px',novalidate:''},preguntasCierre(x.objetivo),e,el('div',{class:'btns'},b,el('button',{class:'btn',type:'button',text:'Volver',onclick:function(){cerrando=null;pintar()}})));
+    f.addEventListener('submit',function(ev){ev.preventDefault();var d=leerCierre(f,e);if(d)hacer(Object.assign({accion:'cerrar',plan:x.id},d),b,e)});c.append(f);
+  }else{
+    var bc=el('button',{class:'btn main',type:'button',text:espera?'Se cierra en '+falta+' s':'Cerrar operación',onclick:function(){cerrando=x.id;pintar()}});
+    if(espera){bc.disabled=true;var t=setInterval(function(){var s=Math.ceil((Date.parse(x.creado)+60000-Date.now())/1000);if(!bc.isConnected)return clearInterval(t);if(s<=0){clearInterval(t);bc.disabled=false;bc.textContent='Cerrar operación'}else bc.textContent='Se cierra en '+s+' s'},1000)}
+    c.append(e,el('div',{class:'btns'},bc,el('button',{class:'btn',type:'button',text:'No entré',onclick:function(ev){hacer({accion:'cancelar',plan:x.id},ev.currentTarget,e,'Plan descartado. Esperar también es parte del plan.')}})));
+  }
+  return c;
+}
+function formSinPlan(){
+  var e=errP(),b=el('button',{class:'btn main',type:'submit',text:'Anotar sin plan'}),id=uuid(),o=E.opciones;
+  var f=el('form',{class:'glass',novalidate:'',id:'sinplan'},el('h2',{text:'Operé sin sellar un plan'}),el('p',{class:'muted small',text:'Anotarla igual vale: suma hasta 67 y mejora tu radiografía.'}),
+    el('div',{class:'dos'},sel('activo','Activo',o.activos,pref.activo),rad('animo','¿Cómo estabas?',o.animos.map(function(x){return[x,x]}),null)),preguntasCierre(null),e,el('div',{class:'btns'},b,el('button',{class:'btn',type:'button',text:'Volver',onclick:function(){sinPlan=false;pintar()}})));
+  f.addEventListener('submit',function(ev){ev.preventDefault();var d=new FormData(f);if(!d.get('activo'))return falla(e,'Elegí el activo.');if(!d.get('animo'))return falla(e,'Elegí cómo estabas.');var c=leerCierre(f,e);if(c)hacer(Object.assign({accion:'cerrar',id:id,activo:d.get('activo'),animo:d.get('animo')},c),b,e)});
+  return f;
+}
+function verOperar(){
+  var h=E.yo.hoy,e=errP(),izq=[];
+  if(E.abiertos.length)izq.push(el('section',{class:'glass'},el('h2',{text:E.abiertos.length===1?'Tu plan abierto':'Tus planes abiertos'}),E.abiertos.map(tarjetaPlan)));
+  if(sinPlan)izq.push(formSinPlan());
+  else if(E.abiertos.length<3&&!cerrando)izq.push(formSellar());
+  var der=el('section',{class:'glass'},el('h2',{text:'Hoy: '+pts(h.puntos)}),el('p',{class:'muted small',text:h.suman>=h.maximo?'Ya usaste tus '+h.maximo+' operaciones. Cada una de más resta 20: quizás es momento de cerrar la plataforma.':h.pausa&&!h.operaciones?'Anotaste que no operaste.':'Llevás '+h.suman+' de '+h.maximo+' operaciones que suman.'}),e,
+    el('div',{class:'btns'},h.operaciones||h.pausa?null:el('button',{class:'btn',type:'button',text:'Hoy no operé (+50)',onclick:function(ev){hacer({accion:'pausa'},ev.currentTarget,e)}}),sinPlan?null:el('button',{class:'btn',type:'button',text:'Operé sin plan',onclick:function(){sinPlan=true;cerrando=null;pintar();document.getElementById('sinplan').scrollIntoView({block:'start'})}}),E.yo.deshacer?el('button',{class:'btn',type:'button',text:'Deshacer lo último',onclick:function(ev){hacer({accion:'deshacer'},ev.currentTarget,e)}}):null));
+  return el('div',{class:'cols'},el('div',{class:'stack'},izq.map(function(x){return ord(1,x)})),el('div',{class:'stack'},ord(2,der),ord(3,duelos())));
+}
+function hacer(d,b,err,ok){
   var r=b.textContent,A=E;b.disabled=true;b.textContent='Guardando…';
   pedir(Object.assign({secreto:secreto},d)).then(function(j){
     E=j;var dif=j.yo.hoy.puntos-A.yo.hoy.puntos,sube=j.puesto&&(!A.puesto||j.puesto<A.puesto),n;
-    if(d.accion==='deshacer')n='Se borró lo último que anotaste.';
+    if(d.accion==='cerrar'){cerrando=null;sinPlan=false}
+    if(ok)n=ok;
+    else if(d.accion==='deshacer')n='Se deshizo lo último que anotaste.';
     else if(d.accion==='pausa')n='+'+pts(dif)+'. No operar sin una entrada de tu plan también es disciplina.';
     else n=dif>0?'+'+pts(dif)+' hoy.':dif<0?'Hoy bajaste a '+pts(j.yo.hoy.puntos)+'.':'Anotada. Hoy seguís en '+pts(j.yo.hoy.puntos)+'.';
-    if(d.accion!=='deshacer'){
+    if(d.accion==='cerrar'||d.accion==='pausa'){
+      if(d.accion==='cerrar'&&j.yo.historial[0]){var f=['el plan sellado','el riesgo','el stop'].filter(function(_,i){return!j.yo.historial[0].reglas[i]});n+=f.length?' Falló: '+f.join(', ')+'.':' Las tres reglas cumplidas.'}
       if(sube)n+=A.puesto&&A.arriba&&A.puesto-j.puesto===1?' Pasaste a '+A.arriba.apodo+': estás '+j.puesto+'.º.':' Estás '+j.puesto+'.º en la tabla.';
+      if(j.yo.mision.lista&&!A.yo.mision.lista){n+=' Misión cumplida: +50.';sube=true}
       if(j.yo.nivel.nombre!==A.yo.nivel.nombre&&j.yo.total>A.yo.total){n+=' Subiste a nivel '+j.yo.nivel.nombre+'.';sube=true}
+      var nuevos=j.yo.logros.filter(function(x,i){return x.listo&&!A.yo.logros[i].listo});if(nuevos.length){n+=' Logro: '+nuevos.map(function(x){return x.nombre}).join(', ')+'.';sube=true}
       if(j.yo.vueltas>A.yo.vueltas){n+=' Completaste 20 operaciones.';medir('completo-reto');sube=true}
       if(sube)papelitos();
     }
     nota=n;pintar(true);
-  }).catch(function(x){b.disabled=false;b.textContent=r;if(err){err.textContent=x.message;err.hidden=false}});
+  }).catch(function(x){b.disabled=false;b.textContent=r;if(err)falla(err,x.message)});
 }
 function papelitos(){
   if(matchMedia('(prefers-reduced-motion:reduce)').matches)return;
@@ -237,12 +319,14 @@ function papelitos(){
   for(var i=0;i<46;i++)c.append(el('i',{style:'left:'+(Math.random()*100)+'%;background:'+col[i%4]+';--x:'+(Math.random()*180-90)+'px;--r:'+(Math.random()*900-450)+'deg;animation-delay:'+Math.random()*.5+'s'}));
   document.body.append(c);setTimeout(function(){c.remove()},3200);
 }
+
+/* ---- semana ---- */
 function semana(){
-  var y=E.yo,max=125;
+  var y=E.yo,max=125,m=y.mision;
   return el('section',{class:'glass'},el('h2',{text:'Tu semana: '+pts(y.puntos)}),
     el('ol',{class:'semana'},y.dias.map(function(v,i){var a=v===null?0:Math.max(6,v/max*100);return el('li',{class:i===y.hoy.indice?'hoy':''},el('div',{class:'col'+(a>80?' alto':''),'aria-label':DIAS[i]+': '+(v===null?'sin anotar':pts(v)),role:'img'},a?el('i',{style:'height:'+a+'%;--i:'+i}):null,v===null?null:el('b',{'aria-hidden':'true',text:String(v)})),DIAS[i])})),
-    el('div',{class:'nivel'},el('div',{},el('span',{text:'Nivel '+y.nivel.nombre}),el('span',{class:'muted',text:y.nivel.siguiente?'Faltan '+num(y.nivel.falta)+' para '+y.nivel.siguiente:'El nivel más alto'})),el('b',{class:'r'},el('i',{style:'width:'+y.nivel.avance+'%'}))),
-    el('p',{class:'muted small',text:(y.racha>1?'Racha de '+y.racha+' días. ':y.racha===1?'Racha de 1 día. ':'')+'Cuentan tus mejores 5 días.'}));
+    el('div',{class:'mision'},el('div',{},el('span',{text:'Misión: '+m.texto}),el('span',{class:m.lista?'up':'muted',text:m.lista?'Cumplida, +'+m.bonus:m.avance+' de '+m.meta+', vale +'+m.bonus})),el('b',{class:'r'},el('i',{style:'width:'+(m.avance/m.meta*100)+'%'}))),
+    el('div',{class:'nivel'},el('div',{},el('span',{text:'Nivel '+y.nivel.nombre+(y.racha>1?', racha de '+y.racha+' días':'')}),el('span',{class:'muted',text:y.nivel.siguiente?'Faltan '+num(y.nivel.falta)+' para '+y.nivel.siguiente:'El nivel más alto'})),el('b',{class:'r'},el('i',{style:'width:'+y.nivel.avance+'%'}))));
 }
 function duelos(){
   var y=E.yo,s=el('section',{class:'glass'},el('h2',{text:'Desafiá a alguien'}),el('p',{class:'muted small',text:'Le mandás tu link, entra, y acá ves quién va ganando. Se reinicia cada lunes.'}),
@@ -250,27 +334,48 @@ function duelos(){
   if(E.duelos.length)s.append(el('div',{class:'duelos'},E.duelos.map(function(x){var t=Math.max(1,y.puntos+x.puntos),dif=y.puntos-x.puntos;return el('div',{class:'duelo'},el('div',{},el('b',{style:'font-weight:500;overflow-wrap:anywhere',text:'Vos contra '+x.apodo}),el('span',{class:'num',text:num(y.puntos)+' a '+num(x.puntos)})),el('div',{class:'vs','aria-hidden':'true'},el('i',{style:'flex:'+(y.puntos/t||.5)}),el('i',{style:'flex:'+(x.puntos/t||.5)})),el('p',{class:'small '+(dif>0?'':'muted'),text:dif>0?'Vas ganando por '+num(dif)+'.':dif<0?'Te gana por '+num(-dif)+'.':'Van iguales.'}))})));
   return s;
 }
+
+/* ---- radiografía ---- */
+function cuando(k){var m={Calma:'con calma',Confianza:'con confianza',Ansiedad:'con ansiedad',Miedo:'con miedo',Revancha:'buscando revancha',Aburrimiento:'por aburrimiento'};return m[k]||({'La primera del día':'en la primera del día','La segunda':'en la segunda del día','La tercera':'en la tercera del día','De la cuarta en adelante':'de la cuarta en adelante'})[k]||(/^(Después|Antes|De )/.test(k)?k.charAt(0).toLowerCase()+k.slice(1):'en '+k)}
+function hallazgo(x,bien){return el('div',{class:'hall'+(bien?' bien':'')},el('p',{text:bien?'Tu punto más fuerte':'Tu fuga principal'}),el('h3',{text:'Cumplís '+x.disciplina+'% '+cuando(x.k)+'.'}),el('p',{class:'small',text:'En el resto, '+x.resto+'%. Son '+x.n+' operaciones contra '+x.nResto+'.'}))}
+function comparaR(r){return el('dl',{class:'compara'},[['Cuando cumplís las 3 reglas',r.cumplidas],['Cuando rompés alguna',r.rotas]].map(function(x){return el('div',{},el('dt',{text:x[0]}),el('dd',{},x[1].n?conSigno(x[1].promedio)+'R':'–',el('small',{text:x[1].n?'promedio de '+x[1].n+(x[1].n===1?' operación':' operaciones'):'sin operaciones todavía'})))}))}
+function calendario(){
+  var c=E.yo.calendario,base=Date.parse(c.inicio+'T12:00:00Z'),n=c.dias.filter(function(v){return v!==null&&v>=0}).length;
+  return el('section',{class:'glass'},el('h2',{text:'Tus últimas 12 semanas'}),el('ol',{class:'cal',role:'img','aria-label':n+(n===1?' día anotado':' días anotados')+' en las últimas 12 semanas'},c.dias.map(function(v,i){var d=new Date(base+i*864e5),t=d.toLocaleDateString('es-AR',{timeZone:'UTC',day:'2-digit',month:'2-digit'});return el('li',{class:v===-1?'f':v===null?'':v<50?'c1':v<80?'c2':v<100?'c3':'c4',title:t+': '+(v===null?'sin anotar':v===-1?'':pts(v))})})),
+    el('p',{class:'calp','aria-hidden':'true'},'Menos',[['rgba(210,240,226,.06)'],['rgba(95,208,160,.22)'],['rgba(95,208,160,.45)'],['rgba(95,208,160,.7)'],['#5FD0A0']].map(function(x){return el('i',{style:'background:'+x[0]})}),'100 o más'));
+}
+function historial(){
+  var t=['plan','riesgo','stop'];
+  return el('section',{class:'glass'},el('h2',{text:'Tus operaciones'}),E.yo.historial.length?el('ul',{class:'hist'},E.yo.historial.map(function(x){var f=t.filter(function(_,i){return!x.reglas[i]}),d=new Date(x.creado);return el('li',{},el('div',{},el('b',{style:'font-weight:500',text:(x.activo||'Operación')+' '+dirTxt(x.dir)}),el('div',{class:'small muted',text:d.toLocaleDateString('es-AR',{day:'2-digit',month:'2-digit'})+' '+d.toLocaleTimeString('es-AR',{hour:'2-digit',minute:'2-digit',hour12:false})+(x.animo?', '+x.animo.toLowerCase():'')+(x.setup?', '+x.setup:'')+(x.cuenta?'':', de más')})),el('div',{class:'num'},x.r===null?'':el('span',{class:x.r>0?'up':x.r<0?'down':'',text:conSigno(x.r)+'R'}),el('div',{class:'small muted',text:f.length?'falló '+f.join(' y '):'3 de 3'})))})):el('p',{class:'muted',text:'Todavía no cerraste ninguna.'}));
+}
+function verRadio(){
+  var x=E.yo.radiografia,izq=[];
+  if(x.faltan)izq.push(el('section',{class:'glass'},el('h2',{text:'Tu radiografía'}),el('p',{text:x.faltan===1?'Falta 1 operación para tu primera lectura.':'Faltan '+x.faltan+' operaciones para tu primera lectura.'}),el('div',{class:'mision',style:'border:0;padding:0'},el('b',{class:'r'},el('i',{style:'width:'+(x.n/(x.n+x.faltan)*100)+'%'}))),el('p',{class:'muted small',text:'Busca en qué momento rompés tus reglas: cómo estabas, a qué hora, en qué activo o después de qué.'})));
+  else izq.push(el('section',{class:'glass'},el('h2',{text:'Tu radiografía'}),x.fuga?hallazgo(x.fuga,false):el('p',{text:'Por ahora cumplís parejo: no aparece una situación que te juegue en contra.'}),x.fuerte?hallazgo(x.fuerte,true):null,el('p',{class:'muted small',text:'Sale de lo que anotaste. Con pocas operaciones puede ser casualidad: mirá si se repite.'})));
+  if(x.r.n)izq.push(el('section',{class:'glass'},el('h2',{text:'Tu disciplina en R'}),comparaR(x.r),el('p',{class:'muted small',text:'En total: '+conSigno(x.r.total)+'R en '+x.r.n+(x.r.n===1?' operación':' operaciones')+(x.r.acierto===null?'':', '+x.r.acierto+'% ganadoras')+'. Solo lo ves vos.'})));
+  if(x.grupos.length)izq.push(el('section',{class:'glass'},el('h2',{text:'Cuánto cumplís según…'}),x.grupos.map(function(g){return el('div',{class:'grupo'},el('h3',{text:g.nombre}),el('ul',{},g.filas.map(function(f){return el('li',{},el('div',{},el('span',{text:f.k}),el('span',{class:'num',text:f.disciplina+'%'})),el('b',{'aria-hidden':'true'},el('i',{style:'width:'+f.disciplina+'%'})),el('span',{class:'small muted',text:f.n+(f.n===1?' operación':' operaciones')+', '+conSigno(f.r)+'R'}))})))})));
+  var y=E.yo;if(y.vueltas>0){var peor=[['tener un plan',y.partes.plan],['arriesgar lo definido',y.partes.riesgo],['respetar el stop',y.partes.stop]].sort(function(a,b){return a[1]-b[1]})[0];izq.push(el('section',{class:'glass'},el('h2',{text:'Ya tenés 20 operaciones medidas'}),el('p',{class:'muted',text:peor[1]<100?'Lo que más te cuesta es '+peor[0]+' ('+peor[1]+'%). En la mentoría se trabaja con datos como estos.':'Cumpliste todo. En la mentoría se trabaja sobre esa base.'}),el('div',{class:'btns'},el('a',{class:'btn main',href:MENTORIA,target:'_blank',rel:'noopener',text:'Trabajarlo en la mentoría'}),el('a',{class:'btn',href:'../?de=reto#sumate',text:'Empezar por algo corto'}))))}
+  return el('div',{class:'cols'},el('div',{class:'stack'},izq.map(function(z){return ord(1,z)})),el('div',{class:'stack'},ord(2,calendario()),ord(3,historial())));
+}
+function verLogros(){
+  var l=E.yo.logros,n=l.filter(function(x){return x.listo}).length;
+  return el('section',{class:'glass'},el('h2',{text:n+' de '+l.length+' logros'}),el('ul',{class:'logros'},l.map(function(x){return el('li',{class:'logro'+(x.listo?' si':'')},el('h3',{text:x.nombre}),el('p',{class:'small muted',text:x.texto}),x.listo?el('p',{class:'small',text:'✓ Conseguido'}):[el('b',{class:'r','aria-hidden':'true'},el('i',{style:'width:'+(x.va/x.meta*100)+'%'})),el('p',{class:'small muted',text:num(x.va)+' de '+num(x.meta)})])})));
+}
 function tarjeta(){
   var m=el('p',{class:'muted small',role:'status',hidden:''});
   return el('section',{class:'glass'},el('h2',{text:'Mostralo en tu historia'}),el('p',{class:'muted small',text:'Una imagen con tu puesto y tu semana. No muestra plata.'}),el('div',{class:'btns'},el('button',{class:'btn main',type:'button',text:'Crear mi tarjeta',onclick:function(e){compartir(e.currentTarget,m)}})),m);
 }
-function camino(){
-  var y=E.yo,lleno=y.celdas.length>=y.meta,t=['ninguna regla','1 de 3 reglas','2 de 3 reglas','las 3 reglas'],l=el('ol',{class:'pista','aria-label':'Avance: '+y.celdas.length+' de '+y.meta});
-  for(var i=0;i<y.meta;i++){var n=y.celdas[i],v=n!==undefined;l.append(el('li',{class:v?'n'+n:!lleno&&i===y.celdas.length?'sig':'',style:'--i:'+i,'aria-label':'Operación '+(i+1)+(v?': '+t[n]:', pendiente')},v&&n?el('i',{}):null,el('span',{'aria-hidden':'true',text:String(i+1)})))}
-  var ps=[['tener un plan',y.partes.plan],['arriesgar lo definido',y.partes.riesgo],['respetar el stop',y.partes.stop]].sort(function(a,b){return a[1]-b[1]});
-  return el('section',{class:'glass'},el('h2',{text:lleno?'Completaste 20 operaciones':'Camino a las 20 operaciones'}),l,
-    el('p',{class:'muted small',text:y.contadas?'Disciplina de tus últimas 20: '+y.disciplina+'%. '+(ps[0][1]<100?'Lo que más te cuesta es '+ps[0][0]+' ('+ps[0][1]+'%).':'Cumpliste todo.'):'Cada casilla se llena según cuántas reglas cumpliste. Al llegar a 20 sabés cuál es tu punto débil.'}),
-    lleno?el('div',{class:'btns'},el('a',{class:'btn main',href:MENTORIA,target:'_blank',rel:'noopener',text:'Trabajarlo en la mentoría'}),el('a',{class:'btn',href:'../?de=reto#sumate',text:'Empezar por algo corto'})):null);
-}
 function ajustes(){
-  var err=el('p',{class:'err',role:'alert',hidden:''});
-  return el('section',{class:'glass'},el('details',{},el('summary',{text:'Mi clave y mis datos'}),el('div',{},el('p',{class:'muted small',text:'Tu clave sirve para seguir en otro teléfono. No la compartas: quien la tenga puede anotar por vos.'}),el('div',{class:'btns'},el('button',{class:'btn',type:'button',text:'Copiar mi clave',onclick:function(e){copiar(secreto,e.currentTarget,'Copiar mi clave')}}),el('button',{class:'btn',type:'button',text:'Cerrar en este navegador',onclick:function(e){var b=e.currentTarget;if(b.textContent!=='¿Ya copiaste la clave?'){b.textContent='¿Ya copiaste la clave?';setTimeout(function(){if(b.isConnected)b.textContent='Cerrar en este navegador'},4000);return}olvidar();inicio()}}),el('button',{class:'btn',type:'button',text:'Borrar todo lo mío',onclick:function(e){var b=e.currentTarget;if(b.textContent!=='¿Seguro? No se puede deshacer'){b.textContent='¿Seguro? No se puede deshacer';setTimeout(function(){if(b.isConnected&&!b.disabled)b.textContent='Borrar todo lo mío'},4000);return}b.disabled=true;pedir({accion:'borrarme',secreto:secreto}).then(function(){olvidar();inicio()}).catch(function(x){b.disabled=false;err.textContent=x.message;err.hidden=false})}})),err)));
+  var err=errP();
+  return el('section',{class:'glass'},el('h2',{text:'Mi clave y mis datos'}),el('p',{class:'muted small',text:'Tu clave sirve para seguir en otro teléfono. No la compartas: quien la tenga puede anotar por vos.'}),el('div',{class:'btns'},el('button',{class:'btn',type:'button',text:'Copiar mi clave',onclick:function(e){copiar(secreto,e.currentTarget,'Copiar mi clave')}}),el('button',{class:'btn',type:'button',text:'Cerrar en este navegador',onclick:function(e){var b=e.currentTarget;if(b.textContent!=='¿Ya copiaste la clave?'){b.textContent='¿Ya copiaste la clave?';setTimeout(function(){if(b.isConnected)b.textContent='Cerrar en este navegador'},4000);return}olvidar();inicio()}}),el('button',{class:'btn',type:'button',text:'Borrar todo lo mío',onclick:function(e){var b=e.currentTarget;if(b.textContent!=='¿Seguro? No se puede deshacer'){b.textContent='¿Seguro? No se puede deshacer';setTimeout(function(){if(b.isConnected&&!b.disabled)b.textContent='Borrar todo lo mío'},4000);return}b.disabled=true;pedir({accion:'borrarme',secreto:secreto}).then(function(){olvidar();inicio()}).catch(function(x){b.disabled=false;falla(err,x.message)})}})),err);
 }
+var VISTAS=[['operar','Operar'],['tabla','Tabla'],['radio','Radiografía'],['logros','Logros'],['yo','Compartir y datos']];
 function tablero(foco){
   var y=E.yo,n=nota?el('p',{class:'aviso ok',role:'status',tabindex:'-1',text:nota}):null;nota=null;
-  var que=E.puesto===1?(E.jugando>1?'Vas primero. Todos te persiguen.':'Vas primero. Desafiá a alguien para que se ponga bueno.'):E.puesto?(E.arriba.dif?'Estás a '+pts(E.arriba.dif)+' de '+E.arriba.apodo+'.':'Mismos puntos que '+E.arriba.apodo+'. Desempata la racha.'):'Anotá tu día para entrar a la tabla.';
+  var que=E.puesto===1?(E.jugando>1?'Vas primero. Todos te persiguen.':'Vas primero. Desafiá a alguien para que se ponga bueno.'):E.puesto?(E.arriba.dif?'Estás a '+pts(E.arriba.dif)+' de '+E.arriba.apodo+'.':'Mismos puntos que '+E.arriba.apodo+'. Desempata la racha.'):'Sellá y cerrá tu primer plan para entrar a la tabla.';
+  var v=vista==='tabla'?el('div',{class:'cols'},el('div',{class:'stack'},tabla()),el('div',{class:'stack'},duelos(),reglas())):vista==='radio'?verRadio():vista==='logros'?verLogros():vista==='yo'?el('div',{class:'cols'},el('div',{class:'stack'},tarjeta(),reglas()),el('div',{class:'stack'},ajustes())):verOperar();
   poner(el('div',{class:'hero'},reloj(),E.puesto?el('h1',{class:'grad puesto','aria-label':'Vas '+E.puesto+' en la tabla',text:E.puesto+'.º'}):el('h1',{class:'grad',text:'Hola, '+y.apodo}),el('p',{class:'lead',text:que})),n,semana(),
-    el('div',{class:'cols'},el('div',{class:'stack'},ord(1,anotar()),ord(3,duelos()),ord(5,camino())),el('div',{class:'stack'},ord(2,tabla()),ord(4,tarjeta()),ord(6,reglas()),ord(7,ajustes()))));
+    el('nav',{class:'tabs','aria-label':'Secciones de la Liga'},VISTAS.map(function(x){return el('button',{type:'button',id:'v-'+x[0],'aria-pressed':String(vista===x[0]),text:x[1]+(x[0]==='operar'&&E.abiertos.length?' ('+E.abiertos.length+')':''),onclick:function(){vista=x[0];pintar();var b=document.getElementById('v-'+x[0]);b.focus({preventScroll:true});b.scrollIntoView({block:'nearest',inline:'nearest'})}})})),v);
   if(foco&&n){n.focus({preventScroll:true});n.scrollIntoView({block:'center',behavior:matchMedia('(prefers-reduced-motion:reduce)').matches?'auto':'smooth'})}
 }
 

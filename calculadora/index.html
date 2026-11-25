@@ -514,7 +514,7 @@ function show(){
       return '<button type="button" data-pick="'+o.id+'" aria-pressed="'+(o.id===r.pick)+'"><b>'+t+'</b><span class="num">'+(z?'no entra':usd(rk))+'</span><span>'+(o.id==='mix'?'combinado':o.sel[0].p.k)+'</span><span class="num muted">'+(z?'1 arriesga '+usd(o.sel[0].p.loss):'usa '+pct(rk/r.budget*100,0)+' del riesgo')+'</span><span class="fill"><i style="width:'+Math.min(100,rk/r.budget*100)+'%"></i></span></button>'}).join('')+'</div>';
   }
   h+='<p class="work">'+work(r,m,rev)+'</p>';
-  if(!r.zero)h+='<div class="btns"><button type="button" class="btn main" id="copy">Copiar plan</button><button type="button" class="btn" id="guardar">Guardar en mi diario</button></div>';
+  if(!r.zero)h+='<div class="btns"><button type="button" class="btn main" id="copy">Copiar plan</button><button type="button" class="btn" id="guardar">Guardar en mi diario</button><a class="btn" style="text-decoration:none" href="'+sellarUrl(r,m)+'">Sellar en la Liga</a></div>';
   $('res').innerHTML=h;
   $('mini-a').textContent=rev?usd(r.risk):r.zero?'No entra':st;
   $('mini-b').textContent=rev?st:r.zero?'Ver por qué':'arriesga '+usd(r.risk);
@@ -627,6 +627,11 @@ function conv(m,v){
     if(m.sm==='precio')m.dir=r.dir;
   }
   m.sm=v;
+}
+/* Lleva el plan a la Liga, con lo que ya se sabe cargado. */
+function sellarUrl(r,m){
+  var a=S.mkt==='fut'?({GC:'Oro',SI:'Plata',CL:'Petróleo','6E':'EUR/USD','6B':'GBP/USD'})[m.inst]||r.sel[r.sel.length-1].p.s:S.mkt==='fx'?pairTxt(m.inst):S.mkt==='cfd'?({XAUUSD:'Oro',XAGUSD:'Plata',WTI:'Petróleo',BTCUSD:'BTC'})[m.inst]||m.inst:S.mkt==='acc'?'Acciones':m.inst;
+  return 'https://dalozyx-dot.github.io/valenttiel-macro/reto/?sellar='+encodeURIComponent(a)+'&riesgo='+(+r.pct.toFixed(2))+'&r='+(+S.R||2)+(r.entry?'&dir='+r.dir:'')+'&desde=calculadora';
 }
 function copiar(t,b,rotulo){
   var ok=function(){b.textContent='Copiado';setTimeout(function(){if(b.isConnected)b.textContent=rotulo},1800)},bad=function(){
