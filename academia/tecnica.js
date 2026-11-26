@@ -4,7 +4,7 @@ var TECNICA=(function(){
 'use strict';
 var M=MOTOR.h,cl=M.cl,sg=M.sg,eo=M.eo,eio=M.eio,rebote=M.rebote,mez=M.mez,rgba=M.rgba,rr=M.rr,gr=M.gr,tx=M.tx,PI=Math.PI;
 var INK='#F1F6F3',MUT='#94A69E',UP='#5FD0A0',DN='#F08A7B',AM='#EBB24A',VI='#B59CF0',AQ='#5CC6D6',F='Geist, system-ui, sans-serif';
-var CAT={grafico:['Leer el gráfico','#7FB4F0','#5CC6D6'],niveles:['Niveles','#5FD0A0','#5CC6D6'],indicadores:['Indicadores','#B59CF0','#7FB4F0'],riesgo:['Riesgo','#EBB24A','#F08A7B'],setups:['Setups de entrada','#F2A65A','#5FD0A0'],metodo:['Método Valenttiel','#C9A649','#7FB4F0']};
+var CAT={grafico:['Leer el gráfico','#7FB4F0','#5CC6D6'],niveles:['Niveles','#5FD0A0','#5CC6D6'],indicadores:['Indicadores','#B59CF0','#7FB4F0'],riesgo:['Riesgo','#EBB24A','#F08A7B'],setups:['Setups de entrada','#F2A65A','#5FD0A0'],metodo:['Método Valenttiel','#C9A649','#7FB4F0'],entradas:['Entradas del método','#C9A649','#26A69A']};
 var VW=1000,MINI=false;
 
 /* ---- datos de ejemplo ---- */
@@ -580,9 +580,9 @@ function marcaM(S,G,cs,h,m){
   if(m.t==='niv')nivel(c,G,m.p,col,a,{x0:m.x0,x1:m.x1,txt:m.txt,z:z*.85,abajo:m.abajo,izq:m.izq,dash:m.dash});
   else if(m.t==='zona'||m.t==='caja'){var p0=m.p0,p1=m.p1;if(m.t==='caja'){p0=Infinity;p1=-Infinity;for(var k=m.i0;k<=m.i1;k++){p0=Math.min(p0,cs[k].l);p1=Math.max(p1,cs[k].h)}}
     var x0=X0(m.i0),x1=m.t==='caja'?X1(m.i1):X1(m.i1),y0=G.y(Math.max(p0,p1)),y1=G.y(Math.min(p0,p1));c.save();c.globalAlpha*=a;c.fillStyle=rgba(col,.16);c.fillRect(x0,y0,(x1-x0)*eo(a),y1-y0);c.strokeStyle=rgba(col,.6);c.lineWidth=1;c.strokeRect(x0,y0,(x1-x0)*eo(a),y1-y0);c.restore();
-    if(m.txt)pastilla(c,m.txt,m.t==='caja'?x0+4:x0+(x1-x0)*eo(a)-6,m.t==='caja'?y0-z*1.5:(y0+y1)/2,col,z*.82,m.t==='caja'?'left':'right',a)}
+    if(m.txt)pastilla(c,m.txt,m.t==='caja'||m.izq?x0+4:x0+(x1-x0)*eo(a)-6,m.t==='caja'?y0-z*1.5:m.izq?y1+z*1.4:(y0+y1)/2,col,z*.82,m.t==='caja'||m.izq?'left':'right',a)}
   else if(m.t==='marca'){var x=G.x(m.i),y=G.y(m.p);punto(c,x,y,col,4.2*Math.min(1,a*1.5));pastilla(c,m.txt,x,y+(m.arriba?-1:1)*z*1.9,col,z*.82,'center',a)}
-  else if(m.t==='anillo'){var x2=G.x(m.i),y2=G.y(m.p);anillo(c,x2,y2,Math.max(z*1.3,G.paso*1.4),col,a);if(m.txt)pastilla(c,m.txt,x2,y2+(m.arriba?-1:1)*z*2.6,col,z*.88,'center',a)}
+  else if(m.t==='anillo'){var x2=G.x(m.i),y2=G.y(m.p);anillo(c,x2,y2,Math.min(z*2,Math.max(z*1.2,G.paso*.9)),col,a);if(m.txt)pastilla(c,m.txt,x2,y2+(m.arriba?-1:1)*z*2.6,col,z*.88,'center',a)}
   else if(m.t==='flecha'){flechaL(c,G.x(m.i0),G.y(m.p0),G.x(m.i1),G.y(m.p1),col,3,a);if(m.txt)pastilla(c,m.txt,G.x(m.i1),G.y(m.p1)+(m.arriba?-1:1)*z*1.9,col,z*.85,'center',sg(a,.7,1))}
   else if(m.t==='top')pastilla(c,m.txt,G.b.x+G.b.w/2,G.b.y-z*2.1,col,z*.95,'center',a);
   else if(m.t==='ses'){var x3=X0(m.i0),x4=X1(m.i1);c.save();c.globalAlpha*=a;c.fillStyle=rgba(col,.09);c.fillRect(x3,G.b.y,x4-x3,G.b.h);c.restore();pastilla(c,m.txt,(x3+x4)/2,G.b.y+G.b.h-z*1.3,col,z*.82,'center',a)}
@@ -591,13 +591,13 @@ function marcaM(S,G,cs,h,m){
       pastilla(c,'Premium: caro',G.b.x+G.b.w-6,(G.y(hi)+G.y(lv(.5)))/2,DN,z*.82,'right',a);pastilla(c,'Descuento: barato',G.b.x+G.b.w-6,(G.y(lv(.5))+G.y(lo))/2,UP,z*.82,'right',a)}
     if(m.ote){var b2=sg(S.p,m.ote,m.ote+.15);c.save();c.globalAlpha*=b2;c.fillStyle=rgba(GOLD,.22);c.fillRect(xa,G.y(lv(.62)),G.b.x+G.b.w-xa,G.y(lv(.79))-G.y(lv(.62)));c.restore();pastilla(c,'Zona óptima 0,62–0,79',xa+6,G.y(lv(.79))+z*1.5,GOLD,z*.82,'left',b2)}
     (m.niv||[0,.5,1]).forEach(function(f){var y=G.y(lv(f));c.save();c.globalAlpha*=a*.85;c.strokeStyle=f===.5?GOLD:'rgba(178,181,190,.6)';c.lineWidth=1;c.setLineDash(f===.5?[6,5]:[]);c.beginPath();c.moveTo(xa,y);c.lineTo(G.b.x+G.b.w,y);c.stroke();c.restore();
-      c.save();c.globalAlpha*=a;tx(c,String(f).replace('.',','),xa-4,y+z*.3,z*.78,TVTX,'right',500);c.restore()});
+      c.save();c.globalAlpha*=a;tx(c,String(f).replace('.',','),m.i0===m.i1?xa+G.paso*.55:xa-4,y+z*.3,z*.78,TVTX,m.i0===m.i1?'left':'right',500);c.restore()});
     c.save();c.globalAlpha*=a*.5;c.strokeStyle=TVTX;c.setLineDash([3,4]);c.beginPath();c.moveTo(G.x(m.i0),G.y(lo));c.lineTo(G.x(m.i1),G.y(hi));c.stroke();c.restore()}
   else if(m.t==='lista')m.items.forEach(function(s,k){var b3=sg(S.p,(m.en||.1)+k*.14,(m.en||.1)+k*.14+.12);pastilla(c,s,G.b.x+G.b.w-6,G.b.y+z*(3.3+k*2.3),m.cs?m.cs[k]:col,z*.88,'right',b3)});
 }
 function escM(i){return function(S){var l=S.l;if(!l._cs)l._cs=velasM(l.vm);var cs=l._cs,sc=l.sc[i],h=mez(sc.h[0]+1,sc.h[1]+1,sg(S.p,.04,.75)),G=graf(S,cs,h,{ext:l.vm.ext,antes:function(G){(sc.an||[]).forEach(function(m){if(m.t==='ses'||m.t==='zona'||m.t==='fib')marcaM(S,G,cs,h,m)})}});
   (sc.an||[]).forEach(function(m){if(m.t!=='ses'&&m.t!=='zona'&&m.t!=='fib')marcaM(S,G,cs,h,m)})}}
-function lecM(o){o.tec=1;o.cat='metodo';o.esc=[0,1,2,3,4,5].map(escM);o.mini=o.mini||5;return o}
+function lecM(o){o.tec=1;o.cat='metodo';o.esc=[0,1,2,3,4,5].map(escM);o.mini=o.mini||Math.min(5,o.sc.length-1);return o}
 var NV=GOLD,LQ='#7FB4F0';
 /* Definiciones oficiales del Mapa Maestro de Teorías (v2). Nivel público: Redes y Comunidad, más el mapa de la Secuencia.
    Las teorías propias del bloque 6 (Premium) no se enseñan acá: solo se nombran como adelanto. */
@@ -769,6 +769,263 @@ METODO.push({id:'modelo',tec:1,cat:'metodo',n:'La secuencia de la liquidez',cort
 var ORDENM=['liquidez','barrido','estructura','premium-descuento','imbalance','order-block','sesiones','modelo'];
 METODO.sort(function(a,b){return ORDENM.indexOf(a.id)-ORDENM.indexOf(b.id)});
 METODO.forEach(function(l){L.push(l)});
+
+/* ---- Niveles del método: todo se ve gratis como demo; cada nivel privado enseña la profundidad ---- */
+var NIVELES={'Comunidad':{n:'Nivel 1 · Comunidad',d:'Los fundamentos completos del método, con tareas y foro de capturas.',mas:['Fundamentos completos con tareas corregidas','Plantilla de TradingView del método','Comunidad de traders que operan igual que vos']},
+ 'Grupal':{n:'Nivel 2 · Mentoría grupal',d:'El método completo H1 + M5 con práctica en vivo cada semana.',mas:['El método H1 + M5 aplicado en vivo','Práctica semanal y PDF de cada clase','Revisión de tus gráficos en la sesión']},
+ '1 a 1':{n:'Nivel 3 · 1 a 1',d:'Tu plan operativo propio, con corrección personal de cada trade.',mas:['Corrección personal de cada operación','Tu plan operativo y tu diario de trading','Filtros finos y gestión emocional']},
+ 'Premium':{n:'Nivel 4 · Premium',d:'Las teorías propias en profundidad, fondeo y ejecución en vivo.',mas:['Las teorías propias del método en profundidad','Gestión de cuenta fondeada','Ejecución en vivo y revisión semanal']}};
+var ORDN=['Comunidad','Grupal','1 a 1','Premium'];
+[['liquidez','Comunidad'],['barrido','Grupal'],['estructura','Grupal'],['premium-descuento','Grupal'],['imbalance','Comunidad'],['order-block','Grupal'],['sesiones','Comunidad'],['modelo','Grupal']].forEach(function(q){L.forEach(function(l){if(l.id===q[0])l.nivel=q[1]})});
+
+/* Plan de la operación dibujado como la herramienta de posición de TradingView. */
+var marcaM0=marcaM;
+marcaM=function(S,G,cs,h,m){
+  if(m.t!=='plan')return marcaM0(S,G,cs,h,m);
+  var c=S.c,z=S.z,a=sg(S.p,m.en==null?.15:m.en,(m.en==null?.15:m.en)+.2);if(a<=0)return;
+  var x0=G.x(m.i0)-G.paso/2,x1=G.b.x+G.b.w,cor=m.o<m.e,R=Math.round(Math.abs((m.o-m.e)/(m.e-m.s))*10)/10,Rs=String(R).replace('.',',');
+  c.save();c.globalAlpha*=a;c.fillStyle=rgba(DN,.17);c.fillRect(x0,Math.min(G.y(m.e),G.y(m.s)),x1-x0,Math.abs(G.y(m.s)-G.y(m.e)));c.fillStyle=rgba(UP,.15);c.fillRect(x0,Math.min(G.y(m.e),G.y(m.o)),x1-x0,Math.abs(G.y(m.o)-G.y(m.e)));c.restore();
+  [[m.e,INK,'Entrada'],[m.s,DN,'Stop'],[m.o,UP,'Objetivo 1:'+Rs]].forEach(function(q,j){nivel(c,G,q[0],q[1],a,{x0:m.i0,g:2,dash:false,txt:q[2],z:z*.8,abajo:cor?j!==1:j===1})});
+  if(m.res){var hi=-1;for(var k=m.i0+1;k<Math.min(cs.length,Math.ceil(h));k++)if(cor?cs[k].l<=m.o:cs[k].h>=m.o){hi=k;break}
+    if(hi>0){var b=sg(h,hi+.6,hi+1.4);pastilla(c,'Objetivo ✓ +'+Rs+'R',G.b.x+G.b.w/2,G.b.y-z*2.1,UP,z,'center',b)}}
+};
+var velasM0=velasM;velasM=function(vm){return vm.cs?vm.cs.map(function(v){return{o:v[0],h:v[1]+.22,l:v[2]-.22,c:v[3]}}):velasM0(vm)};
+function fijo(xs){return(xs||[]).map(function(m){var o={};for(var k in m)o[k]=m[k];o.en=0;delete o.vi;return o})}
+/* Una entrada = 4 escenas: contexto, gatillo, plan y resultado. */
+function entrada(d){
+  var n=d.cs.length,plan={t:'plan',e:d.e,s:d.s,o:d.o,i0:d.i0},hi=-Infinity,lo=Infinity;d.cs.forEach(function(v){hi=Math.max(hi,v[1]);lo=Math.min(lo,v[2])});
+  var iz=function(xs){return(xs||[]).map(function(m){if(m.t==='zona'||m.t==='niv')m.izq=true;return m})},A0=iz(d.a0),A1=iz(d.a1),Z=iz(d.z);
+  var o=lecM({id:d.id,n:d.n,corto:d.corto,sub:d.sub,nivel:d.nivel,mas:d.mas,vm:{cs:d.cs,ext:[Math.min(lo,d.s,d.o)-.6,Math.max(hi,d.s,d.o)+.6]},
+   tit:d.tit||['El contexto','El gatillo','El plan','El resultado'],t:d.t,claves:d.claves,trampa:d.trampa,q:d.q,practica:d.practica||['setup','stop'],
+   sc:[{h:[0,d.k1],an:A0},{h:[d.k1,d.k2],an:fijo(A0).concat(A1)},{h:[d.k2,d.k3],an:fijo(A0).concat(fijo(A1)).concat(Z).concat([Object.assign({},plan,{en:.2})])},{h:[d.k3,n-1],an:fijo(A0).concat(fijo(A1)).concat(fijo(Z)).concat([Object.assign({},plan,{en:0,res:1})])}]});
+  o.cat='entradas';o.mini=3;return o;
+}
+var BASE=[[110,110.4,107.8,108],[108,108.3,106,106.3],[106.3,106.6,103.6,104],[104,106.2,103.8,105.9],[105.9,106.1,104.6,104.8],[104.8,105,102.6,103],[103,103.2,100.6,101]];
+var CH={t:'niv',p:106.2,x0:3,txt:'CH',c:TVTX,en:.5};
+var ENTRADAS=[
+entrada({id:'entrada-choch',n:'Entrada con CHoCH',corto:'Con CHoCH',sub:'Rompe con cuerpo y vuelve a la zona',nivel:'Grupal',
+ cs:BASE.concat([[101,104.8,100.9,104.5],[104.5,106.9,104.3,106.7],[106.7,106.9,105.1,105.3],[105.3,105.5,103.4,103.7],[103.7,103.9,102.7,103],[103,106.4,102.8,106.2],[106.2,109.6,106,109.4],[109.4,113.8,109.2,113.6],[113.6,117.6,113.4,117.4]]),
+ k1:7,k2:8,k3:11,i0:11,e:103,s:100.3,o:111.1,a0:[CH],a1:[{t:'anillo',i:8,p:106.5,txt:'CHoCH: cierra el cuerpo arriba',arriba:true,c:UP,vi:8}],z:[{t:'zona',p0:101,p1:103,i0:6,txt:'Zona',c:NV,en:.05}],
+ t:['El precio cae, hace un máximo interno, el CH, y marca un mínimo nuevo. Todavía no hay nada para comprar.',
+  'Una vela cierra el cuerpo arriba del CH: es el CHoCH. El carácter cambió.',
+  'Se espera la vuelta a la zona del mínimo. Entrada en el borde, stop debajo del mínimo y objetivo a tres veces el riesgo.',
+  'El precio mitiga la zona y sale con fuerza hacia el objetivo.'],
+ claves:['El CHoCH se valida con cierre de cuerpo, no con mecha.','La entrada va en la vuelta a la zona, no en la vela que rompe.','Stop debajo del mínimo que originó el CHoCH.'],
+ trampa:'Comprar en la vela del CHoCH, lejos de la zona y con el stop gigante.',
+ q:[['¿Qué valida el CHoCH?',['Un cierre de cuerpo arriba del CH','Una mecha que lo toca','Que pase una hora'],0,'Cuerpo, no mecha.'],['¿Dónde se entra?',['En la vuelta a la zona del mínimo','En la vela que rompe','Arriba de todo'],0,'Se espera la mitigación.'],['¿Dónde va el stop?',['Debajo del mínimo de la zona','Arriba de la entrada','Sin stop'],0,'Ahí la idea deja de valer.']]}),
+entrada({id:'entrada-sin-choch',n:'Entrada sin CHoCH',corto:'Sin CHoCH',sub:'Entrar antes de la ruptura',nivel:'Premium',
+ cs:[[110,110.5,108,108.3],[108.3,108.5,106.2,106.5],[106.5,108.9,106.3,108.6],[108.6,108.8,105,105.3],[105.3,105.5,103.2,103.5],[103.5,107.4,103.3,107.1],[107.1,107.3,104,104.3],[104.3,106.1,104.1,105.8],[105.8,106,102.4,102.7],[102.7,102.9,100.6,101],[101,103.6,100.8,103.4],[103.4,104.6,102.5,102.9],[102.9,107.4,102.7,107.1],[107.1,111.9,106.9,111.6],[111.6,116.4,111.4,116.1]],
+ k1:9,k2:10,k3:11,i0:11,e:102.9,s:100.3,o:110.7,a0:[{t:'flecha',i0:2,p0:109.1,i1:7,p1:106.3,c:LQ,txt:'$$$ máximos descendentes',arriba:true,en:.5}],a1:[{t:'anillo',i:10,p:102.2,txt:'Reacción en la zona',c:NV,vi:10}],z:[{t:'zona',p0:101,p1:102.9,i0:9,txt:'Zona',c:NV,en:.05}],
+ t:['Mientras cae, el precio deja máximos cada vez más bajos. Arriba se acumula liquidez: el $$$ que va a buscar después.',
+  'En la zona aparece la reacción. Acá no se espera el CHoCH: la liquidez de arriba ya es el objetivo.',
+  'Entrada en la zona, stop debajo del mínimo y objetivo en la liquidez de los máximos.',
+  'El precio barre los máximos descendentes y llega al objetivo. Exige mucha lectura: es nivel avanzado.'],
+ claves:['Sin CHoCH: se entra antes de la ruptura, con la liquidez de arriba como objetivo.','Solo en zonas respaldadas y con liquidez cercana creada.','Es una entrada de lectura avanzada: se practica en el nivel Premium.'],
+ trampa:'Usarla sin experiencia. Sin la ruptura como filtro, una mala lectura cuesta caro.',
+ q:[['¿Qué se usa como objetivo en la entrada sin CHoCH?',['La liquidez de los máximos descendentes','El mínimo','Nada'],0,'El $$$ de arriba.'],['¿Para quién es esta entrada?',['Para el nivel avanzado','Para el primer día','Para todos sin práctica'],0,'Exige mucha lectura.'],['¿Qué filtro se saltea?',['La ruptura de estructura','El stop','La zona'],0,'Por eso necesita zonas respaldadas.']]}),
+entrada({id:'entrada-induccion',n:'Entrada por inducción',corto:'Inducción',sub:'La zona cercana que deja el retroceso',nivel:'Premium',
+ cs:BASE.concat([[101,106.9,100.9,106.6],[106.6,106.8,104.9,105.2],[105.2,105.4,104.2,104.5],[104.5,106.3,104.3,106],[106,109.5,105.8,109.3],[109.3,113.2,109.1,112.9]]),
+ k1:6,k2:7,k3:9,i0:9,e:105.2,s:103.9,o:109.1,a0:[CH],a1:[{t:'anillo',i:7,p:106.4,txt:'CHoCH',arriba:true,c:UP,vi:7}],z:[{t:'zona',p0:104.3,p1:105.2,i0:8,txt:'Zona de inducción',c:NV,en:.05}],
+ t:['El precio cae a la zona del mínimo y rompe el CH con una vela grande.',
+  'Después del CHoCH no vuelve hasta el mínimo: retrocede poco y deja una zona chica más arriba. Esa es la inducción.',
+  'Entrada en esa zona cercana, stop debajo de ella y objetivo a tres veces el riesgo.',
+  'El precio la respeta y continúa. Quien esperaba el mínimo se quedó afuera.'],
+ claves:['No siempre vuelve a la zona extrema: se opera lo más cercano que cumpla factores.','La zona de inducción tiene que tener liquidez previa.','Stop corto: debajo de la zona de inducción.'],
+ trampa:'Esperar siempre el mínimo y quedarte afuera del movimiento.',
+ q:[['¿Dónde se entra en la entrada por inducción?',['En la zona cercana que deja el retroceso','Siempre en el mínimo','En la vela grande'],0,'Lo más cercano que cumpla factores.'],['¿Qué pasa con quien espera el mínimo?',['Se queda afuera','Gana más','Nada'],0,'El precio no vuelve tan lejos.'],['¿Dónde va el stop?',['Debajo de la zona de inducción','Debajo del mínimo mayor siempre','Arriba'],0,'Stop corto.']]}),
+entrada({id:'entrada-induccion-2',n:'Entrada por inducción en continuación',corto:'Inducción 2',sub:'La pausa después del impulso',nivel:'Premium',
+ cs:BASE.concat([[101,104.8,100.9,104.5],[104.5,106.9,104.3,106.7],[106.7,107,105.6,105.9],[105.9,109.8,105.7,109.6],[109.6,109.9,108.4,108.7],[108.7,109.2,107.6,107.9],[107.9,108.3,107.3,107.6],[107.6,111.3,107.4,111.1],[111.1,114.8,110.9,114.6],[114.6,117.9,114.4,117.6]]),
+ k1:8,k2:10,k3:13,i0:13,e:107.6,s:106.3,o:111.5,a0:[CH,{t:'anillo',i:8,p:106.5,txt:'CHoCH',arriba:true,c:UP,vi:8}],a1:[{t:'caja',i0:10,i1:10,txt:'Impulso',c:UP,vi:10}],z:[{t:'zona',p0:106.6,p1:107.6,i0:10,txt:'Zona de inducción',c:NV,en:.05}],
+ t:['Después del CHoCH, el precio ya está en tendencia nueva.',
+  'Un impulso fuerte deja una zona en su base. Las velas rojas que siguen son la pausa, no un giro.',
+  'Entrada en la zona del impulso, stop debajo de ella y objetivo a tres veces el riesgo.',
+  'La pausa termina y el precio continúa. Es la misma lógica, en continuación.'],
+ claves:['Cada impulso deja una zona en su base: ahí se apoya la continuación.','Las velas rojas en la pausa son liquidez, no cambio de tendencia.','Se opera a favor del CHoCH ya confirmado.'],
+ trampa:'Vender las velas rojas de la pausa, en contra de la estructura nueva.',
+ q:[['¿Qué son las velas rojas después del impulso?',['Una pausa que deja liquidez','Un cambio de tendencia','Nada'],0,'Se opera a favor.'],['¿Dónde está la zona?',['En la base del impulso','En el máximo','En el mínimo del día'],0,'Ahí se apoya la continuación.'],['¿A favor de qué se opera?',['Del CHoCH ya confirmado','De las velas rojas','De la noticia'],0,'Estructura nueva.']]}),
+entrada({id:'entrada-envolvente',n:'Entrada envolvente',corto:'Envolvente',sub:'Una vela que se come a la anterior',nivel:'Grupal',
+ cs:[[110,110.4,108.2,108.5],[108.5,108.7,106.6,106.9],[106.9,107.1,105,105.3],[105.3,107.6,105.1,107.3],[107.3,107.5,105.6,105.9],[105.9,106.1,103.6,103.9],[103.9,104.1,101.4,101.7],[101.6,104.6,100.9,104.3],[104.3,106.1,104.1,105.9],[105.9,106.3,104.8,105.1],[105.1,108.9,104.9,108.7],[108.7,113.1,108.5,112.9],[112.9,116.9,112.7,116.6]],
+ k1:6,k2:7,k3:8,i0:8,e:104.3,s:100.6,o:115.4,a0:[{t:'zona',p0:100.9,p1:103,i0:5,txt:'Zona de H1',c:NV,en:.4}],a1:[{t:'caja',i0:6,i1:7,txt:'Envolvente',c:UP,vi:7}],z:[],
+ t:['El precio cae hasta la zona marcada en H1.',
+  'Aparece una vela verde que barre el mínimo de la roja y cierra por encima de su máximo: la envuelve.',
+  'Entrada al cierre de la envolvente, stop debajo de su mínimo y objetivo a tres veces el riesgo.',
+  'Los compradores tomaron el control y el precio sale hacia el objetivo. Es una de las entradas de Base 1.'],
+ claves:['La envolvente barre el extremo de la vela anterior y cierra más allá de su cuerpo.','Solo cuenta dentro de la zona correcta.','Es entrada de Base 1: simple y en M5.'],
+ trampa:'Operar una envolvente en el medio del rango, sin zona ni liquidez.',
+ q:[['¿Qué hace una vela envolvente alcista?',['Barre el mínimo de la roja y cierra arriba de su cuerpo','Cierra igual que abre','Tiene solo mecha'],0,'Se come a la anterior.'],['¿Dónde tiene que aparecer?',['En la zona correcta','En cualquier lado','En el medio del rango'],0,'Sin zona no hay setup.'],['¿Dónde va el stop?',['Debajo del mínimo de la envolvente','Arriba','Sin stop'],0,'Donde la idea deja de valer.']]}),
+entrada({id:'entrada-doblecandle',n:'Entrada doblecandle',corto:'Doblecandle',sub:'Dos velas que forman la zona',nivel:'Grupal',
+ cs:[[110,110.4,108.2,108.5],[108.5,108.7,106.4,106.7],[106.7,108.4,106.5,108.1],[108.1,108.3,105.7,106],[106,106.2,104.3,104.6],[104.6,104.8,101.2,101.5],[101.5,104.2,101.1,103.9],[103.9,105.4,103.7,105.2],[105.2,105.5,104.1,104.4],[104.4,108.6,104.2,108.3],[108.3,112.8,108.1,112.5],[112.5,116.2,112.3,116]],
+ k1:5,k2:6,k3:8,i0:7,e:103.9,s:100.6,o:113.8,a0:[],a1:[{t:'caja',i0:5,i1:6,txt:'Doblecandle',c:UP,vi:6}],z:[{t:'zona',p0:101.5,p1:103.9,i0:5,txt:'Zona',c:NV,en:.05}],
+ t:['El precio cae con fuerza hasta el mínimo.',
+  'Una vela roja y una verde del mismo tamaño, una al lado de la otra: la verde devuelve todo lo que bajó la roja. Juntas forman la zona.',
+  'Entrada en el borde de la zona, stop debajo de las dos velas y objetivo a tres veces el riesgo.',
+  'El precio vuelve a la zona, la respeta y sale.'],
+ claves:['Dos velas opuestas y parecidas: la segunda devuelve el recorrido de la primera.','La zona va del cuerpo de una al de la otra.','Stop debajo del mínimo de las dos.'],
+ trampa:'Llamar doblecandle a dos velas cualquiera fuera de zona.',
+ q:[['¿Qué forma la doblecandle?',['Una vela roja y una verde opuestas que forman la zona','Dos velas verdes','Un doji'],0,'La segunda devuelve el recorrido.'],['¿Dónde va el stop?',['Debajo de las dos velas','Arriba de la entrada','En el medio'],0,'Ahí deja de valer.'],['¿Dónde se entra?',['En el borde de la zona','En el máximo','Sin zona'],0,'Se espera la vuelta.']]}),
+entrada({id:'entrada-fractales',n:'Entrada por fractales',corto:'Fractales',sub:'Zonas escalonadas que se repiten',nivel:'Grupal',
+ cs:[[111,111.3,109.6,109.9],[109.9,111.6,109.7,111.4],[111.4,111.6,104.2,104.6],[104.6,104.8,102.6,102.9],[102.9,103.1,101.1,101.4],[101.4,104.9,101.2,104.6],[104.6,105,103.3,103.6],[103.6,106.9,103.4,106.6],[106.6,106.8,105.2,105.5],[105.5,105.7,104.1,104.4],[104.4,108.6,104.2,108.3],[108.3,108.6,106.4,106.7],[106.7,107,105.6,105.9],[105.9,111.9,105.7,111.6],[111.6,116.4,111.4,116.2]],
+ k1:7,k2:10,k3:12,i0:11,e:106.6,s:104,o:114.4,a0:[{t:'zona',p0:101.4,p1:102.9,i0:4,txt:'Zona 1',c:NV,en:.5}],a1:[{t:'zona',p0:104.4,p1:105.5,i0:9,txt:'Zona 2',c:NV,vi:10}],z:[{t:'zona',p0:105.9,p1:106.6,i0:11,txt:'Zona 3',c:GOLD,en:.05}],
+ t:['El precio cae, deja una primera zona en el mínimo e impulsa.',
+  'Cada impulso deja una zona nueva un escalón más arriba. El patrón se repite en escala: eso es un fractal.',
+  'Entrada en la zona más cercana, stop debajo de la anterior y objetivo a tres veces el riesgo.',
+  'El precio sube en escalones, apoyándose en cada zona.'],
+ claves:['Cada impulso deja su zona: se forman escalones.','Se opera la zona más cercana que cumpla factores.','El stop va debajo del escalón anterior.'],
+ trampa:'Esperar siempre la primera zona y no ver los escalones que deja la tendencia.',
+ q:[['¿Qué es un fractal en esta entrada?',['El mismo patrón de zona que se repite en escalones','Un indicador','Una noticia'],0,'Cada impulso deja una zona.'],['¿Qué zona se opera?',['La más cercana que cumpla factores','Siempre la primera','Ninguna'],0,'Lo más cercano.'],['¿Dónde va el stop?',['Debajo del escalón anterior','Arriba','En el máximo'],0,'Si pierde el escalón, cambió la lectura.']]}),
+entrada({id:'entrada-ifc',n:'Entrada por IFC',corto:'Por IFC',sub:'La vela que roba la liquidez y deja Imbalance',nivel:'Grupal',
+ cs:[[110,110.3,108.4,108.7],[108.7,110.2,108.5,109.9],[109.9,110.1,106.3,106.6],[106.6,106.8,105,105.3],[105.3,107.6,105.1,107.3],[107.3,107.5,104.6,104.9],[104.9,104.95,102.6,102.9],[102.9,106.1,102.2,105.9],[105.9,108.6,105.6,108.3],[108.3,108.5,106,106.3],[106.3,106.5,105.4,105.7],[105.7,109.8,105.5,109.5],[109.5,113.9,109.3,113.6],[113.6,117.8,113.4,117.5]],
+ k1:6,k2:8,k3:10,i0:9,e:105.6,s:101.9,o:116.7,a0:[{t:'anillo',i:6,p:103.8,txt:'OB: última vela contraria',c:NV,vi:6}],a1:[{t:'caja',i0:7,i1:7,txt:'IFC: roba y envuelve',c:UP,vi:7}],z:[{t:'zona',p0:104.95,p1:105.6,i0:7,txt:'Imbalance',c:GOLD,en:.05}],
+ t:['En la zona, la última vela roja es el order block: deja la liquidez.',
+  'La vela siguiente es el IFC: barre el mínimo de la roja, la envuelve y deja un Imbalance.',
+  'Orden límite en el borde del Imbalance, stop debajo del IFC y objetivo en la liquidez mayor.',
+  'El precio mitiga el Imbalance y sale. No te quedes corto: si la lógica marca la liquidez mayor, ese es el objetivo.'],
+ claves:['El OB deja la liquidez; el IFC la toma.','La orden va en el borde del Imbalance que deja el IFC.','Stop debajo del IFC; objetivo en la liquidez mayor.'],
+ trampa:'Confundir el IFC con el order block: el OB es la vela contraria, el IFC la que roba y envuelve.',
+ q:[['¿Cuál es el IFC?',['La vela a favor que roba la liquidez de la anterior y deja Imbalance','La última vela contraria','Cualquier vela verde'],0,'El OB es la contraria.'],['¿Dónde va la orden?',['En el borde del Imbalance del IFC','En el máximo','En el mínimo del día'],0,'La entrada más simple de Base 1.'],['¿Dónde va el stop?',['Debajo del IFC','Arriba de la entrada','En el medio'],0,'Si lo pierde, la idea murió.']]}),
+entrada({id:'entrada-50',n:'Entrada al 50',corto:'Al 50',sub:'La mitad de la vela del impulso',nivel:'Grupal',
+ cs:[[110,110.3,108.6,108.9],[108.9,109.1,107,107.3],[107.3,108.9,107.1,108.6],[108.6,108.8,106.2,106.5],[106.5,106.7,104.4,104.7],[104.7,104.9,102.8,103.1],[103.1,110.4,102.5,110.1],[110.1,110.3,108.8,109.1],[109.1,109.4,106.4,106.9],[106.9,110.9,106.7,110.6],[110.6,114.9,110.4,114.6],[114.6,118.6,114.4,118.3]],
+ k1:5,k2:6,k3:8,i0:7,e:106.45,s:102.1,o:115.15,a0:[],a1:[{t:'fib',i0:6,p0:102.5,i1:6,p1:110.4,niv:[0,.5,1],en:.4}],z:[],
+ t:['El precio cae hasta la zona.',
+  'Sale una vela de impulso enorme. Se traza Fibonacci sobre esa vela: cero arriba, uno abajo y el cincuenta en el medio.',
+  'Orden límite en el cincuenta por ciento de la vela, stop debajo de su mínimo y objetivo a dos veces el riesgo.',
+  'El precio retrocede justo a la mitad y continúa. Es la entrada equilibrada.'],
+ claves:['Fibonacci sobre la vela del impulso: 0, 0,5 y 1.','La orden va en el 0,5: la mitad del recorrido.','Stop debajo del mínimo de la vela.'],
+ trampa:'Perseguir la vela grande en vez de esperar el retroceso a la mitad.',
+ q:[['¿Sobre qué se traza el Fibonacci en esta entrada?',['Sobre la vela del impulso','Sobre todo el mes','Sobre el RSI'],0,'0 arriba, 1 abajo.'],['¿Dónde va la orden?',['En el 0,5','En el 0','En el 1'],0,'La mitad del recorrido.'],['¿Qué tipo de entrada es?',['Equilibrada','Agresiva','Sin stop'],0,'Ni en el borde ni en el extremo.']]})
+];
+/* Set Ups A y B: ventas dibujadas como en TradingView: línea de entrada, stop gris arriba y objetivo azul abajo. */
+function setAB(d){
+  var o={id:d.id,tec:1,cat:'entradas',n:d.n,corto:d.corto,sub:d.sub,nivel:d.nivel,mas:d.mas,mini:3,tit:d.tit,t:d.t,claves:d.claves,trampa:d.trampa,q:d.q,practica:['stop','rr']};
+  o.esc=[0,1,2,3].map(function(k){return function(S){var c=S.c,b=S.caja,w=b.w/3,y=function(v){return b.y+b.h*(1-(v-60)/(112-60))};
+    if(!MINI){panel(c,b,S.z)}
+    d.vars.forEach(function(v,j){var foco=k===3||k===j,a=foco?1:.28,x=b.x+w*j+w*.08,bw=Math.min(w*.12,S.z*1.8),e=v.e,s=v.s;c.save();c.globalAlpha*=a;
+      var xb=x+bw*2.6,xe=b.x+w*(j+1)-w*.06,ap=k===3?1:k===j?sg(S.p,.35,.55):k>j?1:0;
+      if(ap>0){c.save();c.globalAlpha*=ap;c.fillStyle='rgba(178,181,190,.28)';c.fillRect(xb,y(s),xe-xb,y(e)-y(s));c.fillStyle='rgba(120,150,255,.3)';c.fillRect(xb,y(e),xe-xb,y(64)-y(e));c.strokeStyle=INK;c.lineWidth=1.5;c.beginPath();c.moveTo(v.xl===0?x+bw/2:x+bw*1.5+bw/2,y(e));c.lineTo(xe,y(e));c.stroke();c.restore();
+        if(foco&&!MINI){pastilla(c,'Stop',xe-4,(y(s)+y(e))/2,TVTX,S.z*.75,'right',ap);pastilla(c,'Entrada',xb+4,y(e)+S.z*1.4,INK,S.z*.75,'left',ap);pastilla(c,'Objetivo',xe-4,(y(e)+y(64))/2,'#7896FF',S.z*.75,'right',ap)}}
+      v.velas.forEach(function(q,i){var cx=x+bw/2+i*bw*1.5,col=q[3]>=q[0]?TVUP:TVDN;c.fillStyle=col;c.fillRect(cx-.75,y(q[1]),1.5,y(q[2])-y(q[1]));c.fillRect(cx-bw/2,y(Math.max(q[0],q[3])),bw,Math.max(2,y(Math.min(q[0],q[3]))-y(Math.max(q[0],q[3]))))});
+      if(!MINI)tx(c,String(j+1),x+bw,b.y+b.h-S.z*.6,S.z*1.1,foco?GOLD:TVTX,'center',600);c.restore()});
+    if(!MINI&&k<3)pastilla(c,d.notas[k],b.x+b.w/2,b.y-S.z*2.1,GOLD,S.z*.9,'center',sg(S.p,.1,.25));
+    if(!MINI&&k===3)pastilla(c,d.regla,b.x+b.w/2,b.y-S.z*2.1,GOLD,S.z*.9,'center',sg(S.p,.1,.25))}});
+  return o;
+}
+ENTRADAS.push(
+setAB({id:'setups-a',n:'Set Ups A',corto:'Set Ups A',sub:'Venta por ruptura del mínimo de la vela',nivel:'1 a 1',
+ vars:[{velas:[[104,105,97,99],[85,105.5,83,104.5]],e:97,s:106},{velas:[[104,105.5,97,98.5],[78,104.6,76,104]],e:78,s:105.5},{velas:[[104,105.5,97,98.5],[104,107,86,87]],e:86,s:107.5}],
+ notas:['1 · Vela que no supera el máximo','2 · Envolvente que se agota','3 · Continuación bajista'],regla:'Misma regla: entrada en el mínimo, stop arriba del máximo',
+ tit:['Variante 1','Variante 2','Variante 3','La regla de las tres'],
+ t:['Set Ups A son ventas. En la primera variante, la vela blanca sube pero no supera el máximo de la negra. La orden va en el mínimo de referencia.',
+  'En la segunda, una vela grande sube hasta el máximo y se agota. La orden va en su mínimo, con el stop arriba del máximo.',
+  'En la tercera, una segunda vela negra confirma la caída. La orden va en su mínimo.',
+  'La regla es la misma en las tres: entrada en el mínimo, stop arriba del máximo y un objetivo amplio en la liquidez de abajo.'],
+ claves:['Son ventas: entrada en el mínimo de la vela de referencia.','Stop gris arriba del máximo; objetivo azul amplio abajo.','La relación riesgo/beneficio es grande porque el stop es corto.'],
+ trampa:'Usar el patrón fuera de la zona de premium o en contra de la estructura.',
+ q:[['¿Qué son los Set Ups A?',['Ventas por ruptura del mínimo de la vela','Compras','Indicadores'],0,'Entrada en el mínimo.'],['¿Dónde va el stop?',['Arriba del máximo','Debajo de la entrada','No lleva'],0,'La caja gris.'],['¿Por qué el objetivo es tan amplio?',['Porque el stop es corto y el objetivo es la liquidez de abajo','Porque sí','Por la noticia'],0,'Riesgo chico, recorrido grande.']]}),
+setAB({id:'setups-b',n:'Set Ups B',corto:'Set Ups B',sub:'Venta después del sweep del máximo',nivel:'1 a 1',
+ vars:[{velas:[[102,104,99,100],[96,110,96,100]],e:96,s:108,xl:1},{velas:[[102,104,99,100],[98,105,93,99.5]],e:98,s:104,xl:1},{velas:[[95,110,94,99],[79,103,75,97]],e:79,s:103.5,xl:1}],
+ notas:['1 · Mecha larga arriba: sweep','2 · Doji con mechas a los dos lados','3 · Sweep y vela de caída'],regla:'Misma regla: sweep arriba, entrada en el mínimo del cuerpo',
+ tit:['Variante 1','Variante 2','Variante 3','La regla de las tres'],
+ t:['Set Ups B también son ventas. En la primera variante, la vela blanca barre el máximo con una mecha larga y vuelve: es un sweep. La orden va en el mínimo de su cuerpo.',
+  'En la segunda, la vela queda indecisa, con mechas a los dos lados. La orden va en el mínimo de su cuerpo.',
+  'En la tercera, después del sweep aparece una vela que ya cae. La orden va en el mínimo de esa vela.',
+  'La regla: primero el sweep del máximo, después la entrada en el mínimo del cuerpo, con el stop arriba de la mecha.'],
+ claves:['Primero el sweep del máximo, después la venta.','La orden va en el mínimo del cuerpo de la vela que barre.','Stop arriba de la mecha del sweep.'],
+ trampa:'Vender antes de que la vela cierre: si cierra arriba del máximo, no fue sweep.',
+ q:[['¿Qué tiene que pasar antes de la venta en Set Ups B?',['Un sweep del máximo','Una noticia','Un cruce de medias'],0,'Mecha arriba que vuelve.'],['¿Dónde va la orden?',['En el mínimo del cuerpo de la vela','En el máximo','En el medio'],0,'Ruptura del cuerpo.'],['¿Dónde va el stop?',['Arriba de la mecha del sweep','Debajo de la entrada','No lleva'],0,'Si supera la mecha, la idea murió.']]})
+);
+ENTRADAS.forEach(function(l){l.tec=1;l.cat='entradas';L.push(l)});
+
+/* Conceptos que faltaban y demos de las teorías propias (la profundidad queda en los niveles privados). */
+var DEMOS=[
+lecM({id:'inducement',n:'Inducement: la carnada',corto:'Inducement',sub:'La liquidez fácil antes de la zona real',nivel:'Grupal',
+ vm:{ext:[98.5,113],pts:[[0,108],[4,100.4],[9,108.2],[13,104.6],[16,106.4],[19,103.9],[21,105],[24,101.05],[34,112]],sem:281},
+ tit:['La zona real','El inducement','Barre la carnada','Recién ahí, la zona'],
+ t:['El institucional es un pescador: va donde hay cardumen. Abajo está la zona real, el order block en descuento.',
+  'Justo encima queda un mínimo interno obvio. El minorista compra ahí y pone su stop debajo: esa es la carnada, el inducement.',
+  'El precio barre ese mínimo y saca a todos por stop. Esas ventas forzadas son la liquidez que necesita el institucional.',
+  'Recién después mitiga la zona real y se expande. Zona protegida por un inducement ya barrido: alta probabilidad.'],
+ sc:[{h:[0,9],an:[{t:'zona',p0:100.4,p1:101.3,i0:4,txt:'Zona real',c:NV,en:.4}]},
+  {h:[9,16],an:[{t:'zona',p0:100.4,p1:101.3,i0:4,c:NV,en:0},{t:'niv',p:104.6,x0:13,txt:'IDM · los minoristas compran',c:LQ,vi:13}]},
+  {h:[16,21],an:[{t:'zona',p0:100.4,p1:101.3,i0:4,c:NV,en:0},{t:'niv',p:104.6,x0:13,c:LQ,en:0},{t:'anillo',i:19,p:104,txt:'Barre el IDM',c:LQ,vi:19}]},
+  {h:[21,34],an:[{t:'zona',p0:100.4,p1:101.3,i0:4,c:NV,en:0},{t:'niv',p:104.6,x0:13,c:LQ,en:0},{t:'anillo',i:24,p:101.2,txt:'Mitiga la zona real',c:NV,vi:24}]}],
+ claves:['Inducement (IDM): la liquidez fácil antes de la zona real.','Zona sin inducement delante = zona débil.','Donde está el miedo del minorista, está la liquidez del institucional.'],
+ trampa:'Entrar en la zona antes de que se barra el inducement.',practica:['ruptura','nivel'],
+ q:[['¿Qué es el inducement?',['La liquidez fácil antes de la zona real','El objetivo final','Un indicador'],0,'La carnada.'],['Tengo un OB en descuento y arriba un mínimo interno sin tocar. ¿Entro ya?',['Sí','No: espero que barra ese mínimo','Entro el doble'],1,'Si llega sin tomar esa liquidez, puede atravesar la zona.'],['¿Qué zona tiene más probabilidad?',['La protegida por un IDM ya barrido','La que no tiene nada delante','Cualquiera'],0,'Ya se tomó la carnada.']]}),
+lecM({id:'breaker',n:'OB en quiebre: breaker block',corto:'Breaker',sub:'El piso que se vuelve techo',nivel:'Grupal',
+ vm:{ext:[96.5,112],pts:[[0,101],[5,104.6],[6,104.2],[11,110],[16,106.2],[19,107.6],[25,100.5],[29,104.7],[38,97.5]],sem:291,mods:{6:{o:105,h:105.3,l:104,c:104.2},7:{o:104.2,h:107.4,l:104.1,c:107.2}}},
+ tit:['Un order block','Lo atraviesa con desplazamiento','Cambia de rol','Vuelve y rechaza'],
+ t:['En la subida, la última vela contraria antes del impulso es un order block alcista.',
+  'Más tarde, el precio lo atraviesa con desplazamiento y cierra el cuerpo abajo. El bloque se rompió.',
+  'Un bloque atravesado cambia de rol: se vuelve breaker block. El piso ahora es techo.',
+  'Cuando el precio vuelve desde abajo, el breaker lo rechaza. Ahí se buscan ventas.'],
+ sc:[{h:[0,11],an:[{t:'zona',p0:104.2,p1:105,i0:6,txt:'Order block',c:UP,vi:7}]},
+  {h:[11,25],an:[{t:'zona',p0:104.2,p1:105,i0:6,c:UP,en:0},{t:'anillo',ifn:function(cs){for(var i=17;i<cs.length;i++)if(cs[i].c<104)return i;return 22},p:104,txt:'Lo atraviesa',c:DN,en:.6}]},
+  {h:[25,25],an:[{t:'zona',p0:104.2,p1:105,i0:6,txt:'Breaker: ahora es techo',c:DN,en:.15}]},
+  {h:[25,38],an:[{t:'zona',p0:104.2,p1:105,i0:6,txt:'Breaker',c:DN,en:0},{t:'anillo',i:29,p:104.6,txt:'Rechazo',arriba:true,c:DN,vi:29}]}],
+ claves:['Breaker: un order block atravesado con desplazamiento.','Cambia de rol: el piso se vuelve techo, y al revés.','Se valida con cierre de cuerpo del otro lado.'],
+ trampa:'Seguir comprando en un bloque que ya fue atravesado con cuerpo.',practica:['ruptura','setup'],
+ q:[['¿Qué es un breaker block?',['Un OB atravesado con desplazamiento que cambia de rol','Un OB nuevo','Una vela doji'],0,'El piso se vuelve techo.'],['¿Qué valida que el bloque se rompió?',['Un cierre de cuerpo del otro lado','Una mecha','El volumen'],0,'Cuerpo, no mecha.'],['Después de romperse un OB alcista, ¿qué se busca en el retesteo?',['Ventas','Compras','Nada'],0,'Ahora es techo.']]}),
+lecM({id:'doble-mitigacion',n:'Doble mitigación',corto:'Doble mitigación',sub:'La zona se activa en dos tiempos',nivel:'Premium',
+ vm:{ext:[99,115],pts:[[0,110],[6,102.8],[10,108],[13,104.15],[17,107.5],[21,102.6],[33,114]],sem:301,mods:{13:{o:105.4,h:105.6,l:103.9,c:105.3}}},
+ tit:['La zona','1.er tiempo: toque con mecha','2.º tiempo: mitiga el cuerpo','Sale el movimiento real'],
+ t:['Una teoría propia del método. Partimos de una zona marcada con el cuerpo de la vela raíz.',
+  'Primer tiempo: el precio toca la zona solo con la mecha. Es un toque falso: crea liquidez.',
+  'Segundo tiempo: vuelve y mitiga el cuerpo de la zona. Ahí sale el movimiento real.',
+  'Esto es la demo. Cómo filtrar cada tiempo y dónde entrar se enseña en el nivel Premium.'],
+ sc:[{h:[0,10],an:[{t:'zona',p0:102.3,p1:104,i0:6,txt:'Zona · cuerpo',c:NV,en:.4}]},
+  {h:[10,16],an:[{t:'zona',p0:102.3,p1:104,i0:6,c:NV,en:0},{t:'anillo',i:13,p:104,txt:'Toque con mecha: falso',c:LQ,vi:13}]},
+  {h:[16,21],an:[{t:'zona',p0:102.3,p1:104,i0:6,c:NV,en:0},{t:'anillo',i:21,p:102.8,txt:'Mitiga el cuerpo',c:NV,vi:21}]},
+  {h:[21,33],an:[{t:'zona',p0:102.3,p1:104,i0:6,c:NV,en:0},{t:'top',txt:'La entrada exacta: nivel Premium',c:GOLD,en:.4}]}],
+ claves:['Primer toque con mecha: falso, crea liquidez.','Segundo tiempo: mitigación del cuerpo, donde sale el movimiento real.','La lectura completa es Premium.'],
+ trampa:'Entrar en el primer toque con mecha, que es justo el que crea la liquidez.',practica:['setup'],
+ q:[['En la doble mitigación, el primer toque con mecha es…',['Falso: crea liquidez','La entrada principal','El stop'],0,'Prepara el segundo tiempo.'],['¿Dónde sale el movimiento real?',['En la mitigación del cuerpo','En la mecha','Nunca'],0,'Segundo tiempo.'],['¿Con qué se marca la zona?',['Con el cuerpo de la vela raíz','Con la mecha','Con una línea cualquiera'],0,'La mecha se usa para leer el falso toque.']]}),
+lecM({id:'tres-toques',n:'Teoría de los 3 toques',corto:'3 toques',sub:'Qué toque se opera y cuál no',nivel:'Premium',
+ vm:{ext:[99,115],pts:[[0,110],[5,102.9],[9,106.5],[13,102.3],[17,105],[19,103.6],[21,104.4],[24,102.4],[34,114]],sem:311},
+ tit:['1.er toque: no se opera','2.º toque: la entrada principal','El 3.er toque','Avisa, entra, solo si'],
+ t:['Otra teoría propia. El primer toque a la zona genera la primera reacción y deja liquidez. Es el que más engaña: no se opera.',
+  'El segundo toque barre esa liquidez y suele dar el movimiento limpio. Es la entrada principal, siempre con una envolvente a favor.',
+  'El tercer toque llega después de una acumulación, con sweep. Solo se opera en zonas respaldadas.',
+  'Cuándo un toque es válido y cómo se confirma se enseña completo en el nivel Premium.'],
+ sc:[{h:[0,9],an:[{t:'zona',p0:101.8,p1:103,i0:5,c:NV,en:.2},{t:'anillo',i:5,p:103,txt:'1 · No se opera',c:LQ,vi:5}]},
+  {h:[9,16],an:[{t:'zona',p0:101.8,p1:103,i0:5,c:NV,en:0},{t:'anillo',i:13,p:102.5,txt:'2 · Entrada principal',c:UP,vi:13}]},
+  {h:[16,26],an:[{t:'zona',p0:101.8,p1:103,i0:5,c:NV,en:0},{t:'anillo',i:24,p:102.5,txt:'3 · Solo en zona respaldada',c:AM,vi:24}]},
+  {h:[26,34],an:[{t:'zona',p0:101.8,p1:103,i0:5,c:NV,en:0},{t:'lista',items:['1.er toque: deja liquidez','2.º toque: la entrada','3.er toque: solo si respalda'],cs:[LQ,UP,AM],en:.1}]}],
+ claves:['No se opera el primer toque: deja liquidez.','El segundo barre esa liquidez: entrada principal, con envolvente.','El tercero, después de acumular, solo en zonas respaldadas.'],
+ trampa:'Entrar en el primer toque, que es el que más engaña.',practica:['setup','nivel'],
+ q:[['¿Se opera el primer toque?',['No: deja liquidez','Sí, siempre','Solo los viernes'],0,'Es el que más engaña.'],['¿Cuál es la entrada principal?',['El segundo toque','El primero','Ninguno'],0,'Barre la liquidez del primero.'],['¿Con qué se confirma cada toque?',['Con una envolvente a favor','Con el RSI','Con una noticia'],0,'Sin envolvente no hay toque operable.']]}),
+lecM({id:'vela-contraria',n:'Vela contraria',corto:'Vela contraria',sub:'Cuando el precio no necesita ir tan lejos',nivel:'Premium',
+ vm:{ext:[98.5,120],pts:[[0,100],[3,101.4],[12,110.5],[16,106.1],[28,118.5]],sem:321,mods:{8:{o:107.4,h:107.6,l:106.3,c:106.5}}},
+ tit:['Una vela de otro color','Su extremo es liquidez','El retroceso la toma','Y sigue'],
+ t:['En plena subida aparece una sola vela bajista. Es la vela contraria.',
+  'Debajo de su mínimo quedan stops: es liquidez suficiente. Muchos esperan el bajo mayor para comprar.',
+  'En el retroceso, el precio toma el mínimo de la vela contraria, no el bajo mayor.',
+  'Y continúa. La vela contraria ya hizo el trabajo; quien esperaba el bajo mayor quedó afuera. La lectura fina es Premium.'],
+ sc:[{h:[0,12],an:[{t:'anillo',i:8,p:107,txt:'Vela contraria',c:DN,vi:8}]},
+  {h:[12,12],an:[{t:'niv',p:106.3,x0:8,txt:'IDM: mínimo de la vela contraria',c:LQ,en:.1},{t:'niv',p:100,x0:0,txt:'Bajo mayor · no se toca',c:TVTX,abajo:true,en:.4}]},
+  {h:[12,16],an:[{t:'niv',p:106.3,x0:8,c:LQ,en:0},{t:'niv',p:100,x0:0,c:TVTX,en:0},{t:'anillo',i:16,p:106.2,txt:'Toma la vela contraria',c:LQ,vi:16}]},
+  {h:[16,28],an:[{t:'niv',p:106.3,x0:8,c:LQ,en:0},{t:'niv',p:100,x0:0,c:TVTX,en:0}]}],
+ claves:['Vela contraria: una vela de color opuesto dentro del impulso.','Su extremo funciona como inducción.','El precio la toma en lugar de ir al bajo mayor.'],
+ trampa:'Esperar siempre el bajo mayor y quedarte afuera del movimiento.',practica:['setup','tendencia'],
+ q:[['¿Qué es la vela contraria?',['Una vela de color opuesto dentro del impulso','Un doji','La vela del día'],0,'En una subida, una vela bajista.'],['¿Qué toma el precio en el retroceso?',['El extremo de la vela contraria','Siempre el bajo mayor','Nada'],0,'Es liquidez suficiente.'],['¿Qué le pasa a quien espera el bajo mayor?',['Se queda afuera','Gana más','Nada'],0,'La vela contraria ya hizo el trabajo.']]}),
+lecM({id:'rompimiento-123',n:'Patrón de rompimiento 1, 2, 3',corto:'Rompimiento 1-2-3',sub:'Avisa, habilita y continúa',nivel:'Premium',
+ vm:{ext:[99,114],pts:[[0,103],[4,106],[8,101.2],[11,106.9],[14,103.4],[18,107.3],[21,106.3],[25,109.6],[28,108.7],[35,113]],sem:331},
+ tit:['Rompimiento 1: avisa','Rompimiento 2: habilita','Rompimiento 3: continuación','La regla'],
+ t:['El precio rompe un nivel por primera vez. Es un aviso, no una entrada: el primero muchas veces es falso.',
+  'Vuelve a romper en la misma dirección. Ahora sí: el segundo rompimiento habilita la entrada.',
+  'El tercero es continuación: se gestiona lo que ya está abierto.',
+  'El primero avisa, el segundo confirma la intención y el tercero continúa. La ejecución fina es Premium.'],
+ sc:[{h:[0,12],an:[{t:'niv',p:106,x0:0,txt:'Nivel',c:TVTX,en:.2},{t:'anillo',i:11,p:106.6,txt:'1 · Avisa',arriba:true,c:LQ,vi:11}]},
+  {h:[12,19],an:[{t:'niv',p:106,x0:0,c:TVTX,en:0},{t:'anillo',i:18,p:107,txt:'2 · Habilita la entrada',arriba:true,c:UP,vi:18}]},
+  {h:[19,26],an:[{t:'niv',p:106,x0:0,c:TVTX,en:0},{t:'anillo',i:25,p:109.3,txt:'3 · Continuación',arriba:true,c:GOLD,vi:25}]},
+  {h:[26,35],an:[{t:'lista',items:['1 · Avisa','2 · Habilita','3 · Continúa'],cs:[LQ,UP,GOLD],en:.1}]}],
+ claves:['Rompimiento 1: aviso, suele ser falso.','Rompimiento 2: habilita la entrada.','Rompimiento 3: continuación, se gestiona.'],
+ trampa:'Entrar en el primer rompimiento, que muchas veces es falso.',practica:['ruptura'],
+ q:[['¿Qué hace el primer rompimiento?',['Avisa: suele ser falso','Habilita la entrada','Cierra el trade'],0,'Es un aviso.'],['¿Cuál habilita la entrada?',['El segundo','El primero','El tercero'],0,'Confirma la intención.'],['¿Qué se hace en el tercero?',['Se gestiona lo abierto','Se entra con todo','Se vende'],0,'Es continuación.']]})
+];
+DEMOS.forEach(function(l){L.push(l)});
+
+var ORDM=['liquidez','inducement','barrido','estructura','premium-descuento','imbalance','order-block','breaker','sesiones','modelo','doble-mitigacion','tres-toques','vela-contraria','rompimiento-123'];
+(function(){var m=L.filter(function(l){return l.cat==='metodo'}).sort(function(a,b){return ORDM.indexOf(a.id)-ORDM.indexOf(b.id)}),r=L.filter(function(l){return l.cat!=='metodo'});L.length=0;r.concat(m).forEach(function(l){L.push(l)})})();
 var PROPIAS=[['Doble mitigación','La zona se activa en dos tiempos.'],['Teoría de los 3 toques','Qué toque se opera y cuál no.'],['Vela contraria','Cuando el precio no necesita ir tan lejos.'],['Patrón de rompimiento 1, 2, 3','Cuál rompimiento avisa y cuál habilita.'],['Bloque extremo vs decisional','Cuál manda cuando dos zonas compiten.'],['Entradas sin quiebre','Lectura fina en M1, nivel Premium.']];
 
 
@@ -848,5 +1105,5 @@ var TIPOS=Object.keys(EJ),NOMBRE={tendencia:'Tendencia',nivel:'Niveles',vela:'Ve
 function ejercicio(tipo,semilla){var r=azar(semilla),e=EJ[tipo](r);e.tipo=tipo;return e}
 function pintarEj(c,W,H,e,rev,T){VW=W;MINI=false;var pt=H>W,S={c:c,W:W,H:H,pt:pt,p:1,T:T||0,A:'#7FB4F0',B:'#5CC6D6',z:Math.min(W,H)*(pt?.038:.034),caja:{x:W*.05,y:H*.07,w:W*.9,h:H*(e.tipo==='vela'?.74:.86)}};c.fillStyle='#0E1118';c.fillRect(0,0,W,H);c.textBaseline='alphabetic';e.dib(S,rev)}
 function tv(c,W,b,cs,hasta,ext){VW=W;MINI=false;var G=marco(cs,b,ext);rejilla(c,G);velas(c,G,hasta);return G}
-return{tv:tv,velasM:velasM,PROPIAS:PROPIAS,L:L,CAT:CAT,dibujar:dibujar,miniatura:miniatura,ejercicio:ejercicio,pintarEj:pintarEj,TIPOS:TIPOS,NOMBRE:NOMBRE,azar:azar};
+return{tv:tv,velasM:velasM,PROPIAS:PROPIAS,NIVELES:NIVELES,ORDN:ORDN,L:L,CAT:CAT,dibujar:dibujar,miniatura:miniatura,ejercicio:ejercicio,pintarEj:pintarEj,TIPOS:TIPOS,NOMBRE:NOMBRE,azar:azar};
 })();

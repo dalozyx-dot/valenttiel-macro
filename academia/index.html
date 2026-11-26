@@ -97,6 +97,11 @@ main{display:grid;gap:clamp(26px,4vw,46px);padding-block:clamp(26px,5vw,54px) 60
 .atajo{margin-top:-4px}
 .candado{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;padding:0}.candado li{list-style:none;display:grid;gap:3px;padding:14px 16px;border-radius:14px;background:rgba(201,166,73,.07);box-shadow:inset 0 0 0 1px rgba(201,166,73,.35)}.candado b{font-weight:600}
 @media(max-width:760px){.candado{grid-template-columns:minmax(0,1fr)}}
+.nivel-tag{display:inline-block;border-radius:999px;padding:5px 12px;font-size:13px;font-weight:600;letter-spacing:.01em}.n1{background:rgba(127,180,240,.14);color:#9cc4f5;box-shadow:inset 0 0 0 1px rgba(127,180,240,.4)}.n2{background:rgba(95,208,160,.13);color:#7fdcb4;box-shadow:inset 0 0 0 1px rgba(95,208,160,.4)}.n3{background:rgba(235,178,74,.13);color:#f0c46e;box-shadow:inset 0 0 0 1px rgba(235,178,74,.45)}.n4{background:rgba(201,166,73,.18);color:#e3c672;box-shadow:inset 0 0 0 1px rgba(201,166,73,.6)}
+.nivel-g{display:grid;gap:14px}.nivel-cab{display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px}
+.niveles{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;padding:0;margin:0}.niveles>li{list-style:none;display:grid;gap:6px;align-content:start;padding:16px;border-radius:16px;background:rgba(210,240,226,.04);box-shadow:inset 0 0 0 1px var(--line)}.niveles>li.n4{box-shadow:inset 0 0 0 1px rgba(201,166,73,.55);background:rgba(201,166,73,.07)}.niveles ul{padding:0;margin:4px 0 0;display:grid;gap:4px}.niveles ul li{list-style:none;font-size:14px;color:var(--muted)}
+.bloque-nivel{box-shadow:inset 0 0 0 1px rgba(201,166,73,.45);background:linear-gradient(160deg,rgba(201,166,73,.1),var(--glass))}
+@media(max-width:900px){.niveles{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:560px){.niveles{grid-template-columns:minmax(0,1fr)}}
 .gstats{grid-template-columns:repeat(4,minmax(0,1fr))}
 footer{border-top:1px solid var(--line);padding-block:20px 40px;display:grid;gap:6px}
 @media(prefers-reduced-motion:no-preference){.entra>*{animation:sube .7s var(--ease) backwards}.entra>:nth-child(2){animation-delay:.06s}.entra>:nth-child(3){animation-delay:.12s}.entra>:nth-child(n+4){animation-delay:.18s}}
@@ -149,7 +154,7 @@ function inicio(){
   var LS=mat==='tec'?TEC.L:A.L,CT=mat==='tec'?TEC.CAT:A.CAT;if(cat!=='todas'&&!CT[cat])cat='todas';
   var n=TODAS.filter(function(l){return P.v[l.id]}).length,T=TODAS.filter(function(l){return P.t[l.id]>=0}).length,xs=LS.filter(function(l){return cat==='todas'||l.cat===cat});
   minis=[];
-  var li=xs.map(function(l){var c=el('canvas',{'aria-hidden':'true'});minis.push({c:c,l:l});vis.observe(c);var a=el('a',{class:'card',href:'#'+l.id},c,el('h2',{text:l.n}),el('p',{class:'muted',text:l.sub}),el('p',{class:'pie'},el('span',{text:mmss(total(l))}),el('span',{text:l.tec?K(l)[0]:['','Impacto bajo','Impacto medio','Impacto alto'][l.peso]}),P.v[l.id]?el('span',{class:'ok',text:P.t[l.id]>=0?'✓ Vista, test '+P.t[l.id]+'/3':'✓ Vista'}):null));color(a,l);return el('li',{},a)});
+  var li=xs.map(function(l){var c=el('canvas',{'aria-hidden':'true'});minis.push({c:c,l:l});vis.observe(c);var a=el('a',{class:'card',href:'#'+l.id},c,el('h2',{text:l.n}),el('p',{class:'muted',text:l.sub}),el('p',{class:'pie'},el('span',{text:mmss(total(l))}),el('span',{text:l.nivel?'Demo · '+l.nivel:l.tec?K(l)[0]:['','Impacto bajo','Impacto medio','Impacto alto'][l.peso]}),P.v[l.id]?el('span',{class:'ok',text:P.t[l.id]>=0?'✓ Vista, test '+P.t[l.id]+'/3':'✓ Vista'}):null));color(a,l);return el('li',{},a)});
   poner(
     el('div',{class:'hero'},el('h1',{class:'grad',text:'Mirá cómo se mueve el mercado por dentro'}),el('p',{class:'lead',text:'Lecciones animadas de un minuto: los datos que mueven al mercado y cómo leer el gráfico. Y un gimnasio para entrenar el ojo todos los días.'}),
       n?el('div',{class:'prog'},el('p',{class:'small muted',text:n===TODAS.length?'Viste las '+TODAS.length+' lecciones'+(T===TODAS.length?' y completaste todos los tests.':'. Te faltan '+(TODAS.length-T)+' tests.'):n+' de '+TODAS.length+' lecciones vistas'}),el('div',{},el('i',{style:'width:'+n/TODAS.length*100+'%'}))):el('div',{class:'btns'},el('a',{class:'btn main',href:'#fed',text:'Empezar por la Fed'}),el('a',{class:'btn',href:'#velas',text:'Empezar por las velas'}),el('a',{class:'btn',href:'#pullback',text:'Ver los setups'}))),
@@ -159,8 +164,8 @@ function inicio(){
     el('div',{class:'seg materia',role:'group','aria-label':'Materia'},[['fund','Fundamentales',A.L.length],['tec','Análisis técnico',TEC.L.length]].map(function(x){return el('button',{type:'button',id:'m-'+x[0],'aria-pressed':String(mat===x[0]),onclick:function(){mat=x[0];cat='todas';inicio();document.getElementById('m-'+x[0]).focus({preventScroll:true})}},x[1],el('span',{class:'cuenta',text:' '+x[2]}))})),
     el('div',{class:'filtros',role:'group','aria-label':'Tema'},[['todas','Todas']].concat(Object.keys(CT).map(function(k){return[k,CT[k][0]]})).map(function(x){return el('button',{type:'button',id:'f-'+x[0],'aria-pressed':String(cat===x[0]),text:x[1],onclick:function(){cat=x[0];inicio();document.getElementById('f-'+x[0]).focus({preventScroll:true})}})})),
     mat==='tec'&&cat==='todas'?ruta2():null,
-    el('ul',{class:'grid'},li),
-    mat==='tec'&&(cat==='todas'||cat==='metodo')?propias():null,
+    mat==='tec'&&(cat==='metodo'||cat==='entradas')?porNivel(xs,li):el('ul',{class:'grid'},li),
+    mat==='tec'&&(cat==='todas'||cat==='metodo'||cat==='entradas')?escalera():null,
     mat==='tec'&&(cat==='todas'||cat==='setups')?mapa():null);
   requestAnimationFrame(bucleMinis);
 }
@@ -320,10 +325,24 @@ var RUTA=['velas','tendencia','soportes','rupturas','medias','rsi','dobles','rie
 function ruta2(){
   var hechos=RUTA.filter(function(id){return P.v[id]}).length,sig=RUTA.filter(function(id){return!P.v[id]})[0];
   return el('section',{class:'glass'},el('div',{class:'sig'},el('h2',{text:'Ruta recomendada'}),el('span',{class:'muted small',text:hechos+' de '+RUTA.length+' + setups'})),
-    el('ol',{class:'ruta'},RUTA.map(function(id,i){var l=TEC.L.filter(function(x){return x.id===id})[0];return el('li',{class:P.v[id]?'ok':id===sig?'ahora':''},el('a',{href:'#'+id},el('b',{text:P.v[id]?'✓':String(i+1)}),l.corto))}).concat([el('li',{class:'fin'+(!sig?' ahora':'')},el('a',{href:'#pullback'},el('b',{text:'★'}),'Setups')),el('li',{class:'fin metodo'},el('a',{href:'#liquidez'},el('b',{text:'V'}),'Método Valenttiel'))])),
+    el('ol',{class:'ruta'},RUTA.map(function(id,i){var l=TEC.L.filter(function(x){return x.id===id})[0];return el('li',{class:P.v[id]?'ok':id===sig?'ahora':''},el('a',{href:'#'+id},el('b',{text:P.v[id]?'✓':String(i+1)}),l.corto))}).concat([el('li',{class:'fin'+(!sig?' ahora':'')},el('a',{href:'#pullback'},el('b',{text:'★'}),'Setups')),el('li',{class:'fin metodo'},el('a',{href:'#liquidez'},el('b',{text:'V'}),'Método Valenttiel')),el('li',{class:'fin metodo'},el('a',{href:'#entrada-choch'},el('b',{text:'E'}),'Entradas del método'))])),
     el('p',{class:'muted small',text:sig?'Seguí por: '+TEC.L.filter(function(x){return x.id===sig})[0].n+'. Cada lección dura un minuto.':'Terminaste la base. Ahora, los setups de entrada.'}));
 }
 var MAPA={modelo:['Liquidez a los dos lados','Venta o compra','Barrido + Imbalance, entrada al 50 %','Arriba de la mecha del barrido'],pullback:['Tendencia alcista','Compra','Martillo en el viejo techo','Debajo de la vela y la zona'],'pullback-venta':['Tendencia bajista','Venta','Estrella fugaz en el viejo piso','Arriba de la vela y la zona'],retesteo:['Rango que se rompe','Compra','Rechazo al volver al nivel','Debajo del nivel roto'],barrida:['Rango','Compra','Mecha afuera, cierre adentro','Debajo de la mecha'],'rebote-media':['Tendencia con media en subida','Compra','Vela que rebota en la media','Debajo de la vela'],bandera:['Después de un impulso','Compra','Cierre arriba de la bandera','Debajo de la bandera'],'doble-piso':['Después de una caída','Compra','Rechazo en el cuello roto','Debajo del cuello'],'doble-techo':['Después de una subida','Venta','Rechazo en el cuello roto','Arriba del cuello']};
+function porNivel(xs,li){
+  return el('div',{class:'stack',style:'gap:30px'},TEC.ORDN.map(function(nv){var ks=[];xs.forEach(function(l,i){if(l.nivel===nv)ks.push(li[i])});if(!ks.length)return null;var N=TEC.NIVELES[nv];
+    return el('section',{class:'nivel-g'},el('div',{class:'nivel-cab'},el('span',{class:'nivel-tag n'+(TEC.ORDN.indexOf(nv)+1),text:N.n}),el('p',{class:'muted small',text:N.d+' Acá tenés la demo gratis de cada tema.'})),el('ul',{class:'grid'},ks))}));
+}
+function escalera(){
+  return el('section',{class:'glass escalera'},el('p',{class:'tag',style:'color:#C9A649',text:'Método Valenttiel'}),el('h2',{text:'Viste la demo. El método completo está en los niveles.'}),
+    el('p',{class:'muted',text:'Cada lección de acá es gratis y te muestra el concepto. La profundidad, la práctica en vivo y la corrección de tus trades están en cada nivel.'}),
+    el('ol',{class:'niveles'},TEC.ORDN.map(function(nv,i){var N=TEC.NIVELES[nv];return el('li',{class:'n'+(i+1)},el('b',{text:N.n}),el('span',{class:'muted small',text:N.d}),el('ul',{},N.mas.map(function(m){return el('li',{text:'🔒 '+m})})))})),
+    el('div',{class:'btns'},el('a',{class:'btn main',href:'../?de=academia-metodo#sumate',text:'Quiero entrar al método'})));
+}
+function bloqueNivel(l){var N=TEC.NIVELES[l.nivel];
+  return el('section',{class:'glass bloque-nivel'},el('span',{class:'nivel-tag n'+(TEC.ORDN.indexOf(l.nivel)+1),text:N.n}),el('h2',{text:'Esto fue la demo'}),el('p',{class:'muted small',text:'En '+N.n.split(' · ')[1]+' lo ves completo:'}),
+    el('ul',{class:'claves'},(l.mas||N.mas).map(function(m){return el('li',{text:'🔒 '+m})})),el('div',{class:'btns'},el('a',{class:'btn main',href:'../?de=academia-metodo#sumate',text:'Quiero el '+N.n.split(' · ')[0].toLowerCase()})));
+}
 function propias(){
   return el('section',{class:'glass propias'},el('p',{class:'tag',style:'color:#C9A649',text:'Método Valenttiel · mentoría'}),el('h2',{text:'Las teorías propias del método'}),
     el('p',{class:'muted',text:'Lo que diferencia al Método Valenttiel: nació de la operativa real y se enseña en la mentoría, con práctica en vivo y corrección personal.'}),
@@ -389,8 +408,8 @@ function leccionTec(l){
   pl=Reproductor(l,function(){});
   var cl2=el('section',{class:'glass'},el('h2',{text:'Para no olvidarte'}),el('ul',{class:'claves'},l.claves.map(function(c){return el('li',{text:c})})),el('div',{class:'trampa'},el('h3',{text:'La trampa común'}),el('p',{text:l.trampa})));
   var pr=practica(l);color(pr,l);
-  poner(el('div',{class:'hero'},el('p',{},el('a',{href:'#',text:'Todas las lecciones'})),el('h1',{style:'font-size:clamp(32px,5vw,58px)',text:l.n})),pl.caja,
-    el('div',{class:'cols'},el('div',{class:'stack'},pr,test(l)),el('div',{class:'stack'},l.check?checklist(l):null,cl2,el('section',{class:'glass'},el('h2',{text:'Llevalo a la práctica'}),el('p',{class:'muted small',text:'Entrená el ojo todos los días y calculá el tamaño antes de cada operación.'}),el('div',{class:'btns'},l.cat==='metodo'?el('a',{class:'btn main',href:'../?de=academia-metodo#sumate',text:'Aprender el método completo'}):null,el('a',{class:l.cat==='metodo'?'btn':'btn main',href:'#gimnasio',text:'Gimnasio'}),el('a',{class:'btn',href:'../calculadora/',text:'Calculadora'}),el('a',{class:'btn',href:'../reto/?desde=academia',text:'Liga'}))))),
+  poner(el('div',{class:'hero'},el('p',{},el('a',{href:'#',text:'Todas las lecciones'})),el('h1',{style:'font-size:clamp(32px,5vw,58px)',text:l.n}),l.nivel?el('p',{},el('span',{class:'nivel-tag n'+(TEC.ORDN.indexOf(l.nivel)+1),text:'Demo gratis · se enseña completo en '+TEC.NIVELES[l.nivel].n})):null),pl.caja,
+    el('div',{class:'cols'},el('div',{class:'stack'},pr,test(l)),el('div',{class:'stack'},l.nivel?bloqueNivel(l):null,l.check?checklist(l):null,cl2,el('section',{class:'glass'},el('h2',{text:'Llevalo a la práctica'}),el('p',{class:'muted small',text:'Entrená el ojo todos los días y calculá el tamaño antes de cada operación.'}),el('div',{class:'btns'},l.cat==='metodo'?el('a',{class:'btn main',href:'../?de=academia-metodo#sumate',text:'Aprender el método completo'}):null,el('a',{class:l.cat==='metodo'?'btn':'btn main',href:'#gimnasio',text:'Gimnasio'}),el('a',{class:'btn',href:'../calculadora/',text:'Calculadora'}),el('a',{class:'btn',href:'../reto/?desde=academia',text:'Liga'}))))),
     el('nav',{class:'sig','aria-label':'Otras lecciones'},sigLink(l,-1,'btn')||el('span'),sigLink(l,1,'btn main')));
   scrollTo(0,0);
 }

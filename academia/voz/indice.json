@@ -287,6 +287,108 @@
    "5f4040449c",
    "3ec0b07111",
    "d7fa2cf5d2"
+  ],
+  "entrada-choch": [
+   "375e211655",
+   "739d04c6b3",
+   "1d257fe7e8",
+   "3ee39df44d"
+  ],
+  "entrada-sin-choch": [
+   "21f0704f01",
+   "0771d9e0d7",
+   "6c5e453d01",
+   "fec68b67e2"
+  ],
+  "entrada-induccion": [
+   "5dc0fbd814",
+   "af083b6c0e",
+   "64014e015b",
+   "cfcc9f689f"
+  ],
+  "entrada-induccion-2": [
+   "7f0e5ae405",
+   "ee0029e86f",
+   "7385b297f0",
+   "9089e51008"
+  ],
+  "entrada-envolvente": [
+   "321bc2b080",
+   "d622168c55",
+   "6d98565e53",
+   "8611702014"
+  ],
+  "entrada-doblecandle": [
+   "06402ca9ab",
+   "216d433ef7",
+   "fde862375c",
+   "930c723c82"
+  ],
+  "entrada-fractales": [
+   "635efe6662",
+   "63b3a09bde",
+   "c7d5c614f6",
+   "86c9929357"
+  ],
+  "entrada-ifc": [
+   "3d87ef845a",
+   "e0ec1d772f",
+   "73a8b8e1aa",
+   "787c5264cb"
+  ],
+  "entrada-50": [
+   "b3328db969",
+   "bd37349431",
+   "0493b2eb0b",
+   "57320f1e2c"
+  ],
+  "setups-a": [
+   "3b44e71905",
+   "d65955392d",
+   "27b76f63ed",
+   "66be4870a0"
+  ],
+  "setups-b": [
+   "0ed2e6cdf2",
+   "2930c626f4",
+   "1775a7fb52",
+   "980863d180"
+  ],
+  "inducement": [
+   "155173b7eb",
+   "535980635a",
+   "8135af791e",
+   "56a82032bd"
+  ],
+  "breaker": [
+   "22d01f5b24",
+   "488d5e9a03",
+   "9fdb103990",
+   "749847072a"
+  ],
+  "doble-mitigacion": [
+   "dd0b2d6a92",
+   "6ed373f457",
+   "8464fefe0d",
+   "02dc8f5a49"
+  ],
+  "tres-toques": [
+   "23efcb6837",
+   "326e8d34f9",
+   "3199c6e1d5",
+   "e70f8b00ab"
+  ],
+  "vela-contraria": [
+   "343a6b804d",
+   "330f9e7b33",
+   "e09570497b",
+   "edf3798116"
+  ],
+  "rompimiento-123": [
+   "80d9e6ccc8",
+   "d765ec71a6",
+   "8c59038a44",
+   "d2897236ed"
   ]
  },
  "ext": "m4a",
