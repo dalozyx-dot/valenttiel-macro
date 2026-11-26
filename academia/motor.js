@@ -142,9 +142,10 @@ function(c,W,H,p,T,l,A,B,pt){
 }];
 function CATN(l){return ACADEMIA.CAT[l.cat][0]}
 function dibujar(c,W,H,l,i,p,T){
+  if(l.tec)return TECNICA.dibujar(c,W,H,l,i,p,T);
   var k=ACADEMIA.CAT[l.cat],pt=H>W;c.textBaseline='alphabetic';fondo(c,W,H,T,k[1],k[2]);
   var v=eo(sg(p,0,.06))*(1-.0*p);c.save();c.globalAlpha=v;c.translate(0,(1-v)*10);ESC[i](c,W,H,p,T,l,k[1],k[2],pt);c.restore();
 }
-function miniatura(c,W,H,l,T){var k=ACADEMIA.CAT[l.cat];c.clearRect(0,0,W,H);c.textBaseline='alphabetic';var u=(T/7)%1;ilus(c,l.id,0,0,W,H,u<.8?u/.8:1,T,k[1],k[2])}
-return{dibujar:dibujar,miniatura:miniatura,ESCENAS:ESC.length};
+function miniatura(c,W,H,l,T){if(l.tec)return TECNICA.miniatura(c,W,H,l,T);var k=ACADEMIA.CAT[l.cat];c.clearRect(0,0,W,H);c.textBaseline='alphabetic';var u=(T/7)%1;ilus(c,l.id,0,0,W,H,u<.8?u/.8:1,T,k[1],k[2])}
+return{dibujar:dibujar,miniatura:miniatura,ESCENAS:ESC.length,h:{cl:cl,sg:sg,eo:eo,eio:eio,rebote:rebote,mez:mez,rgba:rgba,rr:rr,gr:gr,tx:tx,lineas:lineas,flecha:flecha,persona:persona,fondo:fondo}};
 })();
