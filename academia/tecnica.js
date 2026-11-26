@@ -9,19 +9,25 @@ var VW=1000,MINI=false;
 
 /* ---- datos de ejemplo ---- */
 function azar(s){s=(s>>>0)||1;return function(){s=s+0x6D2B79F5|0;var t=Math.imul(s^s>>>15,1|s);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
-// Velas que pasan por puntos [vela, precio]. Cada punto intermedio es el extremo exacto de su tramo, así los toques quedan limpios.
+function normal(r){var u=1-r(),v=r();return Math.sqrt(-2*Math.log(u))*Math.cos(2*PI*v)}
+// Velas que pasan por puntos [vela, precio]. Entre puntos, un puente browniano (ruido que suma cero) con envolvente senoidal:
+// el precio llega exacto a cada punto, se mueve con naturalidad en el medio y cada punto intermedio es el extremo de su tramo.
 function serie(pts,sem,ruido,mecha){
-  var r=azar(sem||7),n=pts[pts.length-1][0]+1,cs=[],k=0;ruido=ruido==null?.6:ruido;mecha=mecha==null?.9:mecha;
+  var r=azar(sem||7),n=pts[pts.length-1][0]+1,cl0=[],cs=[];ruido=ruido==null?.6:ruido;mecha=mecha==null?.9:mecha;
+  for(var k=0;k<pts.length-1;k++){
+    var a=pts[k],b=pts[k+1],m=b[0]-a[0],W=[0],s=0,lo=Math.min(a[1],b[1]),hi=Math.max(a[1],b[1]),sig=ruido*.75;
+    for(var j=1;j<=m;j++){s+=normal(r);W.push(s)}
+    for(var j2=k?1:0;j2<=m;j2++){var u=m?j2/m:1,w=.5-.5*Math.cos(u*PI),pu=(W[j2]-u*W[m])/Math.sqrt(Math.max(1,m))*sig*2*Math.sin(u*PI);cl0.push(Math.min(hi,Math.max(lo,mez(a[1],b[1],w)+pu)))}
+  }
+  var ext={};pts.forEach(function(q,k){if(k&&k<pts.length-1){var p=pts[k-1][1],s2=pts[k+1][1];ext[q[0]]=q[1]<p&&q[1]<s2?'min':q[1]>p&&q[1]>s2?'max':''}});
   for(var i=0;i<n;i++){
-    while(k<pts.length-2&&i>=pts[k+1][0])k++;
-    var a=pts[k],b=pts[k+1],w=.5-.5*Math.cos(cl((i-a[0])/((b[0]-a[0])||1))*PI),lo=Math.min(a[1],b[1]),hi=Math.max(a[1],b[1]),
-        cc=mez(a[1],b[1],w)+(r()-.5)*2*ruido,o=i?cs[i-1].c:cc+(r()-.5)*ruido;
-    cc=Math.min(hi,Math.max(lo,cc));o=Math.min(hi,Math.max(lo,o));
-    var h=Math.min(hi,Math.max(o,cc)+r()*mecha),l=Math.max(lo,Math.min(o,cc)-r()*mecha);
-    if(i===a[0]&&k>0){var pr=pts[k-1][1],v=a[1];
-      if(v<pr&&v<b[1]){l=v;cc=Math.max(cc,v+.25+r()*mecha*.5);o=Math.max(o,v+.1);h=Math.max(h,o,cc)}
-      else if(v>pr&&v>b[1]){h=v;cc=Math.min(cc,v-.25-r()*mecha*.5);o=Math.min(o,v-.1);l=Math.min(l,o,cc)}}
-    cs.push({o:o,h:h,l:l,c:cc});
+    var c=cl0[i],o=i?cl0[i-1]:c+normal(r)*ruido*.3,vol=mecha*(.35+.65*Math.abs(normal(r))*.8),h=Math.max(o,c)+vol*r()*.9,l=Math.min(o,c)-vol*r()*.9,t=ext[i];
+    var seg=0;while(seg<pts.length-2&&i>pts[seg+1][0])seg++;var A=pts[seg],B=pts[seg+1],lo2=Math.min(A[1],B[1]),hi2=Math.max(A[1],B[1]);
+    if(i>0&&i===A[0]){var P0=pts[Math.max(0,seg-1)];lo2=Math.min(lo2,P0[1]);hi2=Math.max(hi2,P0[1])}
+    h=Math.min(h,hi2);l=Math.max(l,lo2);
+    if(t==='min'){l=A[0]===i?A[1]:B[1];c=Math.max(c,l+.3+r()*mecha*.4);o=Math.max(o,l+.12)}
+    else if(t==='max'){h=A[0]===i?A[1]:B[1];c=Math.min(c,h-.3-r()*mecha*.4);o=Math.min(o,h-.12)}
+    h=Math.max(h,o,c);l=Math.min(l,o,c);cs.push({o:o,h:h,l:l,c:c});
   }
   return cs;
 }
@@ -32,23 +38,39 @@ function rsi(cs,n){var o=[null],g=0,p=0;for(var i=1;i<cs.length;i++){var d=cs[i]
 function traza(pts,u){u=cl(u);for(var i=1;i<pts.length;i++)if(u<=pts[i][0])return mez(pts[i-1][1],pts[i][1],(u-pts[i-1][0])/((pts[i][0]-pts[i-1][0])||1));return pts[pts.length-1][1]}
 
 /* ---- dibujo del gráfico ---- */
+// Paso "lindo" para la escala: 1, 2, 2,5 o 5 por una potencia de 10.
+function paso5(x){var e=Math.pow(10,Math.floor(Math.log10(x))),f=x/e;return(f<=1?1:f<=2?2:f<=2.5?2.5:f<=5?5:10)*e}
 function marco(cs,b,ext){
   var lo=Infinity,hi=-Infinity;cs.forEach(function(v){lo=Math.min(lo,v.l);hi=Math.max(hi,v.h)});(ext||[]).forEach(function(v){lo=Math.min(lo,v);hi=Math.max(hi,v)});
-  var pd=(hi-lo)*.08;lo-=pd;hi+=pd;var paso=b.w/cs.length;
-  return{cs:cs,b:b,lo:lo,hi:hi,n:cs.length,paso:paso,bw:Math.max(1.4,paso*.62),x:function(i){return b.x+paso*(i+.5)},y:function(p){return b.y+b.h*(1-(p-lo)/(hi-lo))}};
+  var pd=(hi-lo)*.07;lo-=pd;hi+=pd;var st=paso5((hi-lo)/4.5),paso=b.w/cs.length;
+  return{cs:cs,b:b,lo:lo,hi:hi,st:st,n:cs.length,paso:paso,bw:Math.max(1.4,paso*.618),x:function(i){return b.x+paso*(i+.5)},y:function(p){return b.y+b.h*(1-(p-lo)/(hi-lo))}};
 }
-function rejilla(c,G){c.strokeStyle='rgba(210,240,226,.06)';c.lineWidth=1;for(var k=0;k<=4;k++){var y=G.b.y+G.b.h*k/4;c.beginPath();c.moveTo(G.b.x,y);c.lineTo(G.b.x+G.b.w,y);c.stroke()}}
+function px(c){var t=c.getTransform?c.getTransform():null;return t?Math.max(1,Math.abs(t.a)):1}
+function rejilla(c,G){
+  var d=px(c),z=Math.max(8,Math.min(11,G.b.h*.034,(VW-G.b.x-G.b.w)*.26));c.lineWidth=1/d;
+  for(var v=Math.ceil(G.lo/G.st)*G.st;v<=G.hi+1e-9;v+=G.st){var y=Math.round(G.y(v)*d+.5)/d-.5/d;c.strokeStyle='rgba(210,240,226,.065)';c.beginPath();c.moveTo(G.b.x,y);c.lineTo(G.b.x+G.b.w,y);c.stroke();
+    if(!MINI){c.font='500 '+z+'px "Geist Mono", ui-monospace, monospace';c.textAlign='left';c.fillStyle='rgba(148,166,158,.6)';c.fillText(v.toLocaleString('es-AR',{maximumFractionDigits:G.st<1?1:0}),G.b.x+G.b.w+5,y+z*.36)}}
+}
+// Velas alineadas a los píxeles del dispositivo: mechas de ancho entero y centradas, cuerpos con bordes nítidos.
 function velas(c,G,hasta,op){
-  op=op||{};var n=Math.min(G.n,hasta);
+  op=op||{};var n=Math.min(G.n,hasta),d=px(c),bw=Math.max(1,Math.round(G.bw*d))/d,mw=Math.max(1,Math.round(Math.max(1,G.bw*.12)*d)),r=Math.min(bw*.18,2.5);
   for(var i=0;i<Math.ceil(n);i++){
-    var v=G.cs[i],f=Math.min(1,n-i),cc=mez(v.o,v.c,f),hh=Math.max(v.o,cc,mez(v.o,v.h,f)),ll=Math.min(v.o,cc,mez(v.o,v.l,f)),col=cc>=v.o?UP:DN,x=G.x(i);
-    c.globalAlpha=(op.al?op.al(i):1);c.strokeStyle=col;c.lineWidth=Math.max(1,G.bw*.13);c.lineCap='butt';c.beginPath();c.moveTo(x,G.y(hh));c.lineTo(x,G.y(ll));c.stroke();
-    var y0=G.y(Math.max(v.o,cc)),y1=G.y(Math.min(v.o,cc));rr(c,x-G.bw/2,y0,G.bw,Math.max(1.5,y1-y0),Math.min(G.bw*.16,3));c.fillStyle=col;c.fill();
+    var v=G.cs[i],f=Math.min(1,n-i),cc=mez(v.o,v.c,f),hh=Math.max(v.o,cc,mez(v.o,v.h,f)),ll=Math.min(v.o,cc,mez(v.o,v.l,f)),col=cc>=v.o?UP:DN;
+    var x0=Math.round((G.x(i)-bw/2)*d)/d,xm=x0+bw/2,xw=(Math.round(xm*d-mw/2)+mw/2)/d;
+    c.globalAlpha=(op.al?op.al(i):1);c.strokeStyle=col;c.lineWidth=mw/d;c.lineCap='butt';c.beginPath();c.moveTo(xw,Math.round(G.y(hh)*d)/d);c.lineTo(xw,Math.round(G.y(ll)*d)/d);c.stroke();
+    var y0=Math.round(G.y(Math.max(v.o,cc))*d)/d,y1=Math.round(G.y(Math.min(v.o,cc))*d)/d;rr(c,x0,y0,bw,Math.max(1.5/d*2,y1-y0),r);c.fillStyle=col;c.fill();
   }
   c.globalAlpha=1;
 }
-function linea(c,G,cs,hasta,col,g){c.beginPath();for(var i=0;i<Math.min(G.n,Math.ceil(hasta));i++){var x=G.x(i),y=G.y(cs[i].c);c[i?'lineTo':'moveTo'](x,y)}c.strokeStyle=col;c.lineWidth=g||2.4;c.lineJoin='round';c.stroke()}
-function curva(c,G,vals,desde,hasta,col,g,yf){yf=yf||G.y;c.beginPath();var on=false;for(var i=Math.max(0,desde);i<Math.min(vals.length,hasta);i++){if(vals[i]==null)continue;var x=G.x(i),y=yf(vals[i]);if(on)c.lineTo(x,y);else{c.moveTo(x,y);on=true}}c.strokeStyle=col;c.lineWidth=g||2.6;c.lineJoin=c.lineCap='round';c.stroke()}
+// Curva monótona (Fritsch–Carlson): pasa por cada punto, sin pasarse de largo entre ellos.
+function suave(c,P){
+  var n=P.length;if(!n)return;c.moveTo(P[0][0],P[0][1]);if(n<3){for(var q=1;q<n;q++)c.lineTo(P[q][0],P[q][1]);return}
+  var dx=[],m=[],t=[];for(var i=0;i<n-1;i++){dx.push(P[i+1][0]-P[i][0]);m.push((P[i+1][1]-P[i][1])/(dx[i]||1))}
+  t.push(m[0]);for(i=1;i<n-1;i++)t.push(m[i-1]*m[i]<=0?0:(3*(dx[i-1]+dx[i]))/((2*dx[i]+dx[i-1])/m[i-1]+(dx[i]+2*dx[i-1])/m[i]));t.push(m[n-2]);
+  for(i=0;i<n-1;i++){var h=dx[i]/3;c.bezierCurveTo(P[i][0]+h,P[i][1]+h*t[i],P[i+1][0]-h,P[i+1][1]-h*t[i+1],P[i+1][0],P[i+1][1])}
+}
+function linea(c,G,cs,hasta,col,g){var P=[];for(var i=0;i<Math.min(G.n,Math.ceil(hasta));i++)P.push([G.x(i),G.y(cs[i].c)]);c.beginPath();suave(c,P);c.strokeStyle=col;c.lineWidth=g||2.4;c.lineJoin=c.lineCap='round';c.stroke()}
+function curva(c,G,vals,desde,hasta,col,g,yf){yf=yf||G.y;var P=[];for(var i=Math.max(0,desde);i<Math.min(vals.length,hasta);i++){if(vals[i]==null)continue;P.push([G.x(i),yf(vals[i])])}c.beginPath();suave(c,P);c.strokeStyle=col;c.lineWidth=g||2.6;c.lineJoin=c.lineCap='round';c.stroke()}
 function pastilla(c,s,x,y,col,z,al,a){
   if(MINI||a<=0||!s)return;c.save();c.globalAlpha*=cl(a);c.font='600 '+z+'px '+F;var w=c.measureText(s).width+z*1.3,h=z*1.8,x0=al==='left'?x:al==='right'?x-w:x-w/2;x0=Math.max(4,Math.min(VW-w-4,x0));
   rr(c,x0,y-h/2,w,h,h/2);c.fillStyle='rgba(7,11,10,.86)';c.fill();c.fillStyle=rgba(col,.2);c.fill();c.strokeStyle=col;c.lineWidth=1.4;c.stroke();

@@ -89,6 +89,12 @@ main{display:grid;gap:clamp(26px,4vw,46px);padding-block:clamp(26px,5vw,54px) 60
 .fb{min-height:1.5em}.fb b{font-weight:600}
 .resultado{display:grid;gap:4px}.resultado .big{font:600 clamp(44px,8vw,64px)/1 var(--f);letter-spacing:-.045em;background:linear-gradient(100deg,var(--ink),#7FB4F0);-webkit-background-clip:text;background-clip:text;color:transparent}
 .check{display:grid;gap:10px;padding:0}.check li{list-style:none;display:flex;gap:12px;align-items:flex-start;border-radius:14px;padding:12px 14px;background:rgba(210,240,226,.04);box-shadow:inset 0 0 0 1px var(--line)}.check input{width:20px;height:20px;margin:2px 0 0;flex:none;accent-color:var(--mint)}.check label{cursor:pointer;line-height:1.4}.check li:has(input:checked){box-shadow:inset 0 0 0 1.5px var(--mint);background:rgba(95,208,160,.08)}
+.ruta{display:flex;flex-wrap:wrap;gap:8px;padding:0;margin:0}.ruta li{list-style:none}.ruta a{display:flex;align-items:center;gap:8px;padding:8px 14px 8px 8px;border-radius:999px;text-decoration:none;color:var(--muted);box-shadow:inset 0 0 0 1px var(--line);font-size:15px}.ruta a:hover{color:var(--ink)}.ruta b{display:grid;place-items:center;width:26px;height:26px;border-radius:50%;background:rgba(210,240,226,.08);font:600 13px var(--m);color:var(--ink)}
+.ruta .ok a{color:var(--ink)}.ruta .ok b{background:var(--mint);color:var(--on)}.ruta .ahora a{color:var(--ink);box-shadow:inset 0 0 0 1.5px #7FB4F0;background:rgba(127,180,240,.1)}.ruta .fin b{background:linear-gradient(120deg,#F2A65A,#5FD0A0);color:var(--on)}
+.mapa{display:grid;gap:6px}.mapa .fila{display:grid;grid-template-columns:1.1fr 1.3fr .7fr 1.5fr 1.3fr;gap:12px;align-items:center;padding:11px 14px;border-radius:14px;text-decoration:none;color:var(--ink);font-size:14.5px;line-height:1.35;background:rgba(210,240,226,.035);transition:background .25s}.mapa a.fila:hover{background:rgba(210,240,226,.09)}.mapa .cab{background:none;color:var(--muted);font-size:13px;padding-block:2px}.mapa .nom{font-weight:600}
+@media(max-width:760px){.mapa .cab{display:none}.mapa .fila{grid-template-columns:1fr 1fr;gap:6px 12px;align-items:start}.mapa .nom{grid-column:1/-1;font-size:16px}.mapa [data-t]::before{content:attr(data-t);display:block;font-size:12px;color:var(--muted)}}
+@media(prefers-reduced-motion:no-preference){.ops .mal{animation:sacude .4s}.ops .bien{animation:brilla .6s}}@keyframes sacude{20%,60%{transform:translateX(-5px)}40%,80%{transform:translateX(5px)}}@keyframes brilla{40%{transform:scale(1.02);box-shadow:inset 0 0 0 1.5px var(--mint),0 0 26px rgba(95,208,160,.35)}}
+.atajo{margin-top:-4px}
 .gstats{grid-template-columns:repeat(4,minmax(0,1fr))}
 footer{border-top:1px solid var(--line);padding-block:20px 40px;display:grid;gap:6px}
 @media(prefers-reduced-motion:no-preference){.entra>*{animation:sube .7s var(--ease) backwards}.entra>:nth-child(2){animation-delay:.06s}.entra>:nth-child(3){animation-delay:.12s}.entra>:nth-child(n+4){animation-delay:.18s}}
@@ -150,7 +156,9 @@ function inicio(){
     n===TODAS.length&&T===TODAS.length?el('section',{class:'glass'},el('h2',{text:'Terminaste la Academia'}),el('p',{class:'muted',text:'Ya sabés leer los datos y el gráfico. El paso siguiente es cumplir un plan con eso.'}),el('div',{class:'btns'},el('a',{class:'btn main',href:'../reto/?desde=academia',text:'Entrar a la Liga'}),el('a',{class:'btn',href:'../?de=academia#sumate',text:'Quiero aprender con guía'}))):null,
     el('div',{class:'seg materia',role:'group','aria-label':'Materia'},[['fund','Fundamentales',A.L.length],['tec','Análisis técnico',TEC.L.length]].map(function(x){return el('button',{type:'button',id:'m-'+x[0],'aria-pressed':String(mat===x[0]),onclick:function(){mat=x[0];cat='todas';inicio();document.getElementById('m-'+x[0]).focus({preventScroll:true})}},x[1],el('span',{class:'cuenta',text:' '+x[2]}))})),
     el('div',{class:'filtros',role:'group','aria-label':'Tema'},[['todas','Todas']].concat(Object.keys(CT).map(function(k){return[k,CT[k][0]]})).map(function(x){return el('button',{type:'button',id:'f-'+x[0],'aria-pressed':String(cat===x[0]),text:x[1],onclick:function(){cat=x[0];inicio();document.getElementById('f-'+x[0]).focus({preventScroll:true})}})})),
-    el('ul',{class:'grid'},li));
+    mat==='tec'&&cat==='todas'?ruta2():null,
+    el('ul',{class:'grid'},li),
+    mat==='tec'&&(cat==='todas'||cat==='setups')?mapa():null);
   requestAnimationFrame(bucleMinis);
 }
 function proximo(){
@@ -294,12 +302,26 @@ function leccion(l){
 }
 function ruta(){var id=location.hash.slice(1),l=TODAS.filter(function(x){return x.id===id})[0];if(id==='gimnasio')gimnasio();else if(l)leccion(l);else inicio()}
 /* ---- análisis técnico: lección, práctica y gimnasio ---- */
+var RUTA=['velas','tendencia','soportes','rupturas','medias','rsi','dobles','riesgo'];
+function ruta2(){
+  var hechos=RUTA.filter(function(id){return P.v[id]}).length,sig=RUTA.filter(function(id){return!P.v[id]})[0];
+  return el('section',{class:'glass'},el('div',{class:'sig'},el('h2',{text:'Ruta recomendada'}),el('span',{class:'muted small',text:hechos+' de '+RUTA.length+' + setups'})),
+    el('ol',{class:'ruta'},RUTA.map(function(id,i){var l=TEC.L.filter(function(x){return x.id===id})[0];return el('li',{class:P.v[id]?'ok':id===sig?'ahora':''},el('a',{href:'#'+id},el('b',{text:P.v[id]?'✓':String(i+1)}),l.corto))}).concat([el('li',{class:'fin'+(!sig?' ahora':'')},el('a',{href:'#pullback'},el('b',{text:'★'}),'Setups'))])),
+    el('p',{class:'muted small',text:sig?'Seguí por: '+TEC.L.filter(function(x){return x.id===sig})[0].n+'. Cada lección dura un minuto.':'Terminaste la base. Ahora, los setups de entrada.'}));
+}
+var MAPA={pullback:['Tendencia alcista','Compra','Martillo en el viejo techo','Debajo de la vela y la zona'],'pullback-venta':['Tendencia bajista','Venta','Estrella fugaz en el viejo piso','Arriba de la vela y la zona'],retesteo:['Rango que se rompe','Compra','Rechazo al volver al nivel','Debajo del nivel roto'],barrida:['Rango','Compra','Mecha afuera, cierre adentro','Debajo de la mecha'],'rebote-media':['Tendencia con media en subida','Compra','Vela que rebota en la media','Debajo de la vela'],bandera:['Después de un impulso','Compra','Cierre arriba de la bandera','Debajo de la bandera'],'doble-piso':['Después de una caída','Compra','Rechazo en el cuello roto','Debajo del cuello'],'doble-techo':['Después de una subida','Venta','Rechazo en el cuello roto','Arriba del cuello']};
+function mapa(){
+  return el('section',{class:'glass'},el('h2',{text:'Mapa de setups'}),el('p',{class:'muted small',text:'Los 8 setups de un vistazo. Primero mirá qué mercado tenés enfrente; después elegí el setup.'}),
+    el('div',{class:'mapa',role:'table','aria-label':'Mapa de setups'},el('div',{class:'fila cab',role:'row'},['Setup','Cuándo','Dirección','Gatillo','Stop'].map(function(t){return el('span',{role:'columnheader',text:t})})),
+      Object.keys(MAPA).map(function(id){var m=MAPA[id],l=TEC.L.filter(function(x){return x.id===id})[0];return el('a',{class:'fila',role:'row',href:'#'+id},el('span',{role:'cell',class:'nom',text:l.corto}),el('span',{role:'cell','data-t':'Cuándo',text:m[0]}),el('span',{role:'cell','data-t':'Dirección',class:m[1]==='Compra'?'up':'down',text:m[1]}),el('span',{role:'cell','data-t':'Gatillo',text:m[2]}),el('span',{role:'cell','data-t':'Stop',text:m[3]}))})));
+}
 var KG='valenttiel-gimnasio',GY={rec:0,dias:{},libres:0};
 try{var gg=JSON.parse(localStorage.getItem(KG));if(gg&&gg.dias)GY=gg}catch(e){}
 function guardarGY(){try{localStorage.setItem(KG,JSON.stringify(GY))}catch(e){}}
 var LEC={tendencia:'tendencia',nivel:'soportes',vela:'velas',ruptura:'rupturas',media:'medias',rsi:'rsi',patron:'dobles',rr:'riesgo',setup:'pullback',stop:'pullback'};
 function hoyAR(){return new Date().toLocaleDateString('en-CA',{timeZone:TZ})}
 function hash(s){var h=2166136261;for(var i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619)}return h>>>0}
+function falta(){var t=new Date().toLocaleTimeString('en-GB',{timeZone:TZ,hour12:false}).split(':'),m=1440-(+t[0]*60+ +t[1]),h=Math.floor(m/60);return'El próximo desafío sale en '+(h?h+' h ':'')+(m%60)+' min.'}
 function rango(p){return p>=1300?'Francotirador':p>=1000?'Analista':p>=600?'Lector de gráficos':'Aprendiz'}
 function rachaDias(){var n=0,d=new Date(hoyAR()+'T12:00:00Z');if(!GY.dias[hoyAR()])d.setUTCDate(d.getUTCDate()-1);while(GY.dias[d.toISOString().slice(0,10)]!=null){n++;d.setUTCDate(d.getUTCDate()-1)}return n}
 function puerta(){
@@ -314,7 +336,7 @@ function Entreno(lista,op){
     var q=lista[i];e=TEC.ejercicio(q.tipo,q.sem);rev=false;t0=performance.now();
     var fb=el('p',{class:'fb',role:'status'}),ops=el('div',{class:'ops'+(e.ops.length===3&&e.ops[0].length<3?' fila':'')},e.ops.map(function(t,k){return el('button',{type:'button',text:t,onclick:function(){responder(k,ops,fb)}})}));
     cv.setAttribute('aria-label','Gráfico de ejemplo del ejercicio '+(i+1));
-    sec.replaceChildren(el('div',{class:'ej-cab'},el('span',{class:'tag',text:TEC.NOMBRE[q.tipo]}),el('span',{class:'muted small',text:(i+1)+' de '+lista.length}),op.reloj?el('span',{class:'num pts',text:pts+' pts'}):null,racha>1?el('span',{class:'racha',text:'🔥 '+racha+' seguidas'}):null),el('h3',{text:e.preg}),cv,ops,fb);
+    sec.replaceChildren(el('div',{class:'ej-cab'},el('span',{class:'tag',text:TEC.NOMBRE[q.tipo]}),el('span',{class:'muted small',text:(i+1)+' de '+lista.length}),op.reloj?el('span',{class:'num pts',text:pts+' pts'}):null,racha>1?el('span',{class:'racha',text:'🔥 '+racha+' seguidas'}):null),el('h3',{text:e.preg}),cv,ops,fb,i===0&&matchMedia('(hover:hover)').matches?el('p',{class:'muted small atajo',text:'Atajos: 1, 2, 3 para responder y Enter para seguir.'}):null);
     requestAnimationFrame(pinta);
   }
   function responder(k,ops,fb){
@@ -323,7 +345,10 @@ function Entreno(lista,op){
     fb.replaceChildren(el('b',{text:ok?(op.reloj?'+'+gana+' puntos. ':'Correcto. '):'No. '}),e.exp);
     var s2=el('button',{class:'btn main',type:'button',text:i<lista.length-1?'Siguiente':'Ver resultado',onclick:function(){i++;if(i<lista.length){una();sec.querySelector('.ops button').focus({preventScroll:true})}else fin()}});sec.append(el('div',{class:'btns'},s2));s2.focus({preventScroll:true});
   }
-  function fin(){rs.disconnect();op.fin({pts:pts,bien:bien,n:lista.length,mejor:mejor,fallos:fallos},sec)}
+  function tecla(ev){if(!sec.isConnected){removeEventListener('keydown',tecla);return}if(ev.target.closest&&ev.target.closest('input,textarea'))return;var r2=sec.getBoundingClientRect();if(r2.bottom<0||r2.top>innerHeight)return;
+    var k=ev.key&&ev.key.length===1?'123abc'.indexOf(ev.key.toLowerCase()):-1,bs=sec.querySelectorAll('.ops button');if(k>=0){k=k%3;if(bs[k]&&!bs[k].disabled){ev.preventDefault();bs[k].click()}}else if(ev.key==='Enter'){var nx=[].filter.call(sec.querySelectorAll('.btns .btn'),function(b){return/Siguiente|Ver resultado/.test(b.textContent)})[0];if(nx&&document.activeElement!==nx){ev.preventDefault();nx.click()}}}
+  addEventListener('keydown',tecla);
+  function fin(){rs.disconnect();removeEventListener('keydown',tecla);op.fin({pts:pts,bien:bien,n:lista.length,mejor:mejor,fallos:fallos},sec)}
   una();return sec;
 }
 function cl(x){return x<0?0:x>1?1:x}
@@ -353,11 +378,12 @@ function desafio(fecha){var r=TEC.azar(hash('valenttiel-'+fecha)),t=TEC.TIPOS.sl
 function gimnasio(){
   detener();document.title='Gimnasio de gráficos | Academia Valenttiel';mat='tec';
   var f=hoyAR(),hoy=GY.dias[f],tema='todos',zona=el('div',{class:'stack',style:'gap:22px'});
+  var cajaStats=el('section',{class:'glass'});
   function stats(){var r=rachaDias();return el('dl',{class:'ficha gstats'},[['Hoy',hoy!=null?hoy+' pts':'Sin jugar'],['Tu récord',GY.rec?GY.rec+' pts':'—'],['Días seguidos',r?r+(r===1?' día':' días'):'—'],['Tu nivel',GY.rec?rango(GY.rec):'—']].map(function(x){return el('div',{},el('dt',{text:x[0]}),el('dd',{text:x[1]}))}))}
   function jugar(lista,oficial){
     var titulo=oficial?'Desafío del '+f.split('-').reverse().slice(0,2).join('/'):'Entrenamiento libre';
     zona.replaceChildren(el('section',{class:'glass'},el('h2',{text:titulo}),Entreno(lista,{reloj:true,fin:function(R,box){
-      medir('test-leccion');var antes=GY.rec;if(oficial){GY.dias[f]=R.pts;hoy=R.pts}else GY.libres++;if(R.pts>GY.rec)GY.rec=R.pts;guardarGY();
+      medir('test-leccion');var antes=GY.rec;if(oficial){GY.dias[f]=R.pts;hoy=R.pts}else GY.libres++;if(R.pts>GY.rec)GY.rec=R.pts;guardarGY();cajaStats.replaceChildren(stats());
       var peor=Object.keys(R.fallos).sort(function(a,b){return R.fallos[b]-R.fallos[a]})[0],txt='Hice '+R.pts+' puntos ('+R.bien+'/'+R.n+') en el desafío de hoy del Gimnasio de gráficos de Valenttiel. ¿Me ganás?',url='https://dalozyx-dot.github.io/valenttiel-macro/academia/?desde=gimnasio#gimnasio',msg=el('p',{class:'muted small',role:'status'});
       box.replaceChildren(el('div',{class:'resultado'},el('p',{class:'tag',text:rango(R.pts)}),el('p',{class:'big num',text:R.pts+' pts'}),el('p',{class:'muted',text:R.bien+' de '+R.n+' bien'+(R.mejor>2?', con '+R.mejor+' seguidas':'')+'.'+(R.pts>antes&&antes?' ¡Nuevo récord!':'')})),
         peor?el('p',{},'Para mejorar: ',el('a',{href:'#'+LEC[peor],text:'repasá '+TEC.NOMBRE[peor].toLowerCase()}),'.'):el('p',{class:'up',text:'Perfecto: no fallaste ninguno.'}),
@@ -368,10 +394,11 @@ function gimnasio(){
   }
   function libre(){var r=TEC.azar(Date.now()&0xffffff),xs=[];for(var k=0;k<10;k++)xs.push({tipo:tema==='todos'?TEC.TIPOS[Math.floor(r()*TEC.TIPOS.length)]:tema,sem:Math.floor(r()*1e9)});jugar(xs,false)}
   var chips=el('div',{class:'filtros',role:'group','aria-label':'Tema del entrenamiento'},[['todos','Todos']].concat(TEC.TIPOS.map(function(t){return[t,TEC.NOMBRE[t]]})).map(function(x){return el('button',{type:'button','aria-pressed':String(tema===x[0]),text:x[1],onclick:function(ev){tema=x[0];[].forEach.call(chips.children,function(b){b.setAttribute('aria-pressed',String(b===ev.currentTarget))})}})}));
-  zona.append(el('div',{class:'cols'},el('section',{class:'glass'},el('p',{class:'tag',text:'Igual para todos hoy'}),el('h2',{text:hoy!=null?'Ya jugaste el desafío de hoy':'Desafío del día'}),el('p',{class:'muted',text:hoy!=null?'Hiciste '+hoy+' puntos. Mañana hay diez gráficos nuevos. Podés repetirlo para practicar, pero cuenta el primero.':'Diez gráficos de todos los temas. Cada acierto vale 100 puntos y hasta 50 más si respondés rápido. Cuenta el primer intento.'}),el('div',{class:'btns'},el('button',{class:hoy!=null?'btn':'btn main',type:'button',text:hoy!=null?'Repetir para practicar':'Jugar el desafío',onclick:function(){jugar(desafio(f),hoy==null)}}))),
+  zona.append(el('div',{class:'cols'},el('section',{class:'glass'},el('p',{class:'tag',text:'Igual para todos hoy'}),el('h2',{text:hoy!=null?'Ya jugaste el desafío de hoy':'Desafío del día'}),el('p',{class:'muted',text:hoy!=null?'Hiciste '+hoy+' puntos. '+falta()+' Podés repetirlo para practicar, pero cuenta el primero.':'Diez gráficos de todos los temas. Cada acierto vale 100 puntos y hasta 50 más si respondés rápido. Cuenta el primer intento.'}),el('div',{class:'btns'},el('button',{class:hoy!=null?'btn':'btn main',type:'button',text:hoy!=null?'Repetir para practicar':'Jugar el desafío',onclick:function(){jugar(desafio(f),hoy==null)}}))),
     el('section',{class:'glass'},el('p',{class:'tag',text:'Sin límite'}),el('h2',{text:'Entrenamiento libre'}),el('p',{class:'muted',text:'Diez gráficos nuevos cada vez. Elegí un tema o mezclá todos.'}),chips,el('div',{class:'btns'},el('button',{class:hoy!=null?'btn main':'btn',type:'button',text:'Entrenar',onclick:libre})))));
+  cajaStats.append(stats());
   poner(el('div',{class:'hero'},el('p',{},el('a',{href:'#',text:'Academia'})),el('h1',{class:'grad',style:'font-size:clamp(34px,6vw,70px)',text:'Gimnasio de gráficos'}),el('p',{class:'lead',text:'Leer un gráfico es un músculo. Diez gráficos por día, respuestas con explicación y puntos por velocidad.'})),
-    el('section',{class:'glass'},stats()),zona,
+    cajaStats,zona,
     el('section',{class:'glass'},el('h2',{text:'Cómo se juega'}),el('ul',{class:'claves'},['Cada pregunta tiene una sola respuesta correcta, explicada al responder.','Acierto: 100 puntos. Si respondés en menos de 3 segundos, suma 50 más; después el bonus baja hasta los 15 segundos.','Máximo: 1500 puntos. Niveles: Aprendiz, Lector de gráficos (600), Analista (1000) y Francotirador (1300).','Los gráficos son de ejemplo: entrenan la lectura, no predicen el precio.'].map(function(t){return el('li',{text:t})}))));
   scrollTo(0,0);
 }
