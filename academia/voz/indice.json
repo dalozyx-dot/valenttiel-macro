@@ -1,0 +1,230 @@
+{
+ "lecciones": {
+  "velas": [
+   "9b54c2d0a7",
+   "c71ecc18f0",
+   "3a47fe2f9a",
+   "8786e0b23e",
+   "e9fd453783",
+   "28c203ac9f"
+  ],
+  "fed": [
+   "4e8b2cedea",
+   "0850cfd01a",
+   "d2e4c26121",
+   "95c6a9b7cc",
+   "55ddbf6a0c",
+   "9a552144d4"
+  ],
+  "cpi": [
+   "3610dc82d3",
+   "cc72b2cbe2",
+   "5d30b3d7e2",
+   "e0b89e8226",
+   "936c213671",
+   "c720b60620"
+  ],
+  "pce": [
+   "e98c94e0d4",
+   "67148275ba",
+   "5985b977a1",
+   "e386fdac70",
+   "fc62fbc804",
+   "f44e733c40"
+  ],
+  "ppi": [
+   "37e0e1c553",
+   "db09660d63",
+   "4b5f1ee5fb",
+   "b3c4caaafa",
+   "a72f4a21d4",
+   "68b32cb50d"
+  ],
+  "nfp": [
+   "75ce63120d",
+   "4a3091a44b",
+   "b329e045cf",
+   "cfbcb200b1",
+   "c49d874628",
+   "d7c3fa64bd"
+  ],
+  "subsidios": [
+   "4e0193798f",
+   "98db305b0b",
+   "158c968de8",
+   "e7c71861ff",
+   "b7be5a086f",
+   "fa081801bc"
+  ],
+  "pib": [
+   "046c66cfe8",
+   "f880f84bb3",
+   "a10023db56",
+   "f57ea57945",
+   "b7c30045ad",
+   "ec5210a016"
+  ],
+  "consumo": [
+   "0ae81aee0f",
+   "1989b52661",
+   "da5feed955",
+   "88a2cdfdd0",
+   "0bf96ef3a2",
+   "ea9dc04e00"
+  ],
+  "ism": [
+   "8f97518b3a",
+   "b5ac251b4f",
+   "331110e418",
+   "8affb1165e",
+   "94bc09f90a",
+   "a89d158a4a"
+  ],
+  "bonos": [
+   "0a8fe52603",
+   "00bdd79a41",
+   "d2ca9f3335",
+   "c92076f02e",
+   "7ffef0a04a",
+   "8704dbd0f7"
+  ],
+  "petroleo": [
+   "742456988c",
+   "1e11a2b5e2",
+   "276467bfeb",
+   "c588729655",
+   "30ab1bd4db",
+   "39e45da14c"
+  ],
+  "mundo": [
+   "ee68bbc0c8",
+   "c867a54a77",
+   "f7bd9e9aaa",
+   "8063f9a460",
+   "dc728617df",
+   "1656e871c2"
+  ],
+  "tendencia": [
+   "ca57ea101e",
+   "e1e54ac5aa",
+   "0ef19b2202",
+   "daa191a660",
+   "761c0bb3e0",
+   "cc31e17ee2"
+  ],
+  "soportes": [
+   "76c3898730",
+   "7fdff1523f",
+   "fbfd6310a7",
+   "b62010bacd",
+   "68bc9622a4",
+   "c46fa3fba3"
+  ],
+  "rupturas": [
+   "32cd4cf371",
+   "ea2e721045",
+   "2060b2ee1f",
+   "ada9801697",
+   "bd4058eec6",
+   "6cf902c094"
+  ],
+  "medias": [
+   "2c41204488",
+   "468b037d32",
+   "e0a28fc7f3",
+   "4c854e61df",
+   "bec541a61b",
+   "0a449c11eb"
+  ],
+  "rsi": [
+   "5a17242c80",
+   "36835eaba0",
+   "2a166b7cde",
+   "5e3cf87bb7",
+   "c4c548fb88",
+   "4ff88e9626"
+  ],
+  "dobles": [
+   "b135c545f5",
+   "ccbc5d3e8d",
+   "ab7700b2ea",
+   "925fae072a",
+   "5cce7f59b3",
+   "bda9e1f329"
+  ],
+  "riesgo": [
+   "3d3b95e028",
+   "e2f3cc9659",
+   "7b09a651e4",
+   "cb5353e172",
+   "b494cde79d",
+   "5453c65941"
+  ],
+  "pullback": [
+   "2093e318eb",
+   "4b326fa9bc",
+   "8354b2488b",
+   "238dba047f",
+   "399e790e8f",
+   "09442d318c"
+  ],
+  "retesteo": [
+   "72d1c312c2",
+   "7a4953068e",
+   "261bc37cb0",
+   "3c364fa69a",
+   "21160bd075",
+   "65035f0068"
+  ],
+  "barrida": [
+   "a3c6571141",
+   "5994438734",
+   "8367d164a5",
+   "62495a69ae",
+   "c6f1682818",
+   "ecf72c15ee"
+  ],
+  "rebote-media": [
+   "abc9aa479f",
+   "5fa675783e",
+   "aa89b8e4cd",
+   "d55fcffd3d",
+   "c695cad521",
+   "411fa106c7"
+  ],
+  "pullback-venta": [
+   "e48e82bb51",
+   "3e22c9159a",
+   "8b3d0db282",
+   "e17cd6e0bd",
+   "7134a87d9e",
+   "6ff7b8d817"
+  ],
+  "bandera": [
+   "ebe8d5f39e",
+   "1dd7e7b0c6",
+   "ff4d41e7a2",
+   "1d8ba0bea7",
+   "fdc555cba1",
+   "63e64475e1"
+  ],
+  "doble-piso": [
+   "1729dee1e6",
+   "aae58892ee",
+   "4ac7ccadd1",
+   "50dd8db5cf",
+   "e2395cc9b4",
+   "678ca555b2"
+  ],
+  "doble-techo": [
+   "429d7e9c5b",
+   "0fa1c1c16d",
+   "f00ce3afb9",
+   "4461ae42e2",
+   "eb2ee1f5d6",
+   "533d1d0d9c"
+  ]
+ },
+ "ext": "m4a",
+ "voz": "Piper es_MX-claude-high"
+}

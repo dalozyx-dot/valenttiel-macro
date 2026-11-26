@@ -110,7 +110,7 @@ footer{border-top:1px solid var(--line);padding-block:20px 40px;display:grid;gap
 <div class="wrap">
   <header class="top"><a class="brand" href="#">Valenttiel <span>Academia</span></a><nav aria-label="Secciones"><a href="../">Macro</a><a href="../calculadora/">Calculadora</a><a href="../reto/">Liga</a></nav></header>
   <main id="app"></main>
-  <footer class="small muted"><p>Contenido educativo, no es asesoramiento financiero. Los impactos son tendencias habituales: el precio puede hacer lo contrario.</p><p><a href="../#aprender">Fuentes y glosario</a></p><p data-medir></p></footer>
+  <footer class="small muted"><p>Contenido educativo, no es asesoramiento financiero. Los impactos son tendencias habituales: el precio puede hacer lo contrario.</p><p><a href="../#aprender">Fuentes y glosario</a></p><p>Narración generada con IA: voz Piper es_MX claude (Apache 2.0).</p><p data-medir></p></footer>
 </div>
 <script src="lecciones.js"></script>
 <script src="motor.js"></script>
@@ -244,7 +244,7 @@ function Reproductor(l,alFin){
     if(S.e>=S.d){if(!S.vf&&S.e<S.d+7){S.e=Math.max(S.d,S.e)}else if(S.i<l.t.length-1){S.i++;S.e=0;S.d=dur(l,S.i)/vel;subt();decir()}else{S.e=S.d;pinta();return acabar()}}
     pinta();requestAnimationFrame(cuadro);
   }
-  function iconos(){tp.textContent=mmss(total(l))+(grabada(l)?', narrada con voz humana. Subí el volumen.':VOZ?', con voz y subtítulos. Subí el volumen.':', con subtítulos');bP.replaceChildren(svg(S.on?IC.pausa:IC.play));bP.setAttribute('aria-label',S.on?'Pausar':'Reproducir');bV.hidden=!VOZ&&!grabada(l);bV.replaceChildren(svg(quiereVoz?IC.voz:IC.mudo));bV.setAttribute('aria-label',quiereVoz?'Quitar la voz':'Activar la voz');bS.textContent=vel.toLocaleString('es-AR')+'x';bS.setAttribute('aria-label','Velocidad '+vel)}
+  function iconos(){tp.textContent=mmss(total(l))+(grabada(l)?', con narración en voz natural (IA). Subí el volumen.':VOZ?', con voz y subtítulos. Subí el volumen.':', con subtítulos');bP.replaceChildren(svg(S.on?IC.pausa:IC.play));bP.setAttribute('aria-label',S.on?'Pausar':'Reproducir');bV.hidden=!VOZ&&!grabada(l);bV.replaceChildren(svg(quiereVoz?IC.voz:IC.mudo));bV.setAttribute('aria-label',quiereVoz?'Quitar la voz':'Activar la voz');bS.textContent=vel.toLocaleString('es-AR')+'x';bS.setAttribute('aria-label','Velocidad '+vel)}
   function alterna(){if(S.on)pausar();else tocar()}
   bP.addEventListener('click',alterna);cv.addEventListener('click',alterna);
   bV.addEventListener('click',function(){desbloquear();quiereVoz=!quiereVoz;aviso('');try{localStorage.setItem('valenttiel-voz',quiereVoz?'1':'0')}catch(e){}if(S.on){if(quiereVoz){S.e=0;decir()}else{S.habla++;S.vf=true;if(VOZ)VOZ.cancel();if(au)au.pause()}}iconos()});
