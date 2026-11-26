@@ -168,6 +168,9 @@ function proximo(){
 }
 
 /* ---- voz ---- */
+// Narración grabada con voz humana (voz/indice.json). Si una lección no la tiene, se usa la voz del dispositivo.
+var AUD=null;fetch('voz/indice.json',{cache:'no-cache'}).then(function(r){return r.ok?r.json():null}).then(function(j){AUD=j;if(pl)pl.iconos()}).catch(function(){});
+function grabada(l){var h=AUD&&AUD.lecciones&&AUD.lecciones[l.id];return h&&h.length===l.t.length?h:null}
 var VOZ=window.speechSynthesis||null,quiereVoz=true,vel=1;
 try{quiereVoz=localStorage.getItem('valenttiel-voz')!=='0'}catch(e){}
 var IOS=/iPhone|iPad|iPod/.test(navigator.userAgent)||(/Macintosh/.test(navigator.userAgent)&&navigator.maxTouchPoints>1),avisoIOS=false;
@@ -195,8 +198,16 @@ function Reproductor(l,alFin){
       nota=el('p',{class:'nota',role:'status',hidden:''}),caja=el('div',{class:'player',tabindex:'-1'},cv,sub,el('div',{class:'ctl'},bP,segs,bV,bS,bF),tapa),S={i:0,e:0,on:false,fin:false,T:0,d:dur(l,0),vf:true,vivo:true,habla:0},ult=0;
   color(caja,l);if(!caja.requestFullscreen)bF.hidden=true;
   function subt(){var ws=l.t[S.i].split(' ');sub.replaceChildren.apply(sub,ws.map(function(w,i){return el('span',{text:(i?' ':'')+w})}))}
+  var au=null,tp=el('p',{class:'small'});
+  function decirGrabada(h){
+    if(!au){au=new Audio();au.preload='auto';au.setAttribute('playsinline','')}
+    var id=++S.habla;S.vf=false;au.onended=function(){if(id!==S.habla)return;S.vf=true;if(S.on)S.d=Math.min(S.d,S.e+.5)};
+    au.onloadedmetadata=function(){if(id===S.habla&&isFinite(au.duration))S.d=Math.max(S.d,au.duration/vel+.5)};
+    au.onerror=function(){if(id!==S.habla)return;S.vf=true};
+    au.src='voz/'+l.id+'-'+S.i+'.'+(AUD.ext||'mp3')+'?v='+h[S.i];au.playbackRate=vel;au.defaultPlaybackRate=vel;var q=au.play();if(q&&q.catch)q.catch(function(){if(id===S.habla){S.vf=true;aviso('Tocá play para escuchar la narración.')}});
+  }
   function decir(){
-    S.vf=true;if(!VOZ||!quiereVoz||!S.on)return;
+    S.vf=true;if(!quiereVoz||!S.on)return;var h=grabada(l);if(h)return decirGrabada(h);if(!VOZ)return;
     var v=voz(),u=new SpeechSynthesisUtterance(l.t[S.i]),id=++S.habla;if(v)u.voice=v;u.lang=v?v.lang:idioma();u.rate=1.02*vel;u.volume=1;S.vf=false;
     var empezo=false,termina=function(){if(id!==S.habla)return;S.vf=true;if(S.on)S.d=Math.min(S.d,Math.max(S.e+.55,S.d*.55))};
     u.onstart=function(){empezo=true;S.oyo=true;if(!IOS)aviso('')};u.onend=termina;
@@ -221,7 +232,7 @@ function Reproductor(l,alFin){
   }
   function ir(i){S.emp=true;S.i=i;S.e=0;S.d=dur(l,i)/vel;S.fin=false;subt();tapa.hidden=S.on;if(S.on)decir();pinta()}
   function tocar(){desbloquear();if(S.fin)ir(0);if(!S.emp){S.emp=true;S.e=0}S.on=true;tapa.hidden=true;tapa.className='tapa';minis=[];if(quiereVoz&&VOZ)S.e=0;S.d=dur(l,S.i)/vel;decir();iconos();ult=performance.now();requestAnimationFrame(cuadro)}
-  function pausar(){S.on=false;S.habla++;if(VOZ)VOZ.cancel();iconos()}
+  function pausar(){S.on=false;S.habla++;if(VOZ)VOZ.cancel();if(au)au.pause();iconos()}
   function acabar(){S.fin=true;pausar();P.v[l.id]=1;guardar();medir('vio-leccion');tapa.className='tapa fin';tapa.replaceChildren(el('h2',{text:'¿Lo entendiste?'}),el('div',{class:'btns',style:'justify-content:center'},el('button',{class:'btn main',type:'button',text:'Hacer el test',onclick:function(){document.getElementById('test').scrollIntoView({behavior:CALMA.matches?'auto':'smooth',block:'start'})}}),el('button',{class:'btn',type:'button',text:'Ver de nuevo',onclick:tocar})));tapa.hidden=false;alFin()}
   function pinta(){
     var d=talla(cv);if(!cv.width)return;var x=cv.getContext('2d'),W=cv.width/d,H=cv.height/d,p=Math.min(1,S.e/S.d);x.setTransform(d,0,0,d,0,0);MOTOR.dibujar(x,W,H,l,S.i,p,S.T);
@@ -233,15 +244,15 @@ function Reproductor(l,alFin){
     if(S.e>=S.d){if(!S.vf&&S.e<S.d+7){S.e=Math.max(S.d,S.e)}else if(S.i<l.t.length-1){S.i++;S.e=0;S.d=dur(l,S.i)/vel;subt();decir()}else{S.e=S.d;pinta();return acabar()}}
     pinta();requestAnimationFrame(cuadro);
   }
-  function iconos(){bP.replaceChildren(svg(S.on?IC.pausa:IC.play));bP.setAttribute('aria-label',S.on?'Pausar':'Reproducir');bV.hidden=!VOZ;bV.replaceChildren(svg(quiereVoz?IC.voz:IC.mudo));bV.setAttribute('aria-label',quiereVoz?'Quitar la voz':'Activar la voz');bS.textContent=vel.toLocaleString('es-AR')+'x';bS.setAttribute('aria-label','Velocidad '+vel)}
+  function iconos(){tp.textContent=mmss(total(l))+(grabada(l)?', narrada con voz humana. Subí el volumen.':VOZ?', con voz y subtítulos. Subí el volumen.':', con subtítulos');bP.replaceChildren(svg(S.on?IC.pausa:IC.play));bP.setAttribute('aria-label',S.on?'Pausar':'Reproducir');bV.hidden=!VOZ&&!grabada(l);bV.replaceChildren(svg(quiereVoz?IC.voz:IC.mudo));bV.setAttribute('aria-label',quiereVoz?'Quitar la voz':'Activar la voz');bS.textContent=vel.toLocaleString('es-AR')+'x';bS.setAttribute('aria-label','Velocidad '+vel)}
   function alterna(){if(S.on)pausar();else tocar()}
   bP.addEventListener('click',alterna);cv.addEventListener('click',alterna);
-  bV.addEventListener('click',function(){desbloquear();quiereVoz=!quiereVoz;aviso('');try{localStorage.setItem('valenttiel-voz',quiereVoz?'1':'0')}catch(e){}if(S.on){if(quiereVoz){S.e=0;decir()}else{S.habla++;S.vf=true;VOZ.cancel()}}iconos()});
+  bV.addEventListener('click',function(){desbloquear();quiereVoz=!quiereVoz;aviso('');try{localStorage.setItem('valenttiel-voz',quiereVoz?'1':'0')}catch(e){}if(S.on){if(quiereVoz){S.e=0;decir()}else{S.habla++;S.vf=true;if(VOZ)VOZ.cancel();if(au)au.pause()}}iconos()});
   bS.addEventListener('click',function(){var v=[.75,1,1.25,1.5];vel=v[(v.indexOf(vel)+1)%4];S.d=dur(l,S.i)/vel;if(S.on&&quiereVoz){S.e=0;decir()}iconos()});
   bF.addEventListener('click',function(){if(document.fullscreenElement)document.exitFullscreen();else caja.requestFullscreen().catch(function(){})});
   caja.addEventListener('keydown',function(e){if(e.target.tagName==='BUTTON'&&(e.key===' '||e.key==='Enter'))return;if(e.key===' '||e.key==='k'){e.preventDefault();alterna()}else if(e.key==='ArrowRight'&&S.i<l.t.length-1){e.preventDefault();ir(S.i+1)}else if(e.key==='ArrowLeft'){e.preventDefault();ir(Math.max(0,S.i-1))}});
   var oc=function(){if(document.hidden&&S.on)pausar()},rs=new ResizeObserver(function(){if(S.vivo)pinta()});document.addEventListener('visibilitychange',oc);rs.observe(cv);
-  tapa.append(el('button',{class:'gran',type:'button','aria-label':'Reproducir la lección',onclick:tocar},svg(IC.play)),el('p',{class:'small',text:mmss(total(l))+(VOZ?', con voz y subtítulos. Subí el volumen.':', con subtítulos')}));
+  tapa.append(el('button',{class:'gran',type:'button','aria-label':'Reproducir la lección',onclick:tocar},svg(IC.play)),tp);
   S.e=S.d*.5;subt();iconos();var listo=function(){if(S.vivo&&!S.on)pinta()};requestAnimationFrame(listo);if(document.fonts)document.fonts.ready.then(function(){if(!S.emp)S.e=S.d*.5;listo()});
   return{caja:el('div',{class:'stack',style:'gap:10px'},caja,nota),iconos:iconos,parar:function(){S.vivo=false;pausar();document.removeEventListener('visibilitychange',oc);rs.disconnect()},tocarDesdeCero:function(){S.e=0;tocar()},estado:S};
 }
