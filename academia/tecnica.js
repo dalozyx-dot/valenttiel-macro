@@ -5,7 +5,7 @@ var TECNICA=(function(){
 var M=MOTOR.h,cl=M.cl,sg=M.sg,eo=M.eo,eio=M.eio,rebote=M.rebote,mez=M.mez,rgba=M.rgba,rr=M.rr,gr=M.gr,tx=M.tx,PI=Math.PI;
 var INK='#F1F6F3',MUT='#94A69E',UP='#5FD0A0',DN='#F08A7B',AM='#EBB24A',VI='#B59CF0',AQ='#5CC6D6',F='Geist, system-ui, sans-serif';
 var CAT={grafico:['Leer el gráfico','#7FB4F0','#5CC6D6'],niveles:['Niveles','#5FD0A0','#5CC6D6'],indicadores:['Indicadores','#B59CF0','#7FB4F0'],riesgo:['Riesgo','#EBB24A','#F08A7B'],setups:['Setups de entrada','#F2A65A','#5FD0A0'],metodo:['Método Valenttiel','#C9A649','#7FB4F0'],entradas:['Entradas del método','#C9A649','#26A69A']};
-var VW=1000,MINI=false;
+var VW=1000,MINI=false,MINIP=false;
 
 /* ---- datos de ejemplo ---- */
 function azar(s){s=(s>>>0)||1;return function(){s=s+0x6D2B79F5|0;var t=Math.imul(s^s>>>15,1|s);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
@@ -28,6 +28,28 @@ function serie(pts,sem,ruido,mecha){
     if(t==='min'){l=A[0]===i?A[1]:B[1];c=Math.max(c,l+.3+r()*mecha*.4);o=Math.max(o,l+.12)}
     else if(t==='max'){h=A[0]===i?A[1]:B[1];c=Math.min(c,h-.3-r()*mecha*.4);o=Math.min(o,h-.12)}
     h=Math.max(h,o,c);l=Math.min(l,o,c);cs.push({o:o,h:h,l:l,c:c});
+  }
+  return cs;
+}
+/* Velas limpias para enseñar patrones: cada tramo va en una sola dirección (con alguna vela de pausa),
+   los cuerpos varían con naturalidad y cada punto clave es el extremo exacto de su vela. */
+function serieLimpia(pts,sem){
+  var r=azar(sem||9),n=pts[pts.length-1][0]+1,C=[],X={},prev=pts[0][1];C[0]=prev;
+  pts.forEach(function(q,k){if(k&&k<pts.length-1){var a=pts[k-1][1],b=pts[k+1][1];X[q[0]]=q[1]>a&&q[1]>b?'max':q[1]<a&&q[1]<b?'min':''}});
+  for(var k=0;k<pts.length-1;k++){
+    var a=pts[k],b=pts[k+1],m=b[0]-a[0];if(m<=0)continue;var ini=C[a[0]],d=b[1]-ini,w=[],s=0,j;
+    for(j=0;j<m;j++){var x=.55+r()*.9;if(m>=3)x*=j<m*.6?1.15:.8;w.push(x);s+=x}
+    var pausa=m>=5&&r()<.75?Math.floor(m*(.4+r()*.3)):-1;if(pausa>=0){w[pausa]=-.3*s/m;s=0;for(j=0;j<m;j++)s+=w[j]}
+    for(j=0;j<m;j++)w[j]/=s;
+    var acc=ini,avg=Math.abs(d)/m;for(j=1;j<=m;j++){acc+=w[j-1]*d;C[a[0]+j]=acc}
+    var ex=X[b[0]];C[b[0]]=b[1]-(ex==='max'?1:ex==='min'?-1:0)*.3*avg;if(!ex)C[b[0]]=b[1];
+  }
+  var cs=[];for(var i=0;i<n;i++){
+    var o=i?C[i-1]:C[0]-(C[1]-C[0])*.4,c=C[i],body=Math.abs(c-o),h=Math.max(o,c)+.06+body*r()*.22,l=Math.min(o,c)-.06-body*r()*.22;
+    var seg=0;while(seg<pts.length-2&&i>pts[seg+1][0])seg++;var A=pts[seg],B=pts[seg+1],lo=Math.min(A[1],B[1]),hi=Math.max(A[1],B[1]);
+    if(i>0&&i===A[0]){var P=pts[Math.max(0,seg-1)];lo=Math.min(lo,P[1]);hi=Math.max(hi,P[1])}
+    h=Math.min(h,hi);l=Math.max(l,lo);if(X[i]==='max')h=B[0]===i?B[1]:A[1];if(X[i]==='min')l=B[0]===i?B[1]:A[1];
+    cs.push({o:o,h:Math.max(h,o,c),l:Math.min(l,o,c),c:c});
   }
   return cs;
 }
@@ -86,7 +108,7 @@ function suave(c,P){
 function linea(c,G,cs,hasta,col,g){var P=[];for(var i=0;i<Math.min(G.n,Math.ceil(hasta));i++)P.push([G.x(i),G.y(cs[i].c)]);c.beginPath();suave(c,P);c.strokeStyle=col;c.lineWidth=g||2.4;c.lineJoin=c.lineCap='round';c.stroke()}
 function curva(c,G,vals,desde,hasta,col,g,yf){yf=yf||G.y;var P=[];for(var i=Math.max(0,desde);i<Math.min(vals.length,hasta);i++){if(vals[i]==null)continue;P.push([G.x(i),yf(vals[i])])}c.beginPath();suave(c,P);c.strokeStyle=col;c.lineWidth=g||2.6;c.lineJoin=c.lineCap='round';c.stroke()}
 function pastilla(c,s,x,y,col,z,al,a){
-  if(MINI||a<=0||!s)return;c.save();c.globalAlpha*=cl(a);c.font='600 '+z+'px '+F;var w=c.measureText(s).width+z*1.3,h=z*1.8,x0=al==='left'?x:al==='right'?x-w:x-w/2;x0=Math.max(4,Math.min(VW-w-4,x0));
+  if((MINI&&!MINIP)||a<=0||!s)return;c.save();c.globalAlpha*=cl(a);c.font='600 '+z+'px '+F;var w=c.measureText(s).width+z*1.3,h=z*1.8,x0=al==='left'?x:al==='right'?x-w:x-w/2;x0=Math.max(4,Math.min(VW-w-4,x0));
   rr(c,x0,y-h/2,w,h,h/2);c.fillStyle='rgba(7,11,10,.86)';c.fill();c.fillStyle=rgba(col,.2);c.fill();c.strokeStyle=col;c.lineWidth=1.4;c.stroke();
   c.textAlign='center';c.textBaseline='middle';c.fillStyle=INK;c.fillText(s,x0+w/2,y+z*.06);c.textBaseline='alphabetic';c.restore();
 }
@@ -392,8 +414,8 @@ function preparar(l){
   if(l._st)return l._st;var st=l.setup(),cs=st.cs,i;st.hit=cs.length-1;st.corto=st.o<st.e;for(i=st.gat+1;i<cs.length;i++)if(st.corto?cs[i].l<=st.o:cs[i].h>=st.o){st.hit=i;break}
   st.no=st.no();l._st=st;return st;
 }
-function zonaDib(S,G,z,txt,a){if(!z||a<=0)return;nivel(S.c,G,z[0],z[3]||UP,a,{x0:z[2],zona:z[1],dash:false,g:0,al:0,za:.17});pastilla(S.c,txt,z[2]!=null?G.x(z[2])+4:G.b.x+6,G.y(z[0]-z[1])+S.z*1.6,UP,S.z*.85,'left',sg(a,.4,1))}
-function gS(S,st,h,k){var G=graf(S,st.cs,h,{ext:[st.s,st.o],antes:function(G){zonaDib(S,G,st.zona,st.zonaTxt,k===0?0:1)}});if(st.extra)st.extra(S,G,h,k);return G}
+function zonaDib(S,G,z,txt,a){if(!z||a<=0)return;nivel(S.c,G,z[0],z[3]||UP,a,{x0:z[2],zona:z[1],dash:false,g:0,al:0,za:.17});pastilla(S.c,txt,z[2]!=null?G.x(z[2])+4:G.b.x+6,z[2]!=null?G.y(z[0]+z[1])-S.z*1.5:G.y(z[0]-z[1])+S.z*1.6,UP,S.z*.85,'left',sg(a,.4,1))}
+function gS(S,st,h,k){var G=graf(S,st.cs,h,{ext:[st.s,st.o],antes:function(G){zonaDib(S,G,st.zona,k<=2?st.zonaTxt:'',k===0?0:1)}});if(st.extra)st.extra(S,G,h,k);return G}
 function lineasPlan(S,G,st,a,b,cc,izq){
   var x=st.gat,R=Math.round((st.o-st.e)/(st.e-st.s)*10)/10;
   [[st.e,INK,'Entrada '+f1(st.e),a],[st.s,DN,'Stop '+f1(st.s),b],[st.o,UP,'Objetivo '+f1(st.o)+' ('+String(R).replace('.',',')+'R)',cc]].forEach(function(q,j){nivel(S.c,G,q[0],q[1],q[3],{x0:x,g:2.4,dash:false,txt:q[2],z:S.z*.85,abajo:st.corto?j!==1:j===1,izq:izq})});
@@ -425,10 +447,10 @@ L.push(
  q:[['¿Qué tres cosas necesita este setup?',['Tendencia, zona y gatillo','Una noticia, el RSI y suerte','Solo una vela verde'],0,'Si falta una, no hay setup.'],
   ['¿Dónde va el stop?',['Debajo de la vela gatillo y de la zona','Arriba de la entrada','En un número redondo cualquiera'],0,'Ahí la idea deja de tener sentido.'],
   ['El precio cierra con fuerza debajo de la zona. ¿Qué hacés?',['Compro igual, ya va a subir','Nada: no hay setup y espero','Compro el doble'],1,'La zona no aguantó: la idea murió.']],
- setup:function(){var P=[[0,100],[6,108],[10,104],[17,113],[21,109],[27,116.5],[32,113.2],[45,121.5]],cs=serie(P,131,.5,.7);fijar(cs,32,{o:Math.min(cs[31].c,113.7),h:114.6,l:112.4,c:114.4});
+ setup:function(){var P=[[0,100],[6,108],[10,104],[17,113],[21,109],[27,116.5],[32,113.2],[45,121.5]],cs=serieLimpia(P,131,.5,.7);fijar(cs,32,{o:Math.min(cs[31].c,113.7),h:114.6,l:112.4,c:114.4});
   return{cs:cs,ctx:27,gat:32,zona:[113,.6],zonaTxt:'Viejo techo, nuevo piso',ctxTxt:'Máximos y mínimos más altos',gatTxt:'Martillo en la zona',e:114.8,s:111.9,o:120.6,
    extra:function(S,G,h,k){if(k===0){var H=[[6,108,'',true,UP],[17,113,'',true,UP],[27,116.5,'',true,UP]],B=[[10,104,'',false,AQ],[21,109,'',false,AQ]];escalon(S,G,h,H,UP);escalon(S,G,h,B,AQ);marcas(S,G,h,H.concat(B))}},
-   no:function(){var c2=serie([[0,100],[6,108],[10,104],[17,113],[21,109],[27,116.5],[34,109.5],[41,107.5]],133,.5,.7);return{cs:c2,i:hastaPrecio(c2,99,112.2,false,28),txt:'Cerró debajo de la zona'}}}}},
+   no:function(){var c2=serieLimpia([[0,100],[6,108],[10,104],[17,113],[21,109],[27,116.5],[34,109.5],[41,107.5]],133,.5,.7);return{cs:c2,i:hastaPrecio(c2,99,112.2,false,28),txt:'Cerró debajo de la zona'}}}}},
 {id:'retesteo',tec:1,cat:'setups',n:'Setup: ruptura y retesteo',corto:'Retesteo',sub:'Entrar cuando el nivel ya cambió de rol',mini:4,
  tit:['El contexto: un rango','Rompe y cierra afuera','El gatillo: rechazo en el retesteo','El plan: entrada, stop y objetivo','Así se ve cuando sale','Cuándo no hay setup'],
  t:['Este setup aprovecha un nivel roto. Primero, un rango claro: un techo que frenó al precio varias veces.',
@@ -444,10 +466,10 @@ L.push(
  q:[['¿Cuándo entrás en este setup?',['En la vela que rompe','Cuando vuelve al nivel y aparece un rechazo','Antes de que rompa'],1,'Esperás que el nivel cambie de rol.'],
   ['¿Dónde va el stop?',['Debajo del nivel roto','Arriba del último máximo','No hace falta'],0,'Si vuelve abajo del nivel, la idea murió.'],
   ['Rompe y al rato cierra adentro del rango. Eso es…',['Un retesteo perfecto','Una posible trampa: se descarta','Señal de comprar más'],1,'El nivel no cambió de rol.']],
- setup:function(){var cs=serie([[0,104],[5,110],[10,101],[16,110],[21,102],[27,110],[31,105],[34,116],[38,110.4],[50,124]],141,.5,.7);fijar(cs,38,{o:Math.min(cs[37].c,111),h:112.1,l:109.8,c:111.9});
+ setup:function(){var cs=serieLimpia([[0,104],[5,110],[10,101],[16,110],[21,102],[27,110],[31,105],[34,116],[38,110.4],[50,124]],141,.5,.7);fijar(cs,38,{o:Math.min(cs[37].c,111),h:112.1,l:109.8,c:111.9});
   return{cs:cs,ctx:31,gat:38,zona:[110,.5],zonaTxt:'Techo roto',ctxTxt:'Un techo que frenó tres veces',gatTxt:'Rechazo en el nivel',e:112.4,s:109.3,o:118.6,
    extra:function(S,G,h,k){if(k===0){piso(S,G,110,'Techo',DN,sg(S.p,.05,.25));[5,16,27].forEach(function(i){pop(S.c,G.x(i),G.y(110),S.z*1.1,DN,sg(h,i+.5,i+2.5))})}if(k===1){var b=hastaPrecio(G.cs,h,110.6,true,31);if(b>0)pastilla(S.c,'Cerró afuera',G.x(b),G.y(G.cs[b].h)-S.z*1.8,UP,S.z*.85,'center',sg(h,b+.6,b+1.6))}},
-   no:function(){var c2=serie([[0,104],[5,110],[10,101],[16,110],[21,102],[27,110],[31,105],[34,113],[38,106],[44,103]],143,.5,.7);return{cs:c2,i:hastaPrecio(c2,99,109.2,false,34),txt:'Volvió adentro del rango'}}}}},
+   no:function(){var c2=serieLimpia([[0,104],[5,110],[10,101],[16,110],[21,102],[27,110],[31,105],[34,113],[38,106],[44,103]],143,.5,.7);return{cs:c2,i:hastaPrecio(c2,99,109.2,false,34),txt:'Volvió adentro del rango'}}}}},
 {id:'barrida',tec:1,cat:'setups',n:'Setup: falsa ruptura',corto:'Falsa ruptura',sub:'Usar la trampa a tu favor',mini:4,
  tit:['El contexto: un rango claro','La barrida: rompe con la mecha','El gatillo: cierra adentro','El plan: entrada, stop y objetivo','Así se ve cuando sale','Cuándo no hay setup'],
  t:['Este setup usa las trampas a tu favor. Necesitás un rango claro, con un piso respetado varias veces.',
@@ -463,10 +485,10 @@ L.push(
  q:[['¿Cuál es la señal de este setup?',['Que la vela cierre debajo del piso','Que la mecha perfore el piso y la vela cierre adentro','Que el RSI llegue a 50'],1,'La ruptura falló: es una trampa.'],
   ['¿Dónde va el stop?',['Debajo de la mecha','En el medio del rango','Arriba del techo'],0,'Si el precio vuelve a perder la mecha, la idea murió.'],
   ['La vela cierra con fuerza debajo del piso. Es…',['Una falsa ruptura','Una ruptura real: no se compra','Un doble piso'],1,'El cierre quedó afuera.']],
- setup:function(){var cs=serie([[0,106],[5,100],[10,109],[16,100.2],[21,109.5],[27,100.4],[31,105],[34,101],[46,110.4]],151,.5,.7);var o=cs[34].c;fijar(cs,35,{o:o,h:Math.max(o,101.9)+.2,l:98.3,c:101.9});
+ setup:function(){var cs=serieLimpia([[0,106],[5,100],[10,109],[16,100.2],[21,109.5],[27,100.4],[31,105],[34,101],[46,110.4]],151,.5,.7);var o=cs[34].c;fijar(cs,35,{o:o,h:Math.max(o,101.9)+.2,l:98.3,c:101.9});
   return{cs:cs,ctx:27,gat:35,zona:[100,.5],zonaTxt:'Piso del rango',ctxTxt:'Un piso respetado tres veces',gatTxt:'Mecha abajo, cierre adentro',e:101.9,s:97.8,o:110.1,
    extra:function(S,G,h,k){if(k<2)piso(S,G,110,'Techo',DN,1)},
-   no:function(){var c2=serie([[0,106],[5,100],[10,109],[16,100.2],[21,109.5],[27,100.4],[31,105],[34,101],[37,96.5],[44,94]],153,.5,.7);return{cs:c2,i:hastaPrecio(c2,99,99.3,false,33),txt:'Cerró afuera: ruptura real'}}}}},
+   no:function(){var c2=serieLimpia([[0,106],[5,100],[10,109],[16,100.2],[21,109.5],[27,100.4],[31,105],[34,101],[37,96.5],[44,94]],153,.5,.7);return{cs:c2,i:hastaPrecio(c2,99,99.3,false,33),txt:'Cerró afuera: ruptura real'}}}}},
 {id:'rebote-media',tec:1,cat:'setups',n:'Setup: rebote en la media',corto:'Rebote en la media',sub:'La media como piso que se mueve',mini:4,
  tit:['El contexto: media que sube','El retroceso a la media','El gatillo: rebota con fuerza','El plan: entrada, stop y objetivo','Así se ve cuando sale','Cuándo no hay setup'],
  t:['Un setup simple para tendencias: el precio arriba de la media de veinte, y la media apuntando para arriba.',
@@ -482,26 +504,26 @@ L.push(
  q:[['¿Qué tiene que hacer la media para usar este setup?',['Estar plana','Apuntar a favor de la operación','Cruzarse con el precio seguido'],1,'Sin pendiente no hay tendencia.'],
   ['¿Cuál es el gatillo?',['Que el precio toque la media','Una vela que rebota y cierra arriba de la media','Que pase una hora'],1,'Tocar no alcanza: tiene que rebotar.'],
   ['La media está plana y el precio la cruza todo el tiempo. ¿Qué hacés?',['Uso el setup igual','No lo uso: no hay tendencia','Pongo el stop más cerca'],1,'Es un rango: las medias engañan.']],
- setup:function(){var cs=serie([[0,100],[8,107],[13,102],[22,112],[29,108],[42,120]],161,.6,.8),m=media(cs,20),mv=m[29];fijar(cs,29,{o:mv+.5,h:mv+1.9,l:mv-.3,c:mv+1.7});var m2=media(cs,20),v=cs[29],e=v.h+.2,s=v.l-.4;
+ setup:function(){var cs=serieLimpia([[0,100],[8,107],[13,102],[22,112],[29,108],[42,120]],161,.6,.8),m=media(cs,20),mv=m[29];fijar(cs,29,{o:mv+.5,h:mv+1.9,l:mv-.3,c:mv+1.7});var m2=media(cs,20),v=cs[29],e=v.h+.2,s=v.l-.4;
   return{cs:cs,ctx:22,gat:29,zona:null,ctxTxt:'Precio arriba de una media que sube',gatTxt:'Rebota en la media',e:e,s:s,o:e+2*(e-s),
    extra:function(S,G,h,k){curva(S.c,G,m2,0,h,S.A,3);pastilla(S.c,'Media de 20',G.x(24),G.y(m2[24])+S.z*2.2,S.A,S.z*.8,'center',k===0?sg(S.p,.4,.5):k===1?1:0)},
-   no:function(){var c2=serie([[0,105],[4,101],[8,107],[12,102],[16,108],[20,101],[24,107],[28,102],[32,108],[36,101],[40,106],[44,103]],163,.7,.9),m3=media(c2,20);return{cs:c2,zona:null,i:-1,txt:'',extra:function(S,G,h){curva(S.c,G,m3,0,h,S.A,3);pastilla(S.c,'Media plana: sin tendencia',G.b.x+G.b.w/2,G.y(m3[c2.length-1])+S.z*3,AM,S.z*.92,'center',sg(S.p,.6,.7))}}}}}}
+   no:function(){var c2=serieLimpia([[0,105],[4,101],[8,107],[12,102],[16,108],[20,101],[24,107],[28,102],[32,108],[36,101],[40,106],[44,103]],163,.7,.9),m3=media(c2,20);return{cs:c2,zona:null,i:-1,txt:'',extra:function(S,G,h){curva(S.c,G,m3,0,h,S.A,3);pastilla(S.c,'Media plana: sin tendencia',G.b.x+G.b.w/2,G.y(m3[c2.length-1])+S.z*3,AM,S.z*.92,'center',sg(S.p,.6,.7))}}}}}}
 );
 /* Datos de setups que sirven para comprar o, dados vuelta, para vender. */
-function pullbackData(cor){var m=110,f=function(x){return cor?2*m-x:x},P=[[0,100],[6,108],[10,104],[17,113],[21,109],[27,116.5],[32,113.2],[45,121.5]],cs=serie(P,131,.5,.7);fijar(cs,32,{o:Math.min(cs[31].c,113.7),h:114.6,l:112.4,c:114.4});if(cor)cs=voltear(cs,m);
+function pullbackData(cor){var m=110,f=function(x){return cor?2*m-x:x},P=[[0,100],[6,108],[10,104],[17,113],[21,109],[27,116.5],[32,113.2],[45,121.5]],cs=serieLimpia(P,131,.5,.7);fijar(cs,32,{o:Math.min(cs[31].c,113.7),h:114.6,l:112.4,c:114.4});if(cor)cs=voltear(cs,m);
   return{cs:cs,ctx:27,gat:32,zona:[f(113),.6],zonaTxt:cor?'Viejo piso, nuevo techo':'Viejo techo, nuevo piso',ctxTxt:cor?'Máximos y mínimos más bajos':'Máximos y mínimos más altos',gatTxt:cor?'Estrella fugaz en la zona':'Martillo en la zona',e:f(114.8),s:f(111.9),o:f(120.6),
    extra:function(S,G,h,k){if(k===0){var H=[[6,f(108),'',true,cor?DN:UP],[17,f(113),'',true,cor?DN:UP],[27,f(116.5),'',true,cor?DN:UP]],B=[[10,f(104),'',false,AQ],[21,f(109),'',false,AQ]];escalon(S,G,h,H,cor?DN:UP);escalon(S,G,h,B,AQ);marcas(S,G,h,H.concat(B))}},
-   no:function(){var c2=serie([[0,100],[6,108],[10,104],[17,113],[21,109],[27,116.5],[34,109.5],[41,107.5]],133,.5,.7);if(cor)c2=voltear(c2,m);return{cs:c2,i:hastaPrecio(c2,99,f(112.2),cor,28),txt:cor?'Cerró arriba de la zona':'Cerró debajo de la zona'}}}}
-function dobleData(cor){var m=106,f=function(x){return cor?2*m-x:x},cs=serie([[0,112],[8,100],[14,106],[22,100.2],[28,108],[31,106.3],[44,114.5]],171,.5,.7);fijar(cs,31,{o:Math.min(cs[30].c,106.9),h:107.6,l:105.7,c:107.4});if(cor)cs=voltear(cs,m);
+   no:function(){var c2=serieLimpia([[0,100],[6,108],[10,104],[17,113],[21,109],[27,116.5],[34,109.5],[41,107.5]],133,.5,.7);if(cor)c2=voltear(c2,m);return{cs:c2,i:hastaPrecio(c2,99,f(112.2),cor,28),txt:cor?'Cerró arriba de la zona':'Cerró debajo de la zona'}}}}
+function dobleData(cor){var m=106,f=function(x){return cor?2*m-x:x},cs=serieLimpia([[0,112],[8,100],[14,106],[22,100.2],[28,108],[31,106.3],[44,114.5]],171,.5,.7);fijar(cs,31,{o:Math.min(cs[30].c,106.9),h:107.6,l:105.7,c:107.4});if(cor)cs=voltear(cs,m);
   return{cs:cs,ctx:24,gat:31,zona:[m,.45],zonaTxt:'Cuello',ctxTxt:cor?'Dos intentos de subir que fallan':'Dos intentos de bajar que fallan',gatTxt:'Rechazo en el cuello',e:f(107.8),s:f(105.2),o:f(113),
    extra:function(S,G,h,k){if(k===0){marcas(S,G,h,[[8,f(100),'1.º',cor,cor?DN:UP],[22,f(100.2),'2.º',cor,cor?DN:UP]]);nivel(S.c,G,f(100),cor?DN:UP,sg(h,22,25),{x0:4,x1:26,g:1.6})}
     if(k===1){var b=hastaPrecio(G.cs,h,f(106.6),!cor,23);if(b>0)pastilla(S.c,'Rompió el cuello',G.x(b),cor?G.y(G.cs[b].l)+S.z*1.8:G.y(G.cs[b].h)-S.z*1.8,cor?DN:UP,S.z*.85,'center',sg(h,b+.6,b+1.6))}},
-   no:function(){var c2=serie([[0,112],[8,100],[14,106],[22,100.2],[26,105.6],[33,98]],173,.5,.7);if(cor)c2=voltear(c2,m);return{cs:c2,zona:[m,.45],i:hastaPrecio(c2,99,f(99.5),cor,26),txt:cor?'No rompió el cuello y superó el techo':'No rompió el cuello y perdió el piso'}}}}
-function banderaData(){var cs=serie([[0,100],[4,101],[12,112],[15,110.6],[17,111.4],[20,109.8],[22,110.3],[23,109.4],[36,121]],181,.35,.45),o=cs[23].c;fijar(cs,24,{o:o,h:112.3,l:Math.min(o,109.6)-.1,c:112});var top=function(i){return 112.2-.17*(i-12)};
+   no:function(){var c2=serieLimpia([[0,112],[8,100],[14,106],[22,100.2],[26,105.6],[33,98]],173,.5,.7);if(cor)c2=voltear(c2,m);return{cs:c2,zona:[m,.45],i:hastaPrecio(c2,99,f(99.5),cor,26),txt:cor?'No rompió el cuello y superó el techo':'No rompió el cuello y perdió el piso'}}}}
+function banderaData(){var cs=serieLimpia([[0,100],[4,101],[12,112],[15,110.6],[17,111.4],[20,109.8],[22,110.3],[23,109.4],[36,121]],181,.35,.45),o=cs[23].c;fijar(cs,24,{o:o,h:112.3,l:Math.min(o,109.6)-.1,c:112});var top=function(i){return 112.2-.17*(i-12)};
   return{cs:cs,ctx:12,gat:24,zona:null,ctxTxt:'Un impulso fuerte: el mástil',gatTxt:'Rompe la bandera con cierre',e:112.5,s:108.9,o:119.7,
    extra:function(S,G,h,k){var c=S.c;if(k===0){var a=sg(h,10,13);flechaL(c,G.x(2),G.y(100.5),G.x(12),G.y(112),S.A,3,a);pastilla(c,'Mástil',G.x(7),G.y(106)-S.z*1.4,S.A,S.z*.85,'right',a)}
     if(k>=1&&k<4){var a2=k===1?sg(h,16,20):1;c.save();c.globalAlpha*=a2;c.strokeStyle=AM;c.lineWidth=2;c.setLineDash([7,6]);c.beginPath();c.moveTo(G.x(12),G.y(top(12)));c.lineTo(G.x(25),G.y(top(25)));c.moveTo(G.x(14),G.y(top(14)-2.5));c.lineTo(G.x(25),G.y(top(25)-2.5));c.stroke();c.restore();pastilla(c,'Bandera',G.x(18),G.y(top(18))-S.z*1.6,AM,S.z*.85,'center',a2)}},
-   no:function(){var c2=serie([[0,100],[4,101],[12,112],[15,110.6],[17,111.4],[20,109.8],[23,109.4],[27,105.5],[34,104]],183,.35,.45);return{cs:c2,zona:null,i:hastaPrecio(c2,99,107.8,false,23),txt:'Se cayó: ya no es bandera'}}}}
+   no:function(){var c2=serieLimpia([[0,100],[4,101],[12,112],[15,110.6],[17,111.4],[20,109.8],[23,109.4],[27,105.5],[34,104]],183,.35,.45);return{cs:c2,zona:null,i:hastaPrecio(c2,99,107.8,false,23),txt:'Se cayó: ya no es bandera'}}}}
 L.forEach(function(l){if(l.id==='pullback')l.setup=function(){return pullbackData(false)}});
 L.push(
 {id:'pullback-venta',tec:1,cat:'setups',n:'Setup: venta en pullback',corto:'Venta en pullback',sub:'Vender el rebote, no el pánico',mini:4,
@@ -573,7 +595,7 @@ L.forEach(function(l){if(l.cat==='setups')l.esc=SET});
 /* ---- Método Valenttiel (SMC + LIT): lecciones anotadas sobre un mismo gráfico ----
    Cada escena dice qué velas mostrar y qué marcas dibujar. Las marcas aparecen en el momento (en) o cuando nace una vela (vi). */
 var GOLD='#C9A649';
-function velasM(vm){var cs=serie(vm.pts,vm.sem,vm.ruido==null?.45:vm.ruido,vm.mecha==null?.6:vm.mecha);Object.keys(vm.mods||{}).map(Number).sort(function(a,b){return a-b}).forEach(function(i){fijar(cs,i,vm.mods[i])});return cs}
+function velasM(vm){var cs=serieLimpia(vm.pts,vm.sem,vm.ruido==null?.45:vm.ruido,vm.mecha==null?.6:vm.mecha);Object.keys(vm.mods||{}).map(Number).sort(function(a,b){return a-b}).forEach(function(i){fijar(cs,i,vm.mods[i])});return cs}
 function marcaM(S,G,cs,h,m){
   if(m.ifn&&m.i==null)m.i=m.ifn(cs);var c=S.c,a=m.vi!=null?sg(h,m.vi+.6,m.vi+1.6):sg(S.p,m.en==null?.15:m.en,(m.en==null?.15:m.en)+.15),col=m.c||GOLD,z=S.z;if(m.fin)a*=1-sg(S.p,m.fin,m.fin+.08);if(a<=0)return;
   var X0=function(i){return i==null?G.b.x:G.x(i)-G.paso/2},X1=function(i){return i==null?G.b.x+G.b.w:G.x(i)+G.paso/2};
@@ -593,7 +615,7 @@ function marcaM(S,G,cs,h,m){
     (m.niv||[0,.5,1]).forEach(function(f){var y=G.y(lv(f));c.save();c.globalAlpha*=a*.85;c.strokeStyle=f===.5?GOLD:'rgba(178,181,190,.6)';c.lineWidth=1;c.setLineDash(f===.5?[6,5]:[]);c.beginPath();c.moveTo(xa,y);c.lineTo(G.b.x+G.b.w,y);c.stroke();c.restore();
       c.save();c.globalAlpha*=a;tx(c,String(f).replace('.',','),m.i0===m.i1?xa+G.paso*.55:xa-4,y+z*.3,z*.78,TVTX,m.i0===m.i1?'left':'right',500);c.restore()});
     c.save();c.globalAlpha*=a*.5;c.strokeStyle=TVTX;c.setLineDash([3,4]);c.beginPath();c.moveTo(G.x(m.i0),G.y(lo));c.lineTo(G.x(m.i1),G.y(hi));c.stroke();c.restore()}
-  else if(m.t==='lista')m.items.forEach(function(s,k){var b3=sg(S.p,(m.en||.1)+k*.14,(m.en||.1)+k*.14+.12);pastilla(c,s,G.b.x+G.b.w-6,G.b.y+z*(3.3+k*2.3),m.cs?m.cs[k]:col,z*.88,'right',b3)});
+  else if(m.t==='lista')m.items.forEach(function(s,k){var b3=sg(S.p,(m.en||.1)+k*.14,(m.en||.1)+k*.14+.12);pastilla(c,s,m.izq?G.b.x+6:G.b.x+G.b.w-6,G.b.y+z*(3.3+k*2.3),m.cs?m.cs[k]:col,z*.88,m.izq?'left':'right',b3)});
 }
 function escM(i){return function(S){var l=S.l;if(!l._cs)l._cs=velasM(l.vm);var cs=l._cs,sc=l.sc[i],h=mez(sc.h[0]+1,sc.h[1]+1,sg(S.p,.04,.75)),G=graf(S,cs,h,{ext:l.vm.ext,antes:function(G){(sc.an||[]).forEach(function(m){if(m.t==='ses'||m.t==='zona'||m.t==='fib')marcaM(S,G,cs,h,m)})}});
   (sc.an||[]).forEach(function(m){if(m.t!=='ses'&&m.t!=='zona'&&m.t!=='fib')marcaM(S,G,cs,h,m)})}}
@@ -759,12 +781,12 @@ METODO.push({id:'modelo',tec:1,cat:'metodo',n:'La secuencia de la liquidez',cort
  q:[['¿Cuáles son las cinco fases en orden?',['Contexto, zona, inducement, sweep + CHoCH + Imbalance, ejecución','Entrada, stop, objetivo, parcial y salida','Sweep, entrada, contexto, zona y stop'],0,'Si falta una, no hay setup.'],
   ['¿Dónde va el stop?',['Detrás del extremo del sweep','Dentro de la zona barrida','Lo más cerca posible de la entrada'],0,'Nunca dentro de la zona barrida.'],
   ['Ves un CHoCH en premium y la narrativa es alcista. ¿Comprás?',['Sí','No: la señal está en la zona equivocada','Compro el doble'],1,'El contexto manda sobre la confirmación.']],
- setup:function(){var cs=serie([[0,104],[5,110],[10,98],[15,110],[20,98.1],[23,108.6],[29,103.6],[31,107.5],[44,97.4]],271,.45,.55);
-  [[24,{o:108.6,h:110.9,l:108.3,c:109.2}],[25,{o:109.2,h:109.4,l:108.6,c:108.8}],[26,{o:108.8,h:108.9,l:105,c:105.3}],[27,{o:105.3,h:107.2,l:104.8,c:105}]].forEach(function(q){fijar(cs,q[0],q[1])});
-  return{cs:cs,ctx:23,gat:31,zona:[107.9,.7,25,GOLD],zonaTxt:'Imbalance',ctxTxt:'Liquidez arriba y abajo: ¿a cuál va?',gatTxt:'Mitiga el borde del Imbalance',e:107.2,s:111.2,o:98.3,
-   extra:function(S,G,h,k){if(k===0){nivel(S.c,G,110,GOLD,sg(S.p,.1,.3),{x0:3,txt:'Equal highs · inducement',z:S.z*.85});nivel(S.c,G,98,LQ,sg(S.p,.3,.5),{x0:8,txt:'Equal lows · objetivo',z:S.z*.85,abajo:true})}
-    if(k===1){nivel(S.c,G,104,TVTX,sg(S.p,.05,.2),{txt:'50 % · arriba es premium',z:S.z*.8});anillo(S.c,G.x(24),G.y(110.6),S.z*1.3,GOLD,sg(h,24.6,25.6));pastilla(S.c,'Sweep',G.x(24),G.y(110.9)-S.z*2.2,GOLD,S.z*.85,'center',sg(h,24.6,25.6))}},
-   no:function(){var c2=serie([[0,104],[5,110],[10,98],[15,110],[20,98.1],[23,108.6],[27,112.6],[32,110.8],[42,115]],273,.45,.55);return{cs:c2,i:hastaPrecio(c2,99,110.5,true,23),txt:'Cerró arriba y se quedó: ruptura real'}}}}});
+ setup:function(){var cs=serieLimpia([[0,103],[6,110],[12,98],[18,110],[24,98.1],[28,108.6],[34,103.6],[36,107.5],[50,97.4]],271,.45,.55);
+  [[29,{o:108.6,h:110.9,l:108.3,c:109.2}],[30,{o:109.2,h:109.4,l:108.6,c:108.8}],[31,{o:108.8,h:108.9,l:105,c:105.3}],[32,{o:105.3,h:107.2,l:104.8,c:105}]].forEach(function(q){fijar(cs,q[0],q[1])});
+  return{cs:cs,ctx:28,gat:36,zona:[107.9,.7,30,GOLD],zonaTxt:'Imbalance',ctxTxt:'Liquidez arriba y abajo: ¿a cuál va?',gatTxt:'Mitiga el borde del Imbalance',e:107.2,s:111.2,o:98.3,
+   extra:function(S,G,h,k){if(k===0){nivel(S.c,G,110,GOLD,sg(S.p,.1,.3),{x0:4,txt:'Equal highs · inducement',z:S.z*.85});nivel(S.c,G,98,LQ,sg(S.p,.3,.5),{x0:10,txt:'Equal lows · objetivo',z:S.z*.85,abajo:true})}
+    if(k===1){nivel(S.c,G,104,TVTX,sg(S.p,.05,.2),{txt:'50 % · arriba es premium',z:S.z*.8});anillo(S.c,G.x(29),G.y(110.6),S.z*1.3,GOLD,sg(h,29.6,30.6));pastilla(S.c,'Sweep',G.x(29),G.y(110.9)-S.z*2.2,GOLD,S.z*.85,'center',sg(h,29.6,30.6))}},
+   no:function(){var c2=serieLimpia([[0,103],[6,110],[12,98],[18,110],[24,98.1],[28,108.6],[32,112.6],[37,110.8],[48,115]],273,.45,.55);return{cs:c2,i:hastaPrecio(c2,99,110.5,true,28),txt:'Cerró arriba y se quedó: ruptura real'}}}}});
 /* Orden pedagógico del Mapa Maestro: liquidez, sweep, estructura, rango, Imbalance, OB, tiempo y, al final, la secuencia. */
 var ORDENM=['liquidez','barrido','estructura','premium-descuento','imbalance','order-block','sesiones','modelo'];
 METODO.sort(function(a,b){return ORDENM.indexOf(a.id)-ORDENM.indexOf(b.id)});
@@ -789,7 +811,7 @@ marcaM=function(S,G,cs,h,m){
   if(m.res){var hi=-1;for(var k=m.i0+1;k<Math.min(cs.length,Math.ceil(h));k++)if(cor?cs[k].l<=m.o:cs[k].h>=m.o){hi=k;break}
     if(hi>0){var b=sg(h,hi+.6,hi+1.4);pastilla(c,'Objetivo ✓ +'+Rs+'R',G.b.x+G.b.w/2,G.b.y-z*2.1,UP,z,'center',b)}}
 };
-var velasM0=velasM;velasM=function(vm){return vm.cs?vm.cs.map(function(v){return{o:v[0],h:v[1]+.22,l:v[2]-.22,c:v[3]}}):velasM0(vm)};
+var velasM0=velasM;velasM=function(vm){if(vm.cs)return vm.cs.map(function(v){return{o:v[0],h:v[1]+.22,l:v[2]-.22,c:v[3]}});var cs=serieLimpia(vm.pts,vm.sem);Object.keys(vm.mods||{}).map(Number).sort(function(a,b){return a-b}).forEach(function(i){var q=vm.mods[i];fijar(cs,i,{o:cs[i-1]?cs[i-1].c:q.o,h:q.h,l:q.l,c:q.c})});return cs};
 function fijo(xs){return(xs||[]).map(function(m){var o={};for(var k in m)o[k]=m[k];o.en=0;delete o.vi;return o})}
 /* Una entrada = 4 escenas: contexto, gatillo, plan y resultado. */
 function entrada(d){
@@ -902,7 +924,7 @@ function setAB(d){
     d.vars.forEach(function(v,j){var foco=k===3||k===j,a=foco?1:.28,x=b.x+w*j+w*.08,bw=Math.min(w*.12,S.z*1.8),e=v.e,s=v.s;c.save();c.globalAlpha*=a;
       var xb=x+bw*2.6,xe=b.x+w*(j+1)-w*.06,ap=k===3?1:k===j?sg(S.p,.35,.55):k>j?1:0;
       if(ap>0){c.save();c.globalAlpha*=ap;c.fillStyle='rgba(178,181,190,.28)';c.fillRect(xb,y(s),xe-xb,y(e)-y(s));c.fillStyle='rgba(120,150,255,.3)';c.fillRect(xb,y(e),xe-xb,y(64)-y(e));c.strokeStyle=INK;c.lineWidth=1.5;c.beginPath();c.moveTo(v.xl===0?x+bw/2:x+bw*1.5+bw/2,y(e));c.lineTo(xe,y(e));c.stroke();c.restore();
-        if(foco&&!MINI){pastilla(c,'Stop',xe-4,(y(s)+y(e))/2,TVTX,S.z*.75,'right',ap);pastilla(c,'Entrada',xb+4,y(e)+S.z*1.4,INK,S.z*.75,'left',ap);pastilla(c,'Objetivo',xe-4,(y(e)+y(64))/2,'#7896FF',S.z*.75,'right',ap)}}
+        if(foco&&(!MINI||MINIP)){pastilla(c,'Stop',xe-4,(y(s)+y(e))/2,TVTX,S.z*.75,'right',ap);pastilla(c,'Entrada',xb+4,y(e)+S.z*1.4,INK,S.z*.75,'left',ap);pastilla(c,'Objetivo',xe-4,(y(e)+y(64))/2,'#7896FF',S.z*.75,'right',ap)}}
       v.velas.forEach(function(q,i){var cx=x+bw/2+i*bw*1.5,col=q[3]>=q[0]?TVUP:TVDN;c.fillStyle=col;c.fillRect(cx-.75,y(q[1]),1.5,y(q[2])-y(q[1]));c.fillRect(cx-bw/2,y(Math.max(q[0],q[3])),bw,Math.max(2,y(Math.min(q[0],q[3]))-y(Math.max(q[0],q[3]))))});
       if(!MINI)tx(c,String(j+1),x+bw,b.y+b.h-S.z*.6,S.z*1.1,foco?GOLD:TVTX,'center',600);c.restore()});
     if(!MINI&&k<3)pastilla(c,d.notas[k],b.x+b.w/2,b.y-S.z*2.1,GOLD,S.z*.9,'center',sg(S.p,.1,.25));
@@ -938,86 +960,86 @@ ENTRADAS.forEach(function(l){l.tec=1;l.cat='entradas';L.push(l)});
 /* Conceptos que faltaban y demos de las teorías propias (la profundidad queda en los niveles privados). */
 var DEMOS=[
 lecM({id:'inducement',n:'Inducement: la carnada',corto:'Inducement',sub:'La liquidez fácil antes de la zona real',nivel:'Grupal',
- vm:{ext:[98.5,113],pts:[[0,108],[4,100.4],[9,108.2],[13,104.6],[16,106.4],[19,103.9],[21,105],[24,101.05],[34,112]],sem:281},
+ vm:{ext:[98.5,113],pts:[[0,108],[3,100.4],[8,108.2],[12,104.6],[14,106.2],[17,104],[18,104.8],[20,101.1],[30,112]],sem:281},
  tit:['La zona real','El inducement','Barre la carnada','Recién ahí, la zona'],
  t:['El institucional es un pescador: va donde hay cardumen. Abajo está la zona real, el order block en descuento.',
   'Justo encima queda un mínimo interno obvio. El minorista compra ahí y pone su stop debajo: esa es la carnada, el inducement.',
   'El precio barre ese mínimo y saca a todos por stop. Esas ventas forzadas son la liquidez que necesita el institucional.',
   'Recién después mitiga la zona real y se expande. Zona protegida por un inducement ya barrido: alta probabilidad.'],
- sc:[{h:[0,9],an:[{t:'zona',p0:100.4,p1:101.3,i0:4,txt:'Zona real',c:NV,en:.4}]},
-  {h:[9,16],an:[{t:'zona',p0:100.4,p1:101.3,i0:4,c:NV,en:0},{t:'niv',p:104.6,x0:13,txt:'IDM · los minoristas compran',c:LQ,vi:13}]},
-  {h:[16,21],an:[{t:'zona',p0:100.4,p1:101.3,i0:4,c:NV,en:0},{t:'niv',p:104.6,x0:13,c:LQ,en:0},{t:'anillo',i:19,p:104,txt:'Barre el IDM',c:LQ,vi:19}]},
-  {h:[21,34],an:[{t:'zona',p0:100.4,p1:101.3,i0:4,c:NV,en:0},{t:'niv',p:104.6,x0:13,c:LQ,en:0},{t:'anillo',i:24,p:101.2,txt:'Mitiga la zona real',c:NV,vi:24}]}],
+ sc:[{h:[0,8],an:[{t:'zona',p0:100.4,p1:101.4,i0:2,txt:'Zona real',c:NV,en:.4}]},
+  {h:[8,14],an:[{t:'zona',p0:100.4,p1:101.4,i0:2,txt:'Zona real',c:NV,en:0},{t:'niv',p:104.6,x0:12,txt:'IDM · los minoristas compran',c:LQ,vi:12}]},
+  {h:[14,18],an:[{t:'zona',p0:100.4,p1:101.4,i0:2,c:NV,en:0},{t:'niv',p:104.6,x0:12,txt:'IDM',c:LQ,en:0},{t:'anillo',i:17,p:104.2,txt:'Barre el IDM',c:LQ,vi:17}]},
+  {h:[18,30],an:[{t:'zona',p0:100.4,p1:101.4,i0:2,txt:'Zona real',c:NV,en:0},{t:'niv',p:104.6,x0:12,txt:'IDM',c:LQ,en:0},{t:'anillo',i:20,p:101.3,txt:'Mitiga la zona real',c:NV,vi:20}]}],
  claves:['Inducement (IDM): la liquidez fácil antes de la zona real.','Zona sin inducement delante = zona débil.','Donde está el miedo del minorista, está la liquidez del institucional.'],
  trampa:'Entrar en la zona antes de que se barra el inducement.',practica:['ruptura','nivel'],
  q:[['¿Qué es el inducement?',['La liquidez fácil antes de la zona real','El objetivo final','Un indicador'],0,'La carnada.'],['Tengo un OB en descuento y arriba un mínimo interno sin tocar. ¿Entro ya?',['Sí','No: espero que barra ese mínimo','Entro el doble'],1,'Si llega sin tomar esa liquidez, puede atravesar la zona.'],['¿Qué zona tiene más probabilidad?',['La protegida por un IDM ya barrido','La que no tiene nada delante','Cualquiera'],0,'Ya se tomó la carnada.']]}),
 lecM({id:'breaker',n:'OB en quiebre: breaker block',corto:'Breaker',sub:'El piso que se vuelve techo',nivel:'Grupal',
- vm:{ext:[96.5,112],pts:[[0,101],[5,104.6],[6,104.2],[11,110],[16,106.2],[19,107.6],[25,100.5],[29,104.7],[38,97.5]],sem:291,mods:{6:{o:105,h:105.3,l:104,c:104.2},7:{o:104.2,h:107.4,l:104.1,c:107.2}}},
+ vm:{ext:[96.5,112],pts:[[0,101],[4,104.8],[5,104],[9,110],[13,106.6],[15,107.8],[20,101],[24,104.5],[32,97.5]],sem:291},
  tit:['Un order block','Lo atraviesa con desplazamiento','Cambia de rol','Vuelve y rechaza'],
  t:['En la subida, la última vela contraria antes del impulso es un order block alcista.',
   'Más tarde, el precio lo atraviesa con desplazamiento y cierra el cuerpo abajo. El bloque se rompió.',
   'Un bloque atravesado cambia de rol: se vuelve breaker block. El piso ahora es techo.',
   'Cuando el precio vuelve desde abajo, el breaker lo rechaza. Ahí se buscan ventas.'],
- sc:[{h:[0,11],an:[{t:'zona',p0:104.2,p1:105,i0:6,txt:'Order block',c:UP,vi:7}]},
-  {h:[11,25],an:[{t:'zona',p0:104.2,p1:105,i0:6,c:UP,en:0},{t:'anillo',ifn:function(cs){for(var i=17;i<cs.length;i++)if(cs[i].c<104)return i;return 22},p:104,txt:'Lo atraviesa',c:DN,en:.6}]},
-  {h:[25,25],an:[{t:'zona',p0:104.2,p1:105,i0:6,txt:'Breaker: ahora es techo',c:DN,en:.15}]},
-  {h:[25,38],an:[{t:'zona',p0:104.2,p1:105,i0:6,txt:'Breaker',c:DN,en:0},{t:'anillo',i:29,p:104.6,txt:'Rechazo',arriba:true,c:DN,vi:29}]}],
+ sc:[{h:[0,9],an:[{t:'anillo',i:5,p:104.4,txt:'Última vela contraria',c:NV,vi:5},{t:'zona',p0:104,p1:104.8,i0:5,txt:'Order block',c:UP,izq:true,vi:7}]},
+  {h:[9,20],an:[{t:'zona',p0:104,p1:104.8,i0:5,txt:'Order block',c:UP,izq:true,en:0},{t:'anillo',ifn:function(cs){for(var i=14;i<cs.length;i++)if(cs[i].c<104)return i;return 17},p:104,txt:'Cierra el cuerpo abajo',c:DN,en:.6}]},
+  {h:[20,20],an:[{t:'zona',p0:104,p1:104.8,i0:5,txt:'Breaker: ahora es techo',c:DN,izq:true,en:.15}]},
+  {h:[20,32],an:[{t:'zona',p0:104,p1:104.8,i0:5,txt:'Breaker',c:DN,izq:true,en:0},{t:'anillo',i:24,p:104.4,txt:'Rechazo: se buscan ventas',arriba:true,c:DN,vi:24}]}],
  claves:['Breaker: un order block atravesado con desplazamiento.','Cambia de rol: el piso se vuelve techo, y al revés.','Se valida con cierre de cuerpo del otro lado.'],
  trampa:'Seguir comprando en un bloque que ya fue atravesado con cuerpo.',practica:['ruptura','setup'],
  q:[['¿Qué es un breaker block?',['Un OB atravesado con desplazamiento que cambia de rol','Un OB nuevo','Una vela doji'],0,'El piso se vuelve techo.'],['¿Qué valida que el bloque se rompió?',['Un cierre de cuerpo del otro lado','Una mecha','El volumen'],0,'Cuerpo, no mecha.'],['Después de romperse un OB alcista, ¿qué se busca en el retesteo?',['Ventas','Compras','Nada'],0,'Ahora es techo.']]}),
 lecM({id:'doble-mitigacion',n:'Doble mitigación',corto:'Doble mitigación',sub:'La zona se activa en dos tiempos',nivel:'Premium',
- vm:{ext:[99,115],pts:[[0,110],[6,102.8],[10,108],[13,104.15],[17,107.5],[21,102.6],[33,114]],sem:301,mods:{13:{o:105.4,h:105.6,l:103.9,c:105.3}}},
+ vm:{ext:[99.5,115],pts:[[0,110],[5,102.3],[10,108.2],[13,103.5],[16,107],[20,102.8],[30,114]],sem:301},
  tit:['La zona','1.er tiempo: toque con mecha','2.º tiempo: mitiga el cuerpo','Sale el movimiento real'],
  t:['Una teoría propia del método. Partimos de una zona marcada con el cuerpo de la vela raíz.',
   'Primer tiempo: el precio toca la zona solo con la mecha. Es un toque falso: crea liquidez.',
   'Segundo tiempo: vuelve y mitiga el cuerpo de la zona. Ahí sale el movimiento real.',
   'Esto es la demo. Cómo filtrar cada tiempo y dónde entrar se enseña en el nivel Premium.'],
- sc:[{h:[0,10],an:[{t:'zona',p0:102.3,p1:104,i0:6,txt:'Zona · cuerpo',c:NV,en:.4}]},
-  {h:[10,16],an:[{t:'zona',p0:102.3,p1:104,i0:6,c:NV,en:0},{t:'anillo',i:13,p:104,txt:'Toque con mecha: falso',c:LQ,vi:13}]},
-  {h:[16,21],an:[{t:'zona',p0:102.3,p1:104,i0:6,c:NV,en:0},{t:'anillo',i:21,p:102.8,txt:'Mitiga el cuerpo',c:NV,vi:21}]},
-  {h:[21,33],an:[{t:'zona',p0:102.3,p1:104,i0:6,c:NV,en:0},{t:'top',txt:'La entrada exacta: nivel Premium',c:GOLD,en:.4}]}],
+ sc:[{h:[0,10],an:[{t:'zona',p0:102.3,p1:103.8,i0:4,txt:'Zona · cuerpo de la vela raíz',c:NV,izq:true,en:.4}]},
+  {h:[10,16],an:[{t:'zona',p0:102.3,p1:103.8,i0:4,txt:'Zona',c:NV,izq:true,en:0},{t:'anillo',i:13,p:103.7,txt:'1.er tiempo: solo la mecha',c:LQ,vi:13}]},
+  {h:[16,20],an:[{t:'zona',p0:102.3,p1:103.8,i0:4,txt:'Zona',c:NV,izq:true,en:0},{t:'marca',i:13,p:103.5,txt:'1',c:LQ,en:0},{t:'anillo',i:20,p:103.1,txt:'2.º tiempo: mitiga el cuerpo',c:NV,vi:20}]},
+  {h:[20,30],an:[{t:'zona',p0:102.3,p1:103.8,i0:4,txt:'Zona',c:NV,izq:true,en:0},{t:'marca',i:13,p:103.5,txt:'1',c:LQ,en:0},{t:'marca',i:20,p:102.8,txt:'2',c:NV,en:0},{t:'top',txt:'La entrada exacta: nivel Premium',c:GOLD,en:.4}]}],
  claves:['Primer toque con mecha: falso, crea liquidez.','Segundo tiempo: mitigación del cuerpo, donde sale el movimiento real.','La lectura completa es Premium.'],
  trampa:'Entrar en el primer toque con mecha, que es justo el que crea la liquidez.',practica:['setup'],
  q:[['En la doble mitigación, el primer toque con mecha es…',['Falso: crea liquidez','La entrada principal','El stop'],0,'Prepara el segundo tiempo.'],['¿Dónde sale el movimiento real?',['En la mitigación del cuerpo','En la mecha','Nunca'],0,'Segundo tiempo.'],['¿Con qué se marca la zona?',['Con el cuerpo de la vela raíz','Con la mecha','Con una línea cualquiera'],0,'La mecha se usa para leer el falso toque.']]}),
 lecM({id:'tres-toques',n:'Teoría de los 3 toques',corto:'3 toques',sub:'Qué toque se opera y cuál no',nivel:'Premium',
- vm:{ext:[99,115],pts:[[0,110],[5,102.9],[9,106.5],[13,102.3],[17,105],[19,103.6],[21,104.4],[24,102.4],[34,114]],sem:311},
- tit:['1.er toque: no se opera','2.º toque: la entrada principal','El 3.er toque','Avisa, entra, solo si'],
+ vm:{ext:[99.5,115],pts:[[0,110],[5,102.6],[9,106.4],[13,102.2],[17,105.4],[19,103.9],[21,104.7],[24,101.95],[33,114]],sem:311},
+ tit:['1.er toque: no se opera','2.º toque: la entrada principal','El 3.er toque','La regla de los toques'],
  t:['Otra teoría propia. El primer toque a la zona genera la primera reacción y deja liquidez. Es el que más engaña: no se opera.',
   'El segundo toque barre esa liquidez y suele dar el movimiento limpio. Es la entrada principal, siempre con una envolvente a favor.',
   'El tercer toque llega después de una acumulación, con sweep. Solo se opera en zonas respaldadas.',
   'Cuándo un toque es válido y cómo se confirma se enseña completo en el nivel Premium.'],
- sc:[{h:[0,9],an:[{t:'zona',p0:101.8,p1:103,i0:5,c:NV,en:.2},{t:'anillo',i:5,p:103,txt:'1 · No se opera',c:LQ,vi:5}]},
-  {h:[9,16],an:[{t:'zona',p0:101.8,p1:103,i0:5,c:NV,en:0},{t:'anillo',i:13,p:102.5,txt:'2 · Entrada principal',c:UP,vi:13}]},
-  {h:[16,26],an:[{t:'zona',p0:101.8,p1:103,i0:5,c:NV,en:0},{t:'anillo',i:24,p:102.5,txt:'3 · Solo en zona respaldada',c:AM,vi:24}]},
-  {h:[26,34],an:[{t:'zona',p0:101.8,p1:103,i0:5,c:NV,en:0},{t:'lista',items:['1.er toque: deja liquidez','2.º toque: la entrada','3.er toque: solo si respalda'],cs:[LQ,UP,AM],en:.1}]}],
+ sc:[{h:[0,9],an:[{t:'zona',p0:101.7,p1:103,i0:4,txt:'Zona',c:NV,izq:true,en:.2},{t:'anillo',i:5,p:102.8,txt:'1.er toque: deja liquidez',c:LQ,vi:5}]},
+  {h:[9,16],an:[{t:'zona',p0:101.7,p1:103,i0:4,txt:'Zona',c:NV,izq:true,en:0},{t:'niv',p:102.6,x0:5,x1:13,c:LQ,en:0},{t:'anillo',i:13,p:102.4,txt:'2.º: barre y entra',c:UP,vi:13}]},
+  {h:[16,26],an:[{t:'zona',p0:101.7,p1:103,i0:4,txt:'Zona',c:NV,izq:true,en:0},{t:'caja',i0:17,i1:21,txt:'Acumulación',c:TVTX,vi:21},{t:'anillo',i:24,p:102.2,txt:'3.º: solo si la zona respalda',c:AM,vi:24}]},
+  {h:[24,26],an:[{t:'zona',p0:101.7,p1:103,i0:4,txt:'Zona',c:NV,izq:true,en:0},{t:'lista',items:['1.er toque: deja liquidez','2.º toque: la entrada','3.er toque: solo si respalda'],cs:[LQ,UP,AM],en:.1}]}],
  claves:['No se opera el primer toque: deja liquidez.','El segundo barre esa liquidez: entrada principal, con envolvente.','El tercero, después de acumular, solo en zonas respaldadas.'],
  trampa:'Entrar en el primer toque, que es el que más engaña.',practica:['setup','nivel'],
  q:[['¿Se opera el primer toque?',['No: deja liquidez','Sí, siempre','Solo los viernes'],0,'Es el que más engaña.'],['¿Cuál es la entrada principal?',['El segundo toque','El primero','Ninguno'],0,'Barre la liquidez del primero.'],['¿Con qué se confirma cada toque?',['Con una envolvente a favor','Con el RSI','Con una noticia'],0,'Sin envolvente no hay toque operable.']]}),
 lecM({id:'vela-contraria',n:'Vela contraria',corto:'Vela contraria',sub:'Cuando el precio no necesita ir tan lejos',nivel:'Premium',
- vm:{ext:[98.5,120],pts:[[0,100],[3,101.4],[12,110.5],[16,106.1],[28,118.5]],sem:321,mods:{8:{o:107.4,h:107.6,l:106.3,c:106.5}}},
+ vm:{ext:[98.5,120],pts:[[0,100.6],[2,100],[7,106.8],[8,105.9],[12,111],[16,105.65],[27,118.5]],sem:321},
  tit:['Una vela de otro color','Su extremo es liquidez','El retroceso la toma','Y sigue'],
  t:['En plena subida aparece una sola vela bajista. Es la vela contraria.',
   'Debajo de su mínimo quedan stops: es liquidez suficiente. Muchos esperan el bajo mayor para comprar.',
   'En el retroceso, el precio toma el mínimo de la vela contraria, no el bajo mayor.',
   'Y continúa. La vela contraria ya hizo el trabajo; quien esperaba el bajo mayor quedó afuera. La lectura fina es Premium.'],
- sc:[{h:[0,12],an:[{t:'anillo',i:8,p:107,txt:'Vela contraria',c:DN,vi:8}]},
-  {h:[12,12],an:[{t:'niv',p:106.3,x0:8,txt:'IDM: mínimo de la vela contraria',c:LQ,en:.1},{t:'niv',p:100,x0:0,txt:'Bajo mayor · no se toca',c:TVTX,abajo:true,en:.4}]},
-  {h:[12,16],an:[{t:'niv',p:106.3,x0:8,c:LQ,en:0},{t:'niv',p:100,x0:0,c:TVTX,en:0},{t:'anillo',i:16,p:106.2,txt:'Toma la vela contraria',c:LQ,vi:16}]},
-  {h:[16,28],an:[{t:'niv',p:106.3,x0:8,c:LQ,en:0},{t:'niv',p:100,x0:0,c:TVTX,en:0}]}],
+ sc:[{h:[0,12],an:[{t:'anillo',i:8,p:106.3,txt:'Vela contraria',c:DN,vi:8}]},
+  {h:[12,12],an:[{t:'anillo',i:8,p:106.3,c:DN,en:0},{t:'niv',p:105.9,x0:8,txt:'IDM: mínimo de la vela contraria',c:LQ,en:.1},{t:'niv',p:100,x0:2,txt:'Bajo mayor · no se toca',c:TVTX,abajo:true,en:.4}]},
+  {h:[12,16],an:[{t:'niv',p:105.9,x0:8,txt:'IDM',c:LQ,en:0},{t:'niv',p:100,x0:2,txt:'Bajo mayor',c:TVTX,abajo:true,en:0},{t:'anillo',i:16,p:105.8,txt:'Toma la vela contraria',c:LQ,vi:16}]},
+  {h:[16,27],an:[{t:'niv',p:105.9,x0:8,txt:'IDM',c:LQ,en:0},{t:'niv',p:100,x0:2,txt:'Bajo mayor: nunca se tocó',c:TVTX,abajo:true,en:0},{t:'flecha',i0:17,p0:106.5,i1:26,p1:117.5,c:UP,en:.3}]}],
  claves:['Vela contraria: una vela de color opuesto dentro del impulso.','Su extremo funciona como inducción.','El precio la toma en lugar de ir al bajo mayor.'],
  trampa:'Esperar siempre el bajo mayor y quedarte afuera del movimiento.',practica:['setup','tendencia'],
  q:[['¿Qué es la vela contraria?',['Una vela de color opuesto dentro del impulso','Un doji','La vela del día'],0,'En una subida, una vela bajista.'],['¿Qué toma el precio en el retroceso?',['El extremo de la vela contraria','Siempre el bajo mayor','Nada'],0,'Es liquidez suficiente.'],['¿Qué le pasa a quien espera el bajo mayor?',['Se queda afuera','Gana más','Nada'],0,'La vela contraria ya hizo el trabajo.']]}),
 lecM({id:'rompimiento-123',n:'Patrón de rompimiento 1, 2, 3',corto:'Rompimiento 1-2-3',sub:'Avisa, habilita y continúa',nivel:'Premium',
- vm:{ext:[99,114],pts:[[0,103],[4,106],[8,101.2],[11,106.9],[14,103.4],[18,107.3],[21,106.3],[25,109.6],[28,108.7],[35,113]],sem:331},
+ vm:{ext:[101,114],pts:[[0,103.4],[4,106],[7,102.8],[10,106.8],[13,103.4],[17,107.8],[19,106.5],[22,110],[24,109],[31,113.4]],sem:331},
  tit:['Rompimiento 1: avisa','Rompimiento 2: habilita','Rompimiento 3: continuación','La regla'],
  t:['El precio rompe un nivel por primera vez. Es un aviso, no una entrada: el primero muchas veces es falso.',
   'Vuelve a romper en la misma dirección. Ahora sí: el segundo rompimiento habilita la entrada.',
   'El tercero es continuación: se gestiona lo que ya está abierto.',
   'El primero avisa, el segundo confirma la intención y el tercero continúa. La ejecución fina es Premium.'],
- sc:[{h:[0,12],an:[{t:'niv',p:106,x0:0,txt:'Nivel',c:TVTX,en:.2},{t:'anillo',i:11,p:106.6,txt:'1 · Avisa',arriba:true,c:LQ,vi:11}]},
-  {h:[12,19],an:[{t:'niv',p:106,x0:0,c:TVTX,en:0},{t:'anillo',i:18,p:107,txt:'2 · Habilita la entrada',arriba:true,c:UP,vi:18}]},
-  {h:[19,26],an:[{t:'niv',p:106,x0:0,c:TVTX,en:0},{t:'anillo',i:25,p:109.3,txt:'3 · Continuación',arriba:true,c:GOLD,vi:25}]},
-  {h:[26,35],an:[{t:'lista',items:['1 · Avisa','2 · Habilita','3 · Continúa'],cs:[LQ,UP,GOLD],en:.1}]}],
+ sc:[{h:[0,13],an:[{t:'niv',p:106,x0:0,txt:'Nivel',c:GOLD,izq:true,en:.2},{t:'anillo',i:10,p:106.5,txt:'1 · Avisa y vuelve',arriba:true,c:LQ,vi:10}]},
+  {h:[13,19],an:[{t:'niv',p:106,x0:0,txt:'Nivel',c:GOLD,izq:true,en:0},{t:'marca',i:10,p:106.8,txt:'1',arriba:true,c:LQ,en:0},{t:'anillo',i:17,p:107.4,txt:'2 · Habilita la entrada',arriba:true,c:UP,vi:17}]},
+  {h:[19,24],an:[{t:'niv',p:106,x0:0,txt:'Nivel',c:GOLD,izq:true,en:0},{t:'marca',i:10,p:106.8,txt:'1',arriba:true,c:LQ,en:0},{t:'marca',i:17,p:107.8,txt:'2',arriba:true,c:UP,en:0},{t:'anillo',i:22,p:109.6,txt:'3 · Continuación',arriba:true,c:GOLD,vi:22}]},
+  {h:[24,31],an:[{t:'niv',p:106,x0:0,c:GOLD,en:0},{t:'lista',items:['1 · Avisa','2 · Habilita','3 · Continúa'],cs:[LQ,UP,GOLD],izq:true,en:.1}]}],
  claves:['Rompimiento 1: aviso, suele ser falso.','Rompimiento 2: habilita la entrada.','Rompimiento 3: continuación, se gestiona.'],
  trampa:'Entrar en el primer rompimiento, que muchas veces es falso.',practica:['ruptura'],
  q:[['¿Qué hace el primer rompimiento?',['Avisa: suele ser falso','Habilita la entrada','Cierra el trade'],0,'Es un aviso.'],['¿Cuál habilita la entrada?',['El segundo','El primero','El tercero'],0,'Confirma la intención.'],['¿Qué se hace en el tercero?',['Se gestiona lo abierto','Se entra con todo','Se vende'],0,'Es continuación.']]})
@@ -1039,8 +1061,8 @@ function dibujar(c,W,H,l,i,p,T){
   l.esc[i](S);c.restore();c.globalAlpha=1;
 }
 function miniatura(c,W,H,l,T){
-  var S=base(c,W,H,l,0,T),u=(T/7)%1;S.p=u<.85?u/.85:1;S.z=Math.min(W,H)*.05;S.caja={x:W*.05,y:H*.08,w:W*.9,h:H*.84};MINI=true;c.clearRect(0,0,W,H);c.textBaseline='alphabetic';
-  try{l.esc[l.mini||0](S)}finally{MINI=false}
+  var S=base(c,W,H,l,0,T),u=(T/7)%1;S.p=u<.85?u/.85:1;S.z=Math.min(W,H)*.05;S.caja={x:W*.05,y:H*.08,w:W*.9,h:H*.84};MINI=true;MINIP=l.cat==='metodo'||l.cat==='entradas'||l.cat==='setups';c.clearRect(0,0,W,H);c.textBaseline='alphabetic';
+  try{l.esc[l.mini||0](S)}finally{MINI=false;MINIP=false}
 }
 
 /* ---- ejercicios: cada uno tiene una respuesta objetiva ---- */
@@ -1048,7 +1070,7 @@ function ent(r,a,b){return a+Math.floor(r()*(b-a+1))}
 function elegir(r,xs){return xs[Math.floor(r()*xs.length)]}
 function zig(r,n,ini,paso,dir,amp){var pts=[[0,ini]],v=ini,i=0,arriba=r()<.5;while(i<n-1){var d=ent(r,3,6);i=Math.min(n-1,i+d);var m=(arriba?1:-1)*amp*(.7+r()*.6);v+=dir*paso*d/4.5+m;arriba=!arriba;pts.push([i,v])}return pts}
 function voltear(cs,m){return cs.map(function(v){return{o:2*m-v.o,c:2*m-v.c,h:2*m-v.l,l:2*m-v.h}})}
-function base3(r){var Z=100+r()*3,lo=Z-8-r()*2,pts=[[0,lo],[6,Z-2.5],[10,Z-5.5],[16,Z],[20,Z-3],[26,Z+5+r()*2],[31,Z+.9]];return{Z:Z,cs:serie(pts,ent(r,1,9e5),.45,.6)}}
+function base3(r){var Z=100+r()*3,lo=Z-8-r()*2,pts=[[0,lo],[6,Z-2.5],[10,Z-5.5],[16,Z],[20,Z-3],[26,Z+5+r()*2],[31,Z+.9]];return{Z:Z,cs:serieLimpia(pts,ent(r,1,9e5),.45,.6)}}
 var EJ={
  imbalance:function(r){var baj=r()<.5,b0=100+r()*2,cs=serie([[0,b0],[6,b0+2],[10,b0-1],[16,b0+.5]],ent(r,1,9e5),.4,.5),x=cs[cs.length-1].c,g=1.4+r()*1.2;
   var c1={o:x,h:x+.6,l:x-.5,c:x+.4},c2={o:c1.c,h:c1.c+4.3,l:c1.c-.1,c:c1.c+4},c3={o:c2.c,l:c1.h+g,c:c2.c+.6,h:c2.c+1};cs.push(c1,c2,c3);var pv=c3.c;for(var k=0;k<3;k++){var nv=pv+.3+r()*.8;cs.push({o:pv,c:nv,h:nv+r()*.4,l:Math.max(c3.l+.2,pv-r()*.4)});pv=nv}
