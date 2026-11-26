@@ -1,6 +1,17 @@
 {
  "dias": [
   {
+   "fecha": "2026-11-26",
+   "actualizado": "2026-11-26T09:45:00-03:00",
+   "titular": "Feriado en EE.UU.: el mundo sube tras el rebote de ayer",
+   "novedades": [
+    {
+     "cuando": "2026-11-26T09:45:00-03:00",
+     "texto": "Primer resumen del día: Feriado en EE.UU.: el mundo sube tras el rebote de ayer"
+    }
+   ]
+  },
+  {
    "fecha": "2026-11-25",
    "actualizado": "2026-11-25T16:24:42-03:00",
    "titular": "La economía sigue fuerte y la inflación no afloja",

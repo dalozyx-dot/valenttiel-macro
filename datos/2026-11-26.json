@@ -1,0 +1,203 @@
+{
+ "fecha": "2026-11-26",
+ "actualizado": "2026-11-26T09:45:00-03:00",
+ "titular": "Feriado en EE.UU.: el mundo sube tras el rebote de ayer",
+ "bajada": "Hoy es Acción de Gracias: no hay datos de EE.UU. y Wall Street está cerrado. Ayer el S&P 500 llegó a caer 3,2% y cerró apenas -0,3%; el Dow terminó en suba. Hoy Asia y Europa siguen ese rebote y los futuros de EE.UU. suben cerca de 0,7%. La foto económica es la de ayer: crecimiento fuerte, inflación alta y una Fed que el mercado ve subiendo la tasa el 9 de diciembre. Mañana la bolsa abre medio día.",
+ "termometro": [
+  {
+   "factor": "Crecimiento",
+   "dato": "PIB 4,3%",
+   "posicion": 82,
+   "texto": "Muy por encima de lo previsto, aunque cubre de julio a septiembre. Para el 4T, el GDPNow bajó a 2,9%. En el Libro Beige crecen 8 de 12 distritos (9 en octubre)."
+  },
+  {
+   "factor": "Empleo",
+   "dato": "Subsidios 189K",
+   "posicion": 78,
+   "texto": "Menos pedidos de los esperados: hay pocos despidos. Según el Libro Beige, el empleo subió apenas y los salarios subieron más que en el informe anterior."
+  },
+  {
+   "factor": "Inflación",
+   "dato": "PCE subyacente 3,3%",
+   "posicion": 76,
+   "texto": "Apenas arriba de lo previsto y lejos del objetivo de 2%. El mensual salió en línea. En el Libro Beige, los precios subieron en forma moderada, igual que en el informe anterior."
+  },
+  {
+   "factor": "Consumo",
+   "dato": "Consumo real 0,0%",
+   "posicion": 30,
+   "texto": "La gente gastó 0,3% más, pero los precios también subieron 0,3%. El Libro Beige también ve el gasto casi sin cambios."
+  }
+ ],
+ "ideas": [
+  {
+   "titulo": "Hoy no hay dato: lo que mueve es el rebote de ayer",
+   "texto": "El S&P 500 llegó a perder 3,2% y cerró -0,3%. El Dow borró una caída de más de 1.100 puntos y terminó +0,3%. Hoy Asia y Europa siguen esa recuperación."
+  },
+  {
+   "titulo": "En feriado el mercado es más fino",
+   "texto": "Con EE.UU. cerrado hay menos operaciones y los movimientos pueden ser más bruscos o engañosos. Los futuros cotizan, pero con poco volumen."
+  },
+  {
+   "titulo": "Lo que sigue: medio día el viernes y empleo la semana que viene",
+   "texto": "Mañana la bolsa cierra a las 15:00. El próximo dato fuerte es el informe de empleo del 4 de diciembre, antes de la Fed del 9."
+  }
+ ],
+ "datos": [
+  {
+   "nombre": "S&P 500 (cierre del 25/11)",
+   "nota": "Llegó a caer 3,2% en el día",
+   "salio": "-0,3%",
+   "previsto": "",
+   "anterior": "",
+   "sorpresa": "sd"
+  },
+  {
+   "nombre": "Nasdaq (cierre del 25/11)",
+   "salio": "-0,6%",
+   "previsto": "",
+   "anterior": "",
+   "sorpresa": "sd"
+  },
+  {
+   "nombre": "Dow Jones (cierre del 25/11)",
+   "nota": "Borró una caída de más de 1.100 puntos",
+   "salio": "+0,3%",
+   "previsto": "",
+   "anterior": "",
+   "sorpresa": "sd"
+  },
+  {
+   "nombre": "Russell 2000 (cierre del 25/11)",
+   "nota": "Empresas chicas",
+   "salio": "+0,7%",
+   "previsto": "",
+   "anterior": "",
+   "sorpresa": "sd"
+  },
+  {
+   "nombre": "Tasa a 10 años (25/11)",
+   "nota": "Dato oficial del Tesoro",
+   "salio": "4,85%",
+   "previsto": "",
+   "anterior": "4,91%",
+   "sorpresa": "sd"
+  }
+ ],
+ "fed": "La tasa está en 3,75% a 4,00% y la próxima decisión es el 9 de diciembre. Después del PCE de ayer, el mercado daba cerca de 98% a una suba de 0,25 puntos, según CME citado por Yahoo Finance. Hoy no hay datos ni discursos que cambien esa lectura. Antes de la reunión quedan el empleo del 4/12 y, después, el IPC del 10/12.",
+ "mercado": [
+  "Cierre de ayer, según AP: S&P 500 -0,3% a 7.182,78; Nasdaq -0,6% a 23.585,80; Dow +0,3% a 50.182,95 y Russell 2000 +0,7% a 2.704,06. En la semana, los cuatro suben entre 3,9% y 4,7%.",
+  "La baja la concentraron las grandes de IA y chips: Nvidia cayó 3,9% y acumula -27% en noviembre, según CNBC. La mayoría de las acciones del S&P 500 subió.",
+  "La tasa oficial del bono a 10 años cerró el 25/11 en 4,85%, contra 4,91% del martes (Tesoro de EE.UU.). Hoy el mercado de bonos de EE.UU. está cerrado.",
+  "Asia, según AP: el Nikkei sube 0,9% y el Taiex de Taiwán 2,5%, con compras en IA. El Kospi sube 0,3% después de caer 6,2% el día anterior.",
+  "Europa abre en suba, según AP: DAX cerca de +1,8%, CAC 40 +1,6% y FTSE 100 +1,3%.",
+  "A las 9:33 de Argentina, en Yahoo Finanzas (con demora): futuros del Nasdaq +0,7% y del S&P 500 +0,7%, oro +1,6%, Bitcoin +0,3% cerca de 60.550 dólares e índice dólar +0,1%. Con feriado, el volumen es bajo."
+ ],
+ "leccion": "Un feriado no es un día sin riesgo. Con menos operadores, una noticia mueve más el precio y los gráficos pueden marcar señales que el lunes no se confirman. Por eso muchos traders operan más chico o directamente esperan al lunes.",
+ "agenda": [
+  {
+   "cuando": "2026-11-26T10:00:00-03:00",
+   "evento": "Feriado en EE.UU. (Acción de Gracias)",
+   "impacto": "bajo"
+  },
+  {
+   "cuando": "2026-11-27T10:30:00-03:00",
+   "evento": "Balanza comercial de bienes",
+   "previsto": "-135,9B",
+   "anterior": "-134,9B",
+   "impacto": "bajo"
+  },
+  {
+   "cuando": "2026-11-27T15:00:00-03:00",
+   "evento": "Cierre anticipado de la bolsa de EE.UU.",
+   "impacto": "bajo"
+  },
+  {
+   "cuando": "2026-11-30T11:45:00-03:00",
+   "evento": "PMI de Chicago",
+   "anterior": "55,3",
+   "impacto": "bajo"
+  },
+  {
+   "cuando": "2026-12-01T12:00:00-03:00",
+   "evento": "ISM manufacturero y vacantes JOLTS",
+   "impacto": "medio",
+   "anterior": "ISM 55,5, JOLTS 7,523M"
+  },
+  {
+   "cuando": "2026-12-02T10:15:00-03:00",
+   "evento": "Empleo privado ADP",
+   "anterior": "86K",
+   "impacto": "medio"
+  },
+  {
+   "cuando": "2026-12-04T10:30:00-03:00",
+   "evento": "Empleo: NFP y desempleo",
+   "previsto": "NFP 90K, desempleo 4,1%",
+   "anterior": "NFP 165K, desempleo 4,1%",
+   "impacto": "alto"
+  },
+  {
+   "cuando": "2026-12-08T10:30:00-03:00",
+   "evento": "Balanza comercial de octubre",
+   "impacto": "bajo"
+  },
+  {
+   "cuando": "2026-12-09T16:00:00-03:00",
+   "evento": "Decisión de tasas de la Fed",
+   "impacto": "alto"
+  },
+  {
+   "cuando": "2026-12-10T10:30:00-03:00",
+   "evento": "IPC de noviembre",
+   "impacto": "alto"
+  },
+  {
+   "cuando": "2026-12-23T10:30:00-03:00",
+   "evento": "PIB 3T (tercera estimación) y PCE de noviembre",
+   "impacto": "alto"
+  }
+ ],
+ "mensaje": "📊 *FUNDAMENTALES EE.UU. | 26/11*\n\n*Feriado en EE.UU.: el mundo sube tras el rebote de ayer.*\n\n🦃 Hoy es Acción de Gracias: no hay datos y Wall Street está cerrado. Mañana abre medio día.\n\n• Cierre de ayer: S&P 500 *-0,3%* (llegó a -3,2%), Nasdaq *-0,6%*, Dow *+0,3%*\n• Tasa a 10 años: *4,85%* (antes 4,91%)\n• Hoy: Europa sube más de 1%, Nikkei +0,9%. Futuros de EE.UU. cerca de *+0,7%*\n\n⚠️ Con feriado hay poco volumen: los movimientos pueden ser bruscos y engañosos.\n\n📅 Próximo dato fuerte: empleo, el 4/12. Fed, el 9/12.\n\n_Contenido educativo. No es asesoramiento financiero._",
+ "fuentes": [
+  {
+   "nombre": "AP (cierre del 25/11, vía WTOP)",
+   "url": "https://wtop.com/national/2026/11/how-major-us-stock-indexes-fared-wednesday-11-25-2026"
+  },
+  {
+   "nombre": "AP (mercados del 26/11, vía BNN Bloomberg)",
+   "url": "https://www.bnnbloomberg.ca/markets/2026/11/26/world-shares-push-higher-while-markets-in-us-will-be-closed-for-thanksgiving/"
+  },
+  {
+   "nombre": "AP (Asia, vía NWA)",
+   "url": "https://www.nwahomepage.com/news/business-news/ap-asian-shares-rebound-led-by-ai-stocks-after-wall-street-pares-sharp-losses/"
+  },
+  {
+   "nombre": "investingLIVE (apertura europea)",
+   "url": "https://investinglive.com/stocks/european-stock-market-open-stocks-surge-after-stunning-wall-street-turnaround"
+  },
+  {
+   "nombre": "Tesoro (curva de tasas)",
+   "url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/TextView?type=daily_treasury_yield_curve&field_tdr_date_value_month=202611"
+  },
+  {
+   "nombre": "Investing (calendario)",
+   "url": "https://es.investing.com/economic-calendar"
+  },
+  {
+   "nombre": "Yahoo Finanzas (precios con demora)",
+   "url": "https://finance.yahoo.com/"
+  }
+ ],
+ "tasa10": {
+  "fecha": "2026-11-25",
+  "valor": 4.85,
+  "fuente": "Departamento del Tesoro de EE.UU."
+ },
+ "novedades": [
+  {
+   "cuando": "2026-11-26T09:45:00-03:00",
+   "texto": "Primer resumen del día: Feriado en EE.UU.: el mundo sube tras el rebote de ayer"
+  }
+ ]
+}
