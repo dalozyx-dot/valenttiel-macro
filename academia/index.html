@@ -95,6 +95,8 @@ main{display:grid;gap:clamp(26px,4vw,46px);padding-block:clamp(26px,5vw,54px) 60
 @media(max-width:760px){.mapa .cab{display:none}.mapa .fila{grid-template-columns:1fr 1fr;gap:6px 12px;align-items:start}.mapa .nom{grid-column:1/-1;font-size:16px}.mapa [data-t]::before{content:attr(data-t);display:block;font-size:12px;color:var(--muted)}}
 @media(prefers-reduced-motion:no-preference){.ops .mal{animation:sacude .4s}.ops .bien{animation:brilla .6s}}@keyframes sacude{20%,60%{transform:translateX(-5px)}40%,80%{transform:translateX(5px)}}@keyframes brilla{40%{transform:scale(1.02);box-shadow:inset 0 0 0 1.5px var(--mint),0 0 26px rgba(95,208,160,.35)}}
 .atajo{margin-top:-4px}
+.candado{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;padding:0}.candado li{list-style:none;display:grid;gap:3px;padding:14px 16px;border-radius:14px;background:rgba(201,166,73,.07);box-shadow:inset 0 0 0 1px rgba(201,166,73,.35)}.candado b{font-weight:600}
+@media(max-width:760px){.candado{grid-template-columns:minmax(0,1fr)}}
 .gstats{grid-template-columns:repeat(4,minmax(0,1fr))}
 footer{border-top:1px solid var(--line);padding-block:20px 40px;display:grid;gap:6px}
 @media(prefers-reduced-motion:no-preference){.entra>*{animation:sube .7s var(--ease) backwards}.entra>:nth-child(2){animation-delay:.06s}.entra>:nth-child(3){animation-delay:.12s}.entra>:nth-child(n+4){animation-delay:.18s}}
@@ -158,6 +160,7 @@ function inicio(){
     el('div',{class:'filtros',role:'group','aria-label':'Tema'},[['todas','Todas']].concat(Object.keys(CT).map(function(k){return[k,CT[k][0]]})).map(function(x){return el('button',{type:'button',id:'f-'+x[0],'aria-pressed':String(cat===x[0]),text:x[1],onclick:function(){cat=x[0];inicio();document.getElementById('f-'+x[0]).focus({preventScroll:true})}})})),
     mat==='tec'&&cat==='todas'?ruta2():null,
     el('ul',{class:'grid'},li),
+    mat==='tec'&&(cat==='todas'||cat==='metodo')?propias():null,
     mat==='tec'&&(cat==='todas'||cat==='setups')?mapa():null);
   requestAnimationFrame(bucleMinis);
 }
@@ -321,6 +324,12 @@ function ruta2(){
     el('p',{class:'muted small',text:sig?'Seguí por: '+TEC.L.filter(function(x){return x.id===sig})[0].n+'. Cada lección dura un minuto.':'Terminaste la base. Ahora, los setups de entrada.'}));
 }
 var MAPA={modelo:['Liquidez a los dos lados','Venta o compra','Barrido + Imbalance, entrada al 50 %','Arriba de la mecha del barrido'],pullback:['Tendencia alcista','Compra','Martillo en el viejo techo','Debajo de la vela y la zona'],'pullback-venta':['Tendencia bajista','Venta','Estrella fugaz en el viejo piso','Arriba de la vela y la zona'],retesteo:['Rango que se rompe','Compra','Rechazo al volver al nivel','Debajo del nivel roto'],barrida:['Rango','Compra','Mecha afuera, cierre adentro','Debajo de la mecha'],'rebote-media':['Tendencia con media en subida','Compra','Vela que rebota en la media','Debajo de la vela'],bandera:['Después de un impulso','Compra','Cierre arriba de la bandera','Debajo de la bandera'],'doble-piso':['Después de una caída','Compra','Rechazo en el cuello roto','Debajo del cuello'],'doble-techo':['Después de una subida','Venta','Rechazo en el cuello roto','Arriba del cuello']};
+function propias(){
+  return el('section',{class:'glass propias'},el('p',{class:'tag',style:'color:#C9A649',text:'Método Valenttiel · mentoría'}),el('h2',{text:'Las teorías propias del método'}),
+    el('p',{class:'muted',text:'Lo que diferencia al Método Valenttiel: nació de la operativa real y se enseña en la mentoría, con práctica en vivo y corrección personal.'}),
+    el('ul',{class:'candado'},TEC.PROPIAS.map(function(x){return el('li',{},el('b',{text:'🔒 '+x[0]}),el('span',{class:'muted small',text:x[1]}))})),
+    el('div',{class:'btns'},el('a',{class:'btn main',href:'../?de=academia-metodo#sumate',text:'Quiero el método completo'})));
+}
 function mapa(){
   return el('section',{class:'glass'},el('h2',{text:'Mapa de setups'}),el('p',{class:'muted small',text:'Los 8 setups de un vistazo. Primero mirá qué mercado tenés enfrente; después elegí el setup.'}),
     el('div',{class:'mapa',role:'table','aria-label':'Mapa de setups'},el('div',{class:'fila cab',role:'row'},['Setup','Cuándo','Dirección','Gatillo','Stop'].map(function(t){return el('span',{role:'columnheader',text:t})})),
@@ -381,7 +390,7 @@ function leccionTec(l){
   var cl2=el('section',{class:'glass'},el('h2',{text:'Para no olvidarte'}),el('ul',{class:'claves'},l.claves.map(function(c){return el('li',{text:c})})),el('div',{class:'trampa'},el('h3',{text:'La trampa común'}),el('p',{text:l.trampa})));
   var pr=practica(l);color(pr,l);
   poner(el('div',{class:'hero'},el('p',{},el('a',{href:'#',text:'Todas las lecciones'})),el('h1',{style:'font-size:clamp(32px,5vw,58px)',text:l.n})),pl.caja,
-    el('div',{class:'cols'},el('div',{class:'stack'},pr,test(l)),el('div',{class:'stack'},l.check?checklist(l):null,cl2,el('section',{class:'glass'},el('h2',{text:'Llevalo a la práctica'}),el('p',{class:'muted small',text:'Entrená el ojo todos los días y calculá el tamaño antes de cada operación.'}),el('div',{class:'btns'},el('a',{class:'btn main',href:'#gimnasio',text:'Gimnasio'}),el('a',{class:'btn',href:'../calculadora/',text:'Calculadora'}),el('a',{class:'btn',href:'../reto/?desde=academia',text:'Liga'}))))),
+    el('div',{class:'cols'},el('div',{class:'stack'},pr,test(l)),el('div',{class:'stack'},l.check?checklist(l):null,cl2,el('section',{class:'glass'},el('h2',{text:'Llevalo a la práctica'}),el('p',{class:'muted small',text:'Entrená el ojo todos los días y calculá el tamaño antes de cada operación.'}),el('div',{class:'btns'},l.cat==='metodo'?el('a',{class:'btn main',href:'../?de=academia-metodo#sumate',text:'Aprender el método completo'}):null,el('a',{class:l.cat==='metodo'?'btn':'btn main',href:'#gimnasio',text:'Gimnasio'}),el('a',{class:'btn',href:'../calculadora/',text:'Calculadora'}),el('a',{class:'btn',href:'../reto/?desde=academia',text:'Liga'}))))),
     el('nav',{class:'sig','aria-label':'Otras lecciones'},sigLink(l,-1,'btn')||el('span'),sigLink(l,1,'btn main')));
   scrollTo(0,0);
 }
