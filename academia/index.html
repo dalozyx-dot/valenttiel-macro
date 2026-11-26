@@ -11,7 +11,7 @@
 <meta property="og:site_name" content="Valenttiel Macro">
 <meta property="og:locale" content="es_AR">
 <meta property="og:title" content="Academia Valenttiel: fundamentales y técnico">
-<meta property="og:description" content="20 lecciones animadas de un minuto y un desafío diario de gráficos. Gratis.">
+<meta property="og:description" content="24 lecciones animadas de un minuto, setups de entrada y un desafío diario de gráficos. Gratis.">
 <meta property="og:url" content="https://dalozyx-dot.github.io/valenttiel-macro/academia/">
 <meta property="og:image" content="https://dalozyx-dot.github.io/valenttiel-macro/img/icono-512.png">
 <meta name="twitter:card" content="summary">
@@ -88,6 +88,7 @@ main{display:grid;gap:clamp(26px,4vw,46px);padding-block:clamp(26px,5vw,54px) 60
 .ops.fila{grid-template-columns:repeat(3,minmax(0,1fr))}.ops.fila button{text-align:center;font-weight:600;font-size:18px}
 .fb{min-height:1.5em}.fb b{font-weight:600}
 .resultado{display:grid;gap:4px}.resultado .big{font:600 clamp(44px,8vw,64px)/1 var(--f);letter-spacing:-.045em;background:linear-gradient(100deg,var(--ink),#7FB4F0);-webkit-background-clip:text;background-clip:text;color:transparent}
+.check{display:grid;gap:10px;padding:0}.check li{list-style:none;display:flex;gap:12px;align-items:flex-start;border-radius:14px;padding:12px 14px;background:rgba(210,240,226,.04);box-shadow:inset 0 0 0 1px var(--line)}.check input{width:20px;height:20px;margin:2px 0 0;flex:none;accent-color:var(--mint)}.check label{cursor:pointer;line-height:1.4}.check li:has(input:checked){box-shadow:inset 0 0 0 1.5px var(--mint);background:rgba(95,208,160,.08)}
 .gstats{grid-template-columns:repeat(4,minmax(0,1fr))}
 footer{border-top:1px solid var(--line);padding-block:20px 40px;display:grid;gap:6px}
 @media(prefers-reduced-motion:no-preference){.entra>*{animation:sube .7s var(--ease) backwards}.entra>:nth-child(2){animation-delay:.06s}.entra>:nth-child(3){animation-delay:.12s}.entra>:nth-child(n+4){animation-delay:.18s}}
@@ -143,7 +144,7 @@ function inicio(){
   var li=xs.map(function(l){var c=el('canvas',{'aria-hidden':'true'});minis.push({c:c,l:l});vis.observe(c);var a=el('a',{class:'card',href:'#'+l.id},c,el('h2',{text:l.n}),el('p',{class:'muted',text:l.sub}),el('p',{class:'pie'},el('span',{text:mmss(total(l))}),el('span',{text:l.tec?K(l)[0]:['','Impacto bajo','Impacto medio','Impacto alto'][l.peso]}),P.v[l.id]?el('span',{class:'ok',text:P.t[l.id]>=0?'✓ Vista, test '+P.t[l.id]+'/3':'✓ Vista'}):null));color(a,l);return el('li',{},a)});
   poner(
     el('div',{class:'hero'},el('h1',{class:'grad',text:'Mirá cómo se mueve el mercado por dentro'}),el('p',{class:'lead',text:'Lecciones animadas de un minuto: los datos que mueven al mercado y cómo leer el gráfico. Y un gimnasio para entrenar el ojo todos los días.'}),
-      n?el('div',{class:'prog'},el('p',{class:'small muted',text:n===TODAS.length?'Viste las '+TODAS.length+' lecciones'+(T===TODAS.length?' y completaste todos los tests.':'. Te faltan '+(TODAS.length-T)+' tests.'):n+' de '+TODAS.length+' lecciones vistas'}),el('div',{},el('i',{style:'width:'+n/TODAS.length*100+'%'}))):el('div',{class:'btns'},el('a',{class:'btn main',href:'#fed',text:'Empezar por la Fed'}),el('a',{class:'btn',href:'#velas',text:'Empezar por las velas'}))),
+      n?el('div',{class:'prog'},el('p',{class:'small muted',text:n===TODAS.length?'Viste las '+TODAS.length+' lecciones'+(T===TODAS.length?' y completaste todos los tests.':'. Te faltan '+(TODAS.length-T)+' tests.'):n+' de '+TODAS.length+' lecciones vistas'}),el('div',{},el('i',{style:'width:'+n/TODAS.length*100+'%'}))):el('div',{class:'btns'},el('a',{class:'btn main',href:'#fed',text:'Empezar por la Fed'}),el('a',{class:'btn',href:'#velas',text:'Empezar por las velas'}),el('a',{class:'btn',href:'#pullback',text:'Ver los setups'}))),
     puerta(),
     proximo(),
     n===TODAS.length&&T===TODAS.length?el('section',{class:'glass'},el('h2',{text:'Terminaste la Academia'}),el('p',{class:'muted',text:'Ya sabés leer los datos y el gráfico. El paso siguiente es cumplir un plan con eso.'}),el('div',{class:'btns'},el('a',{class:'btn main',href:'../reto/?desde=academia',text:'Entrar a la Liga'}),el('a',{class:'btn',href:'../?de=academia#sumate',text:'Quiero aprender con guía'}))):null,
@@ -296,7 +297,7 @@ function ruta(){var id=location.hash.slice(1),l=TODAS.filter(function(x){return 
 var KG='valenttiel-gimnasio',GY={rec:0,dias:{},libres:0};
 try{var gg=JSON.parse(localStorage.getItem(KG));if(gg&&gg.dias)GY=gg}catch(e){}
 function guardarGY(){try{localStorage.setItem(KG,JSON.stringify(GY))}catch(e){}}
-var LEC={tendencia:'tendencia',nivel:'soportes',vela:'velas',ruptura:'rupturas',media:'medias',rsi:'rsi',patron:'dobles',rr:'riesgo'};
+var LEC={tendencia:'tendencia',nivel:'soportes',vela:'velas',ruptura:'rupturas',media:'medias',rsi:'rsi',patron:'dobles',rr:'riesgo',setup:'pullback',stop:'pullback'};
 function hoyAR(){return new Date().toLocaleDateString('en-CA',{timeZone:TZ})}
 function hash(s){var h=2166136261;for(var i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619)}return h>>>0}
 function rango(p){return p>=1300?'Francotirador':p>=1000?'Analista':p>=600?'Lector de gráficos':'Aprendiz'}
@@ -327,20 +328,28 @@ function Entreno(lista,op){
 }
 function cl(x){return x<0?0:x>1?1:x}
 function practica(l){
-  var sec=el('section',{class:'glass'}),go=function(){var r=TEC.azar(Date.now()&0xffffff),xs=[];for(var k=0;k<5;k++)xs.push({tipo:l.practica,sem:Math.floor(r()*1e9)});
+  var sec=el('section',{class:'glass'}),go=function(){var r=TEC.azar(Date.now()&0xffffff),xs=[];var tp=[].concat(l.practica);for(var k=0;k<5;k++)xs.push({tipo:tp[k%tp.length],sem:Math.floor(r()*1e9)});
     sec.replaceChildren(el('h2',{text:'Practicá con gráficos'}),Entreno(xs,{fin:function(R,box){medir('test-leccion');box.replaceChildren(el('h3',{text:R.bien+' de '+R.n}),el('p',{class:'muted',text:R.bien===R.n?'Ojo entrenado. Probá el desafío del día.':R.bien>=3?'Bien. Una vuelta más y lo tenés.':'Volvé a mirar la lección y probá otra vez: los gráficos cambian.'}),el('div',{class:'btns'},el('button',{class:'btn main',type:'button',text:'Otros 5 gráficos',onclick:go}),el('a',{class:'btn',href:'#gimnasio',text:'Ir al Gimnasio'})))}}))};
   sec.append(el('h2',{text:'Practicá con gráficos'}),el('p',{class:'muted',text:'Cinco gráficos nuevos cada vez, con la respuesta explicada.'}),el('div',{class:'btns'},el('button',{class:'btn main',type:'button',text:'Empezar',onclick:go})));return sec;
+}
+function checklist(l){
+  var hechos=l.check.map(function(){return false}),msg=el('p',{class:'fb',role:'status'}),btns=el('div',{class:'btns'});
+  var ul=el('ul',{class:'check'},l.check.map(function(t,i){var id='ck-'+l.id+'-'+i;return el('li',{},el('input',{type:'checkbox',id:id,onchange:function(e){hechos[i]=e.target.checked;pinta()}}),el('label',{for:id,text:t}))}));
+  function pinta(){var f=l.check.filter(function(_,i){return!hechos[i]});
+    if(!f.length){msg.className='fb up';msg.textContent='Setup completo. Ahora calculá el tamaño y sellá el plan antes de entrar.';btns.replaceChildren(el('a',{class:'btn main',href:'../calculadora/',text:'Calcular el tamaño'}),el('a',{class:'btn',href:'../reto/?desde=academia',text:'Sellar el plan en la Liga'}))}
+    else{msg.className='fb muted';msg.textContent=f.length===l.check.length?'Marcá cada punto mirando tu gráfico.':'Te falta: '+f[0].charAt(0).toLowerCase()+f[0].slice(1)+'. Si falta algo, no hay operación.';btns.replaceChildren()}}
+  pinta();return el('section',{class:'glass'},el('h2',{text:'Antes de entrar'}),el('p',{class:'muted small',text:'Usala con tu gráfico real. Si falta un punto, no hay operación.'}),ul,msg,btns);
 }
 function leccionTec(l){
   pl=Reproductor(l,function(){});
   var cl2=el('section',{class:'glass'},el('h2',{text:'Para no olvidarte'}),el('ul',{class:'claves'},l.claves.map(function(c){return el('li',{text:c})})),el('div',{class:'trampa'},el('h3',{text:'La trampa común'}),el('p',{text:l.trampa})));
   var pr=practica(l);color(pr,l);
   poner(el('div',{class:'hero'},el('p',{},el('a',{href:'#',text:'Todas las lecciones'})),el('h1',{style:'font-size:clamp(32px,5vw,58px)',text:l.n})),pl.caja,
-    el('div',{class:'cols'},el('div',{class:'stack'},pr,test(l)),el('div',{class:'stack'},cl2,el('section',{class:'glass'},el('h2',{text:'Llevalo a la práctica'}),el('p',{class:'muted small',text:'Entrená el ojo todos los días y calculá el tamaño antes de cada operación.'}),el('div',{class:'btns'},el('a',{class:'btn main',href:'#gimnasio',text:'Gimnasio'}),el('a',{class:'btn',href:'../calculadora/',text:'Calculadora'}),el('a',{class:'btn',href:'../reto/?desde=academia',text:'Liga'}))))),
+    el('div',{class:'cols'},el('div',{class:'stack'},pr,test(l)),el('div',{class:'stack'},l.check?checklist(l):null,cl2,el('section',{class:'glass'},el('h2',{text:'Llevalo a la práctica'}),el('p',{class:'muted small',text:'Entrená el ojo todos los días y calculá el tamaño antes de cada operación.'}),el('div',{class:'btns'},el('a',{class:'btn main',href:'#gimnasio',text:'Gimnasio'}),el('a',{class:'btn',href:'../calculadora/',text:'Calculadora'}),el('a',{class:'btn',href:'../reto/?desde=academia',text:'Liga'}))))),
     el('nav',{class:'sig','aria-label':'Otras lecciones'},sigLink(l,-1,'btn')||el('span'),sigLink(l,1,'btn main')));
   scrollTo(0,0);
 }
-function desafio(fecha){var r=TEC.azar(hash('valenttiel-'+fecha)),t=TEC.TIPOS.slice(),xs=[];for(var k=t.length-1;k>0;k--){var j=Math.floor(r()*(k+1)),x=t[k];t[k]=t[j];t[j]=x}t=t.concat([t[0],t[3]]);t.forEach(function(tp){xs.push({tipo:tp,sem:Math.floor(r()*1e9)})});return xs}
+function desafio(fecha){var r=TEC.azar(hash('valenttiel-'+fecha)),t=TEC.TIPOS.slice(),xs=[];for(var k=t.length-1;k>0;k--){var j=Math.floor(r()*(k+1)),x=t[k];t[k]=t[j];t[j]=x}t=t.concat(t).slice(0,10);t.forEach(function(tp){xs.push({tipo:tp,sem:Math.floor(r()*1e9)})});return xs}
 function gimnasio(){
   detener();document.title='Gimnasio de gráficos | Academia Valenttiel';mat='tec';
   var f=hoyAR(),hoy=GY.dias[f],tema='todos',zona=el('div',{class:'stack',style:'gap:22px'});

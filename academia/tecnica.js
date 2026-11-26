@@ -4,7 +4,7 @@ var TECNICA=(function(){
 'use strict';
 var M=MOTOR.h,cl=M.cl,sg=M.sg,eo=M.eo,eio=M.eio,rebote=M.rebote,mez=M.mez,rgba=M.rgba,rr=M.rr,gr=M.gr,tx=M.tx,PI=Math.PI;
 var INK='#F1F6F3',MUT='#94A69E',UP='#5FD0A0',DN='#F08A7B',AM='#EBB24A',VI='#B59CF0',AQ='#5CC6D6',F='Geist, system-ui, sans-serif';
-var CAT={grafico:['Leer el gráfico','#7FB4F0','#5CC6D6'],niveles:['Niveles','#5FD0A0','#5CC6D6'],indicadores:['Indicadores','#B59CF0','#7FB4F0'],riesgo:['Riesgo','#EBB24A','#F08A7B']};
+var CAT={grafico:['Leer el gráfico','#7FB4F0','#5CC6D6'],niveles:['Niveles','#5FD0A0','#5CC6D6'],indicadores:['Indicadores','#B59CF0','#7FB4F0'],riesgo:['Riesgo','#EBB24A','#F08A7B'],setups:['Setups de entrada','#F2A65A','#5FD0A0']};
 var VW=1000,MINI=false;
 
 /* ---- datos de ejemplo ---- */
@@ -350,8 +350,111 @@ function zoom(S,cs,k,txt,col){
   var a=sg(h,k+1,k+1.6);if(a>0){var v=cs[k];anillo(c,G.x(k),G.y(v.c),S.z*.9,col,a);pastilla(c,txt,G.x(k)+G.bw*.8,col===UP?G.y(v.c)-S.z*2.6:G.y(v.h),col,S.z,'left',a);pastilla(c,'Cierre',G.x(k)-G.bw,G.y(v.c),INK,S.z*.75,'right',a)}
 }
 
+/* ---- setups de entrada: seis escenas iguales para todos (contexto, zona, gatillo, plan, resultado, cuándo no) ---- */
+function f1(x){return x.toLocaleString('es-AR',{minimumFractionDigits:1,maximumFractionDigits:1})}
+function preparar(l){
+  if(l._st)return l._st;var st=l.setup(),cs=st.cs,i;st.hit=cs.length-1;for(i=st.gat+1;i<cs.length;i++)if(cs[i].h>=st.o){st.hit=i;break}
+  st.no=st.no();l._st=st;return st;
+}
+function zonaDib(S,G,z,txt,a){if(!z||a<=0)return;nivel(S.c,G,z[0],UP,a,{zona:z[1],dash:false,g:0,al:0,za:.17});pastilla(S.c,txt,G.b.x+6,G.y(z[0]-z[1])+S.z*1.6,UP,S.z*.85,'left',sg(a,.4,1))}
+function gS(S,st,h,k){var G=graf(S,st.cs,h,{ext:[st.s,st.o],antes:function(G){zonaDib(S,G,st.zona,st.zonaTxt,k===0?0:1)}});if(st.extra)st.extra(S,G,h,k);return G}
+function lineasPlan(S,G,st,a,b,cc,izq){
+  var x=st.gat,R=Math.round((st.o-st.e)/(st.e-st.s)*10)/10;
+  [[st.e,INK,'Entrada '+f1(st.e),a],[st.s,DN,'Stop '+f1(st.s),b],[st.o,UP,'Objetivo '+f1(st.o)+' ('+String(R).replace('.',',')+'R)',cc]].forEach(function(q,j){nivel(S.c,G,q[0],q[1],q[3],{x0:x,g:2.4,dash:false,txt:q[2],z:S.z*.85,abajo:j===1,izq:izq})});
+}
+var SET=[
+function(S){var st=preparar(S.l),h=ver(S,st.ctx+1,.03,.75),G=gS(S,st,h,0);pastilla(S.c,st.ctxTxt,G.b.x+G.b.w/2,G.b.y-S.z*.5,S.A,S.z*.95,'center',sg(S.p,.55,.65))},
+function(S){var st=preparar(S.l),h=mez(st.ctx+1,st.gat,sg(S.p,.04,.7)),G=gS(S,st,h,1)},
+function(S){var st=preparar(S.l),h=mez(st.gat,st.gat+1,sg(S.p,.08,.45)),G=gS(S,st,h,2),v=st.cs[st.gat],a=sg(S.p,.45,.55);anillo(S.c,G.x(st.gat),G.y((v.h+v.l)/2),Math.max(S.z*1.3,(G.y(v.l)-G.y(v.h))*.75),AM,a);pastilla(S.c,st.gatTxt,G.x(st.gat),G.y(v.l)+S.z*2.6,AM,S.z*.92,'center',a)},
+function(S){var st=preparar(S.l),G=gS(S,st,st.gat+1,3);lineasPlan(S,G,st,sg(S.p,.04,.2),sg(S.p,.25,.42),sg(S.p,.5,.68))},
+function(S){var st=preparar(S.l),c=S.c,h=mez(st.gat+1,st.hit+1,sg(S.p,.04,.72)),G=graf(S,st.cs,h,{ext:[st.s,st.o],antes:function(G){zonaDib(S,G,st.zona,'',1);var x0=G.x(st.gat),x1=G.b.x+G.b.w;c.fillStyle=rgba(DN,.18);c.fillRect(x0,G.y(st.e),x1-x0,G.y(st.s)-G.y(st.e));c.fillStyle=rgba(UP,.16);c.fillRect(x0,G.y(st.o),x1-x0,G.y(st.e)-G.y(st.o))}});
+  if(st.extra)st.extra(S,G,h,4);lineasPlan(S,G,st,1,1,1,true);var a=sg(h,st.hit+.6,st.hit+1.4);if(a>0){pop(c,G.x(st.hit),G.y(st.o),S.z*1.3,UP,a);pastilla(c,'Objetivo alcanzado: +'+String(Math.round((st.o-st.e)/(st.e-st.s)*10)/10).replace('.',',')+'R ✓',G.b.x+G.b.w/2,G.b.y-S.z*.5,UP,S.z*1.05,'center',a)}},
+function(S){var st=preparar(S.l),n=st.no,c=S.c,h=ver(S,n.cs.length,.03,.68),G=graf(S,n.cs,h,{antes:function(G){zonaDib(S,G,n.zona||st.zona,'',n.zona===null?0:1)}});if(n.extra)n.extra(S,G,h);var a=sg(S.p,.7,.8);
+  if(n.i>=0){anillo(c,G.x(n.i),G.y(n.cs[n.i].c),S.z*1.2,DN,a);pastilla(c,n.txt,G.x(n.i),G.y(n.cs[n.i].c)+S.z*2.6,DN,S.z*.92,'center',a)}pastilla(c,'✗ No hay setup',G.b.x+G.b.w/2,G.b.y-S.z*.5,DN,S.z*1.05,'center',sg(S.p,.8,.9))}
+];
+function piso(S,G,pr,txt,col,a){nivel(S.c,G,pr,col,a,{g:2,txt:txt,z:S.z*.8,izq:true,abajo:col===UP})}
+L.push(
+{id:'pullback',tec:1,cat:'setups',n:'Setup: pullback en tendencia',corto:'Pullback',sub:'Comprar el retroceso, no la euforia',mini:4,
+ tit:['El contexto: tendencia alcista','La zona: el viejo techo','El gatillo: vela de rechazo','El plan: entrada, stop y objetivo','Así se ve cuando sale','Cuándo no hay setup'],
+ t:['El setup más clásico: comprar el retroceso dentro de una tendencia. Primero, que haya escalera: máximos y mínimos más altos.',
+  'Esperás que el precio vuelva a una zona clara. Acá, el viejo techo, que ahora debería funcionar como piso.',
+  'En la zona no entrás a ciegas: esperás una vela que muestre compradores, como un martillo o una vela verde fuerte.',
+  'Entrada apenas arriba de esa vela. Stop debajo de su mínimo y de la zona. Objetivo: el doble de lo que arriesgás.',
+  'Si la tendencia sigue, el precio retoma la escalera y llega al objetivo. Ganás dos R.',
+  'Si el precio cierra debajo de la zona, la idea murió antes de empezar. Sin vela de rechazo, no hay entrada.'],
+ claves:['Tendencia, zona y gatillo: los tres juntos.','El stop va donde la idea deja de valer: debajo de la vela y de la zona.','Si no aparece el gatillo, no hay operación. Esperar también es operar.'],
+ trampa:'Comprar apenas el precio toca la zona, sin esperar la vela que confirma que aparecieron compradores.',
+ check:['La tendencia es clara: máximos y mínimos más altos','El precio volvió a una zona marcada antes','Apareció una vela de rechazo en la zona','El stop va debajo de esa vela y de la zona','El objetivo está al menos a 2R'],
+ practica:['setup','stop'],
+ q:[['¿Qué tres cosas necesita este setup?',['Tendencia, zona y gatillo','Una noticia, el RSI y suerte','Solo una vela verde'],0,'Si falta una, no hay setup.'],
+  ['¿Dónde va el stop?',['Debajo de la vela gatillo y de la zona','Arriba de la entrada','En un número redondo cualquiera'],0,'Ahí la idea deja de tener sentido.'],
+  ['El precio cierra con fuerza debajo de la zona. ¿Qué hacés?',['Compro igual, ya va a subir','Nada: no hay setup y espero','Compro el doble'],1,'La zona no aguantó: la idea murió.']],
+ setup:function(){var P=[[0,100],[6,108],[10,104],[17,113],[21,109],[27,116.5],[32,113.2],[45,121.5]],cs=serie(P,131,.5,.7);fijar(cs,32,{o:Math.min(cs[31].c,113.7),h:114.6,l:112.4,c:114.4});
+  return{cs:cs,ctx:27,gat:32,zona:[113,.6],zonaTxt:'Viejo techo, nuevo piso',ctxTxt:'Máximos y mínimos más altos',gatTxt:'Martillo en la zona',e:114.8,s:111.9,o:120.6,
+   extra:function(S,G,h,k){if(k===0){var H=[[6,108,'',true,UP],[17,113,'',true,UP],[27,116.5,'',true,UP]],B=[[10,104,'',false,AQ],[21,109,'',false,AQ]];escalon(S,G,h,H,UP);escalon(S,G,h,B,AQ);marcas(S,G,h,H.concat(B))}},
+   no:function(){var c2=serie([[0,100],[6,108],[10,104],[17,113],[21,109],[27,116.5],[34,109.5],[41,107.5]],133,.5,.7);return{cs:c2,i:hastaPrecio(c2,99,112.2,false,28),txt:'Cerró debajo de la zona'}}}}},
+{id:'retesteo',tec:1,cat:'setups',n:'Setup: ruptura y retesteo',corto:'Retesteo',sub:'Entrar cuando el nivel ya cambió de rol',mini:4,
+ tit:['El contexto: un rango','Rompe y cierra afuera','El gatillo: rechazo en el retesteo','El plan: entrada, stop y objetivo','Así se ve cuando sale','Cuándo no hay setup'],
+ t:['Este setup aprovecha un nivel roto. Primero, un rango claro: un techo que frenó al precio varias veces.',
+  'El precio rompe el techo y la vela cierra afuera. Todavía no entrás: perseguir la vela es caro y arriesgado.',
+  'Esperás que vuelva a probar el nivel desde arriba. Si aparece una vela de rechazo, el viejo techo ya funciona como piso.',
+  'Entrada arriba de la vela de rechazo. Stop debajo del nivel. Objetivo: dos veces lo que arriesgás.',
+  'Con el nivel defendido, el precio sigue su camino y alcanza el objetivo.',
+  'Si después de romper vuelve a cerrar adentro del rango, fue una trampa. No hay retesteo válido: se descarta.'],
+ claves:['Ruptura con cierre, retesteo y vela de rechazo.','El retesteo te da un stop más corto que entrar en la ruptura.','No siempre vuelve: a veces el setup se pierde, y está bien.'],
+ trampa:'Entrar en la vela de ruptura por miedo a quedarte afuera.',
+ check:['Había un techo claro, tocado varias veces','Una vela cerró afuera del techo','El precio volvió a probar el nivel desde arriba','Apareció una vela de rechazo en el nivel','El objetivo está al menos a 2R'],
+ practica:['setup','stop','ruptura'],
+ q:[['¿Cuándo entrás en este setup?',['En la vela que rompe','Cuando vuelve al nivel y aparece un rechazo','Antes de que rompa'],1,'Esperás que el nivel cambie de rol.'],
+  ['¿Dónde va el stop?',['Debajo del nivel roto','Arriba del último máximo','No hace falta'],0,'Si vuelve abajo del nivel, la idea murió.'],
+  ['Rompe y al rato cierra adentro del rango. Eso es…',['Un retesteo perfecto','Una posible trampa: se descarta','Señal de comprar más'],1,'El nivel no cambió de rol.']],
+ setup:function(){var cs=serie([[0,104],[5,110],[10,101],[16,110],[21,102],[27,110],[31,105],[34,116],[38,110.4],[50,124]],141,.5,.7);fijar(cs,38,{o:Math.min(cs[37].c,111),h:112.1,l:109.8,c:111.9});
+  return{cs:cs,ctx:31,gat:38,zona:[110,.5],zonaTxt:'Techo roto',ctxTxt:'Un techo que frenó tres veces',gatTxt:'Rechazo en el nivel',e:112.4,s:109.3,o:118.6,
+   extra:function(S,G,h,k){if(k===0){piso(S,G,110,'Techo',DN,sg(S.p,.05,.25));[5,16,27].forEach(function(i){pop(S.c,G.x(i),G.y(110),S.z*1.1,DN,sg(h,i+.5,i+2.5))})}if(k===1){var b=hastaPrecio(G.cs,h,110.6,true,31);if(b>0)pastilla(S.c,'Cerró afuera',G.x(b),G.y(G.cs[b].h)-S.z*1.8,UP,S.z*.85,'center',sg(h,b+.6,b+1.6))}},
+   no:function(){var c2=serie([[0,104],[5,110],[10,101],[16,110],[21,102],[27,110],[31,105],[34,113],[38,106],[44,103]],143,.5,.7);return{cs:c2,i:hastaPrecio(c2,99,109.2,false,34),txt:'Volvió adentro del rango'}}}}},
+{id:'barrida',tec:1,cat:'setups',n:'Setup: falsa ruptura',corto:'Falsa ruptura',sub:'Usar la trampa a tu favor',mini:4,
+ tit:['El contexto: un rango claro','La barrida: rompe con la mecha','El gatillo: cierra adentro','El plan: entrada, stop y objetivo','Así se ve cuando sale','Cuándo no hay setup'],
+ t:['Este setup usa las trampas a tu favor. Necesitás un rango claro, con un piso respetado varias veces.',
+  'El precio perfora el piso con una mecha. Muchos venden, y saltan los stops de los que compraron abajo.',
+  'Pero la vela cierra de vuelta adentro del rango. Esa es la señal: la ruptura falló.',
+  'Entrada al cierre de esa vela. Stop debajo de la mecha. Objetivo: dos R, sin pasar el otro lado del rango.',
+  'Los atrapados salen con pérdida y empujan el precio hacia el otro lado del rango.',
+  'Si la vela cierra afuera del piso, no es trampa: es una ruptura de verdad. Ahí no se compra.'],
+ claves:['La clave es el cierre de vuelta adentro del rango.','El stop va debajo de la mecha: si la pierde, la idea murió.','El otro lado del rango es un objetivo natural.'],
+ trampa:'Comprar mientras la mecha todavía se está formando. Si cierra abajo, era una ruptura real.',
+ check:['Hay un rango claro, con piso tocado varias veces','La vela perforó el piso solo con la mecha','La vela cerró de vuelta adentro del rango','El stop va debajo de la mecha','El objetivo entra antes del techo del rango'],
+ practica:['ruptura','stop','setup'],
+ q:[['¿Cuál es la señal de este setup?',['Que la vela cierre debajo del piso','Que la mecha perfore el piso y la vela cierre adentro','Que el RSI llegue a 50'],1,'La ruptura falló: es una trampa.'],
+  ['¿Dónde va el stop?',['Debajo de la mecha','En el medio del rango','Arriba del techo'],0,'Si el precio vuelve a perder la mecha, la idea murió.'],
+  ['La vela cierra con fuerza debajo del piso. Es…',['Una falsa ruptura','Una ruptura real: no se compra','Un doble piso'],1,'El cierre quedó afuera.']],
+ setup:function(){var cs=serie([[0,106],[5,100],[10,109],[16,100.2],[21,109.5],[27,100.4],[31,105],[34,101],[46,110.4]],151,.5,.7);var o=cs[34].c;fijar(cs,35,{o:o,h:Math.max(o,101.9)+.2,l:98.3,c:101.9});
+  return{cs:cs,ctx:27,gat:35,zona:[100,.5],zonaTxt:'Piso del rango',ctxTxt:'Un piso respetado tres veces',gatTxt:'Mecha abajo, cierre adentro',e:101.9,s:97.8,o:110.1,
+   extra:function(S,G,h,k){if(k<2)piso(S,G,110,'Techo',DN,1)},
+   no:function(){var c2=serie([[0,106],[5,100],[10,109],[16,100.2],[21,109.5],[27,100.4],[31,105],[34,101],[37,96.5],[44,94]],153,.5,.7);return{cs:c2,i:hastaPrecio(c2,99,99.3,false,33),txt:'Cerró afuera: ruptura real'}}}}},
+{id:'rebote-media',tec:1,cat:'setups',n:'Setup: rebote en la media',corto:'Rebote en la media',sub:'La media como piso que se mueve',mini:4,
+ tit:['El contexto: media que sube','El retroceso a la media','El gatillo: rebota con fuerza','El plan: entrada, stop y objetivo','Así se ve cuando sale','Cuándo no hay setup'],
+ t:['Un setup simple para tendencias: el precio arriba de la media de veinte, y la media apuntando para arriba.',
+  'Esperás un retroceso hasta la media. En tendencia, suele funcionar como un piso que se mueve.',
+  'Cuando toca la media aparece una vela verde que rebota. Ese es el gatillo.',
+  'Entrada arriba de esa vela. Stop debajo de su mínimo. Objetivo: dos veces lo arriesgado.',
+  'El precio retoma la tendencia y llega al objetivo.',
+  'Si la media está plana y el precio la cruza todo el tiempo, no hay tendencia. Este setup no se usa en rangos.'],
+ claves:['Media con pendiente: sin pendiente no hay setup.','Mejor en el primer o segundo retroceso a la media, no en el quinto.','La vela gatillo tiene que cerrar arriba de la media.'],
+ trampa:'Usarlo en un mercado lateral, donde la media está plana y el precio la cruza todo el tiempo.',
+ check:['La media de 20 apunta para arriba','El precio retrocedió hasta la media','Una vela verde rebotó y cerró arriba de la media','El stop va debajo de esa vela','El objetivo está al menos a 2R'],
+ practica:['media','setup','stop'],
+ q:[['¿Qué tiene que hacer la media para usar este setup?',['Estar plana','Apuntar a favor de la operación','Cruzarse con el precio seguido'],1,'Sin pendiente no hay tendencia.'],
+  ['¿Cuál es el gatillo?',['Que el precio toque la media','Una vela que rebota y cierra arriba de la media','Que pase una hora'],1,'Tocar no alcanza: tiene que rebotar.'],
+  ['La media está plana y el precio la cruza todo el tiempo. ¿Qué hacés?',['Uso el setup igual','No lo uso: no hay tendencia','Pongo el stop más cerca'],1,'Es un rango: las medias engañan.']],
+ setup:function(){var cs=serie([[0,100],[8,107],[13,102],[22,112],[29,108],[42,120]],161,.6,.8),m=media(cs,20),mv=m[29];fijar(cs,29,{o:mv+.5,h:mv+1.9,l:mv-.3,c:mv+1.7});var m2=media(cs,20),v=cs[29],e=v.h+.2,s=v.l-.4;
+  return{cs:cs,ctx:22,gat:29,zona:null,ctxTxt:'Precio arriba de una media que sube',gatTxt:'Rebota en la media',e:e,s:s,o:e+2*(e-s),
+   extra:function(S,G,h,k){curva(S.c,G,m2,0,h,S.A,3);pastilla(S.c,'Media de 20',G.x(24),G.y(m2[24])+S.z*2.2,S.A,S.z*.8,'center',k===0?sg(S.p,.4,.5):k===1?1:0)},
+   no:function(){var c2=serie([[0,105],[4,101],[8,107],[12,102],[16,108],[20,101],[24,107],[28,102],[32,108],[36,101],[40,106],[44,103]],163,.7,.9),m3=media(c2,20);return{cs:c2,zona:null,i:-1,txt:'',extra:function(S,G,h){curva(S.c,G,m3,0,h,S.A,3);pastilla(S.c,'Media plana: sin tendencia',G.b.x+G.b.w/2,G.y(m3[c2.length-1])+S.z*3,AM,S.z*.92,'center',sg(S.p,.6,.7))}}}}}}
+);
+L.forEach(function(l){if(l.cat==='setups')l.esc=SET});
+
 /* ---- dibujo de cada escena ---- */
-function base(c,W,H,l,p,T){var k=CAT[l.cat],pt=H>W;VW=W;return{c:c,W:W,H:H,pt:pt,p:p,T:T,A:k[1],B:k[2],z:Math.min(W,H)*(pt?.036:.03),caja:pt?{x:W*.07,y:H*.19,w:W*.86,h:H*.72}:{x:W*.07,y:H*.185,w:W*.86,h:H*.5}}}
+function base(c,W,H,l,p,T){var k=CAT[l.cat],pt=H>W;VW=W;return{l:l,c:c,W:W,H:H,pt:pt,p:p,T:T,A:k[1],B:k[2],z:Math.min(W,H)*(pt?.036:.03),caja:pt?{x:W*.07,y:H*.19,w:W*.86,h:H*.72}:{x:W*.07,y:H*.185,w:W*.86,h:H*.5}}}
 function dibujar(c,W,H,l,i,p,T){
   var S=base(c,W,H,l,p,T);MINI=false;c.textBaseline='alphabetic';M.fondo(c,W,H,T,S.A,S.B);
   var v=eo(sg(p,0,.06));c.save();c.globalAlpha=v;c.translate(0,(1-v)*10);
@@ -367,7 +470,18 @@ function miniatura(c,W,H,l,T){
 function ent(r,a,b){return a+Math.floor(r()*(b-a+1))}
 function elegir(r,xs){return xs[Math.floor(r()*xs.length)]}
 function zig(r,n,ini,paso,dir,amp){var pts=[[0,ini]],v=ini,i=0,arriba=r()<.5;while(i<n-1){var d=ent(r,3,6);i=Math.min(n-1,i+d);var m=(arriba?1:-1)*amp*(.7+r()*.6);v+=dir*paso*d/4.5+m;arriba=!arriba;pts.push([i,v])}return pts}
+function voltear(cs,m){return cs.map(function(v){return{o:2*m-v.o,c:2*m-v.c,h:2*m-v.l,l:2*m-v.h}})}
+function base3(r){var Z=100+r()*3,lo=Z-8-r()*2,pts=[[0,lo],[6,Z-2.5],[10,Z-5.5],[16,Z],[20,Z-3],[26,Z+5+r()*2],[31,Z+.9]];return{Z:Z,cs:serie(pts,ent(r,1,9e5),.45,.6)}}
 var EJ={
+ setup:function(r){var k=r()<.5?0:ent(r,1,2),cor=r()<.5,b=base3(r),Z=b.Z,cs=b.cs,u=cs[cs.length-1].c,v=[{o:Math.min(u,Z+.9),l:Z-.5,c:Z+1.5,h:Z+1.7},{o:Math.min(u,Z+.8),h:Math.min(u,Z+.8)+.2,l:Z-2.5,c:Z-2.1},{o:Math.max(u,Z+1.5),h:Math.max(u,Z+1.5)+.2,l:Z-.25,c:Z-.1}][k];cs.push(v);if(cor){cs=voltear(cs,Z);v=cs[cs.length-1]}
+  return{preg:cor?'Tendencia bajista y el precio volvió a la zona. Mirá la última vela: ¿hay setup de venta?':'Tendencia alcista y el precio volvió a la zona. Mirá la última vela: ¿hay setup de compra?',ops:[cor?'Sí: entro abajo de la vela':'Sí: entro arriba de la vela','No: espero'],ok:k?1:0,
+   exp:(cor?['Mecha larga arriba y cierre debajo de la zona: aparecieron vendedores.','Cerró con fuerza arriba de la zona: la idea murió.','Vela verde sin rechazo: todavía no hay gatillo. Se espera.']:['Mecha larga abajo y cierre arriba de la zona: aparecieron compradores.','Cerró con fuerza debajo de la zona: la idea murió.','Vela roja sin rechazo: todavía no hay gatillo. Se espera.'])[k],
+   dib:function(S,rev){var G=graf(S,cs,99,{ext:cor?[Z+3,Z-9]:[Z-3,Z+9],antes:function(G){zonaDib(S,G,[Z,.6],'Zona',1)}});anillo(S.c,G.x(cs.length-1),G.y((v.h+v.l)/2),Math.max(S.z*1.4,(G.y(v.l)-G.y(v.h))*.8),rev?(k?DN:UP):INK,.8)}}},
+ stop:function(r){var cor=r()<.5,b=base3(r),Z=b.Z,cs=b.cs,u=cs[cs.length-1].c,v={o:Math.min(u,Z+.9),l:Z-.5,c:Z+1.5,h:Z+1.7};cs.push(v);var e=v.h+.2,ok=v.l-.5,dec=[['arriba',e+1.8+r()],['ajustado',Z+.7],['lejos',ok-3.5-r()*1.5]].sort(function(){return r()-.5}).slice(0,2),f=function(x){return cor?2*Z-x:x};
+  if(cor){cs=voltear(cs,Z);e=f(e);ok=f(ok);dec=dec.map(function(d){return[d[0],f(d[1])]})}
+  var ls=[ok].concat(dec.map(function(d){return d[1]})).sort(function(a,b){return b-a}),k=ls.indexOf(ok),mal=dec.map(function(d){return d[0]});
+  return{preg:cor?'Venta abajo de la estrella fugaz. ¿Qué línea es el stop correcto del setup?':'Compra arriba del martillo. ¿Qué línea es el stop correcto del setup?',ops:['A','B','C'],ok:k,exp:(cor?'Justo arriba de la mecha de la vela y de la zona':'Justo debajo de la mecha del martillo y de la zona')+': ahí la idea deja de valer.'+(mal.indexOf('ajustado')>=0?' Adentro de la vela, el ruido te saca.':'')+(mal.indexOf('lejos')>=0?' Muy lejos arriesgás de más sin motivo.':'')+(mal.indexOf('arriba')>=0?(cor?' Del lado de la ganancia':' Arriba de la entrada')+' no protege nada.':''),
+   dib:function(S,rev){var G=graf(S,cs,99,{ext:ls.concat([cor?Z-9:Z+9,e]),antes:function(G){zonaDib(S,G,[Z,.6],'Zona',1)}});nivel(S.c,G,e,INK,1,{x0:cs.length-2,g:2,dash:false});ls.forEach(function(x,j){nivel(S.c,G,x,rev?(j===k?UP:MUT):DN,1,{x0:cs.length-6,g:j===k&&rev?3:2,txt:'ABC'[j],z:S.z*1.05})})}}},
  tendencia:function(r){var k=ent(r,0,2),dir=[1,-1,0][k],pts=zig(r,44,100,dir?2.2:0,dir,dir?2.6:3.2);if(!dir){pts=pts.map(function(q,i){return[q[0],i%2?104+r()*1.2:98.5+r()*1.2]})}var cs=serie(pts,ent(r,1,9e5),.5,.7);
   return{preg:'¿Qué tendencia ves?',ops:['Alcista','Bajista','Lateral'],ok:k,exp:['Máximos y mínimos cada vez más altos: una escalera que sube.','Máximos y mínimos cada vez más bajos: una escalera que baja.','Va y viene entre un piso y un techo, sin escalones.'][k],
    dib:function(S,rev){var G=graf(S,cs,cs.length);if(rev)escalon(S,G,99,pts.slice(1,-1),[UP,DN,AM][k])}}},
@@ -402,7 +516,7 @@ var EJ={
    dib:function(S,rev){var G=marco(cs.concat([{o:e,c:e,h:Math.max(st,ob),l:Math.min(st,ob)}]).slice(0,cs.length),S.caja,[st,ob]);rejilla(S.c,G);var x0=G.x(19),x1=G.b.x+G.b.w;S.c.fillStyle=rgba(DN,.2);S.c.fillRect(x0,Math.min(G.y(e),G.y(st)),x1-x0,Math.abs(G.y(st)-G.y(e)));S.c.fillStyle=rgba(UP,.18);S.c.fillRect(x0,Math.min(G.y(e),G.y(ob)),x1-x0,Math.abs(G.y(ob)-G.y(e)));velas(S.c,G,99);
     [[e,INK,'Entrada '+f(e)],[st,DN,'Stop '+f(st)],[ob,UP,'Objetivo '+f(ob)]].forEach(function(q){nivel(S.c,G,q[0],q[1],1,{x0:19,g:2,dash:false,txt:q[2],z:S.z*.85,abajo:q[0]===st?lg:!lg&&q[0]===ob})});if(rev){pastilla(S.c,'1R',x1-6,(G.y(e)+G.y(st))/2,DN,S.z*.9,'right',1);pastilla(S.c,m+'R',x1-6,(G.y(e)+G.y(ob))/2,UP,S.z*.9,'right',1)}}}}
 };
-var TIPOS=Object.keys(EJ),NOMBRE={tendencia:'Tendencia',nivel:'Niveles',vela:'Velas',ruptura:'Rupturas',media:'Medias',rsi:'RSI',patron:'Patrones',rr:'Riesgo'};
+var TIPOS=Object.keys(EJ),NOMBRE={tendencia:'Tendencia',nivel:'Niveles',vela:'Velas',ruptura:'Rupturas',media:'Medias',rsi:'RSI',patron:'Patrones',rr:'Riesgo',setup:'Setups',stop:'Stops'};
 function ejercicio(tipo,semilla){var r=azar(semilla),e=EJ[tipo](r);e.tipo=tipo;return e}
 function pintarEj(c,W,H,e,rev,T){VW=W;MINI=false;var pt=H>W,S={c:c,W:W,H:H,pt:pt,p:1,T:T||0,A:'#7FB4F0',B:'#5CC6D6',z:Math.min(W,H)*(pt?.038:.034),caja:{x:W*.05,y:H*.07,w:W*.9,h:H*(e.tipo==='vela'?.74:.86)}};c.fillStyle='#0a100d';c.fillRect(0,0,W,H);c.textBaseline='alphabetic';e.dib(S,rev)}
 return{L:L,CAT:CAT,dibujar:dibujar,miniatura:miniatura,ejercicio:ejercicio,pintarEj:pintarEj,TIPOS:TIPOS,NOMBRE:NOMBRE,azar:azar};
