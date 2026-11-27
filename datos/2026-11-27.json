@@ -1,0 +1,157 @@
+{
+ "fecha": "2026-11-27",
+ "actualizado": "2026-11-27T15:50:00-03:00",
+ "titular": "El déficit comercial de bienes saltó a 149.500 millones en octubre",
+ "bajada": "Con la bolsa de EE.UU. en medio día, el único dato de la jornada fue el comercio exterior de bienes de octubre: el déficit fue de 149.500 millones de dólares, contra 135.100 millones en septiembre. Las importaciones subieron 21.100 millones y las exportaciones 6.700 millones. También subieron los inventarios de mayoristas (+0,9%) y minoristas (+0,8%). Es un dato adelantado y de impacto bajo: la atención sigue en el empleo del 4/12 y la Fed del 9/12.",
+ "termometro": [
+  {
+   "factor": "Comercio",
+   "dato": "Déficit 149,5B",
+   "posicion": 60,
+   "texto": "El déficit de bienes creció 14.400 millones en un mes porque las importaciones subieron más que las exportaciones. Es un dato adelantado, que se revisa."
+  },
+  {
+   "factor": "Crecimiento",
+   "dato": "PIB 4,3% (3T)",
+   "posicion": 82,
+   "texto": "Dato del 25/11: muy por encima de lo previsto, aunque cubre de julio a septiembre."
+  },
+  {
+   "factor": "Empleo",
+   "dato": "Subsidios 189K",
+   "posicion": 78,
+   "texto": "Dato del 25/11: menos pedidos de los esperados, hay pocos despidos. El informe de empleo sale el 4/12."
+  },
+  {
+   "factor": "Inflación",
+   "dato": "PCE subyacente 3,3%",
+   "posicion": 76,
+   "texto": "Dato del 25/11: apenas arriba de lo previsto y lejos del objetivo de 2%."
+  }
+ ],
+ "ideas": [
+  {
+   "titulo": "Un dato chico en un día corto",
+   "texto": "La balanza comercial de bienes de octubre mostró un déficit de 149.500 millones, contra 135.100 millones en septiembre. Es un adelanto del dato completo, que sale el 8/12."
+  },
+  {
+   "titulo": "Más importaciones que exportaciones",
+   "texto": "Las importaciones de bienes fueron de 365.300 millones (+21.100 millones) y las exportaciones de 215.800 millones (+6.700 millones). Los inventarios de mayoristas subieron 0,9% y los de minoristas 0,8%."
+  },
+  {
+   "titulo": "Lo que sigue: empleo y Fed",
+   "texto": "El próximo dato fuerte es el informe de empleo del 4/12. La Fed decide la tasa el 9/12 y el IPC sale el 10/12."
+  }
+ ],
+ "datos": [
+  {
+   "nombre": "Balanza comercial de bienes (octubre, adelantada)",
+   "nota": "Déficit en dólares",
+   "salio": "-149,5B",
+   "previsto": "s/d",
+   "anterior": "-135,1B",
+   "sorpresa": "sd"
+  },
+  {
+   "nombre": "Inventarios de mayoristas (octubre, adelantado)",
+   "salio": "+0,9%",
+   "previsto": "s/d",
+   "anterior": "+0,8%",
+   "sorpresa": "sd"
+  },
+  {
+   "nombre": "Inventarios de minoristas (octubre, adelantado)",
+   "salio": "+0,8%",
+   "previsto": "s/d",
+   "anterior": "+0,7%",
+   "sorpresa": "sd"
+  }
+ ],
+ "fed": "La tasa está en 3,75% a 4,00% y la próxima decisión es el 9 de diciembre. Hoy no hay decisión ni minutas de la Fed en la agenda. Antes de la reunión quedan el empleo del 4/12 y, después, el IPC del 10/12.",
+ "mercado": [
+  "La bolsa de EE.UU. operó medio día y cerró a las 15:00 de Argentina. No pude leer hoy un medio reconocido con el cierre, así que no publico números de índices.",
+  "No hubo subastas del Tesoro en la agenda de hoy ni dato nuevo de la tasa a 10 años: el último valor oficial publicado es 4,85% del 25/11 (Tesoro de EE.UU.).",
+  "Con poco volumen, los movimientos del día después de un feriado pueden ser más bruscos y engañosos."
+ ],
+ "leccion": "Un dato adelantado no es el definitivo. El déficit comercial de octubre es una primera estimación del Census: el informe completo sale el 8/12 y puede cambiar. Por eso conviene distinguir entre el dato adelantado y el final antes de sacar conclusiones.",
+ "agenda": [
+  {
+   "cuando": "2026-11-27T10:30:00-03:00",
+   "evento": "Balanza comercial de bienes",
+   "anterior": "-135,1B",
+   "impacto": "bajo",
+   "salio": "-149,5B"
+  },
+  {
+   "cuando": "2026-11-27T15:00:00-03:00",
+   "evento": "Cierre anticipado de la bolsa de EE.UU.",
+   "impacto": "bajo"
+  },
+  {
+   "cuando": "2026-11-30T11:45:00-03:00",
+   "evento": "PMI de Chicago",
+   "anterior": "55,3",
+   "impacto": "bajo"
+  },
+  {
+   "cuando": "2026-12-01T12:00:00-03:00",
+   "evento": "ISM manufacturero y vacantes JOLTS",
+   "impacto": "medio",
+   "anterior": "ISM 55,5, JOLTS 7,523M"
+  },
+  {
+   "cuando": "2026-12-02T10:15:00-03:00",
+   "evento": "Empleo privado ADP",
+   "anterior": "86K",
+   "impacto": "medio"
+  },
+  {
+   "cuando": "2026-12-04T10:30:00-03:00",
+   "evento": "Empleo: NFP y desempleo",
+   "previsto": "NFP 90K, desempleo 4,1%",
+   "anterior": "NFP 165K, desempleo 4,1%",
+   "impacto": "alto"
+  },
+  {
+   "cuando": "2026-12-08T10:30:00-03:00",
+   "evento": "Balanza comercial de octubre",
+   "impacto": "bajo"
+  },
+  {
+   "cuando": "2026-12-09T16:00:00-03:00",
+   "evento": "Decisión de tasas de la Fed",
+   "impacto": "alto"
+  },
+  {
+   "cuando": "2026-12-10T10:30:00-03:00",
+   "evento": "IPC de noviembre",
+   "impacto": "alto"
+  },
+  {
+   "cuando": "2026-12-23T10:30:00-03:00",
+   "evento": "PIB 3T (tercera estimación) y PCE de noviembre",
+   "impacto": "alto"
+  }
+ ],
+ "mensaje": "📊 *FUNDAMENTALES EE.UU. | 27/11*\n\n*El déficit comercial de bienes saltó a 149.500 millones en octubre.*\n\n• Salió: *-149,5B* (septiembre: -135,1B). Dato adelantado del Census.\n• Importaciones *365,3B* (+21,1B); exportaciones *215,8B* (+6,7B)\n• Inventarios: mayoristas *+0,9%*, minoristas *+0,8%*\n\n🕒 La bolsa de EE.UU. operó medio día. Poco volumen: los movimientos pueden ser engañosos.\n\n📅 Próximo dato fuerte: empleo, el 4/12. Fed, el 9/12.\n\n_Contenido educativo. No es asesoramiento financiero._",
+ "fuentes": [
+  {
+   "nombre": "Census (Advance Economic Indicators, octubre 2026)",
+   "url": "https://www.census.gov/econ/indicators/advance_report.pdf"
+  },
+  {
+   "nombre": "Census (indicadores económicos)",
+   "url": "https://www.census.gov/econ/indicators/current/index.html"
+  },
+  {
+   "nombre": "Tesoro (curva de tasas)",
+   "url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/TextView?type=daily_treasury_yield_curve&field_tdr_date_value_month=202611"
+  }
+ ],
+ "novedades": [
+  {
+   "cuando": "2026-11-27T15:50:00-03:00",
+   "texto": "Primer resumen del día: El déficit comercial de bienes saltó a 149.500 millones en octubre"
+  }
+ ]
+}
