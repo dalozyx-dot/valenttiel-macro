@@ -102,6 +102,9 @@ main{display:grid;gap:clamp(26px,4vw,46px);padding-block:clamp(26px,5vw,54px) 60
 .niveles{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;padding:0;margin:0}.niveles>li{list-style:none;display:grid;gap:6px;align-content:start;padding:16px;border-radius:16px;background:rgba(210,240,226,.04);box-shadow:inset 0 0 0 1px var(--line)}.niveles>li.n4{box-shadow:inset 0 0 0 1px rgba(201,166,73,.55);background:rgba(201,166,73,.07)}.niveles ul{padding:0;margin:4px 0 0;display:grid;gap:4px}.niveles ul li{list-style:none;font-size:14px;color:var(--muted)}
 .bloque-nivel{box-shadow:inset 0 0 0 1px rgba(201,166,73,.45);background:linear-gradient(160deg,rgba(201,166,73,.1),var(--glass))}
 @media(max-width:900px){.niveles{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:560px){.niveles{grid-template-columns:minmax(0,1fr)}}
+.rank{display:grid;gap:4px;padding:0;margin:0}.rank li{list-style:none;display:grid;grid-template-columns:34px minmax(0,1fr) auto auto;gap:12px;align-items:center;padding:10px 14px;border-radius:12px;background:rgba(210,240,226,.035)}.rank li:nth-child(-n+3) .pos{color:#C9A649}.rank .pos{font-weight:600;color:var(--muted)}.rank .ap{font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.rank li.vos{background:rgba(95,208,160,.1);box-shadow:inset 0 0 0 1px rgba(95,208,160,.45)}
+.rank-seg{max-width:320px}.apodo{display:grid;gap:8px;border-top:1px solid var(--line);padding-top:14px}.apodo-fila{display:flex;gap:8px;flex-wrap:wrap}.apodo input{flex:1;min-width:160px;border:0;border-radius:999px;padding:12px 16px;background:rgba(6,10,9,.6);box-shadow:inset 0 0 0 1px var(--line);color:var(--ink);font:inherit}.apodo input:focus-visible{outline:2px solid var(--mint)}
+button.link{border:0;background:none;padding:0;color:var(--mint);text-decoration:underline;text-underline-offset:3px;font-size:inherit}
 .gstats{grid-template-columns:repeat(4,minmax(0,1fr))}
 footer{border-top:1px solid var(--line);padding-block:20px 40px;display:grid;gap:6px}
 @media(prefers-reduced-motion:no-preference){.entra>*{animation:sube .7s var(--ease) backwards}.entra>:nth-child(2){animation-delay:.06s}.entra>:nth-child(3){animation-delay:.12s}.entra>:nth-child(n+4){animation-delay:.18s}}
@@ -355,7 +358,10 @@ function mapa(){
       Object.keys(MAPA).map(function(id){var m=MAPA[id],l=TEC.L.filter(function(x){return x.id===id})[0];return el('a',{class:'fila',role:'row',href:'#'+id},el('span',{role:'cell',class:'nom',text:l.corto}),el('span',{role:'cell','data-t':'Cuándo',text:m[0]}),el('span',{role:'cell','data-t':'Dirección',class:m[1]==='Compra'?'up':'down',text:m[1]}),el('span',{role:'cell','data-t':'Gatillo',text:m[2]}),el('span',{role:'cell','data-t':'Stop',text:m[3]}))})));
 }
 var KG='valenttiel-gimnasio',GY={rec:0,dias:{},libres:0};
+var API_G=/^(localhost|127\.0\.0\.1)$/.test(location.hostname)?'http://localhost:3100/api/gimnasio':'https://leads-vbm4.vercel.app/api/gimnasio';
+function apiG(cuerpo){return fetch(API_G,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify(cuerpo),credentials:'omit'}).then(function(r){return r.json().then(function(j){if(!r.ok||!j.ok)throw new Error(j.error||'No pudimos cargar el ranking.');return j})})}
 try{var gg=JSON.parse(localStorage.getItem(KG));if(gg&&gg.dias)GY=gg}catch(e){}
+function idGY(){if(!GY.id){GY.id=crypto.randomUUID?crypto.randomUUID():'xxxxxxxx-xxxx-4xxx-8xxx-xxxxxxxxxxxx'.replace(/x/g,function(){return(Math.random()*16|0).toString(16)});guardarGY()}if(!GY.env)GY.env={};return GY.id}
 function guardarGY(){try{localStorage.setItem(KG,JSON.stringify(GY))}catch(e){}}
 var LEC={tendencia:'tendencia',nivel:'soportes',vela:'velas',ruptura:'rupturas',media:'medias',rsi:'rsi',patron:'dobles',rr:'riesgo',setup:'pullback',stop:'pullback',imbalance:'imbalance'};
 function hoyAR(){return new Date().toLocaleDateString('en-CA',{timeZone:TZ})}
@@ -375,7 +381,7 @@ function Entreno(lista,op){
     var q=lista[i];e=TEC.ejercicio(q.tipo,q.sem);rev=false;t0=performance.now();
     var fb=el('p',{class:'fb',role:'status'}),ops=el('div',{class:'ops'+(e.ops.length===3&&e.ops[0].length<3?' fila':'')},e.ops.map(function(t,k){return el('button',{type:'button',text:t,onclick:function(){responder(k,ops,fb)}})}));
     cv.setAttribute('aria-label','Gráfico de ejemplo del ejercicio '+(i+1));
-    sec.replaceChildren(el('div',{class:'ej-cab'},el('span',{class:'tag',text:TEC.NOMBRE[q.tipo]}),el('span',{class:'muted small',text:(i+1)+' de '+lista.length}),op.reloj?el('span',{class:'num pts',text:pts+' pts'}):null,racha>1?el('span',{class:'racha',text:'🔥 '+racha+' seguidas'}):null),el('h3',{text:e.preg}),cv,ops,fb,i===0&&matchMedia('(hover:hover)').matches?el('p',{class:'muted small atajo',text:'Atajos: 1, 2, 3 para responder y Enter para seguir.'}):null);
+    sec.replaceChildren(el('div',{class:'ej-cab'},el('span',{class:'tag',text:TEC.NOMBRE[q.tipo]}),el('span',{class:'muted small',text:(i+1)+' de '+lista.length}),op.reloj?el('span',{class:'num pts',text:pts+' pts'}):null,racha>1?el('span',{class:'racha',text:'🔥 '+racha+' seguidas'}):null),el('h3',{text:e.preg}),cv,ops,fb,i===0&&matchMedia('(hover:hover)').matches?el('p',{class:'muted small atajo',text:'Atajos: 1, 2, 3 para responder y Enter para seguir.'}):'');
     requestAnimationFrame(pinta);
   }
   function responder(k,ops,fb){
@@ -417,12 +423,29 @@ function desafio(fecha){var r=TEC.azar(hash('valenttiel-'+fecha)),t=TEC.TIPOS.sl
 function gimnasio(){
   detener();document.title='Gimnasio de gráficos | Academia Valenttiel';mat='tec';
   var f=hoyAR(),hoy=GY.dias[f],tema='todos',zona=el('div',{class:'stack',style:'gap:22px'});
-  var cajaStats=el('section',{class:'glass'});
+  var cajaStats=el('section',{class:'glass'}),cajaRank=el('section',{class:'glass ranking'}),vista='hoy',datosR=null,errR='';
+  function enviarHoy(){if(!GY.apodo||GY.dias[f]==null||(GY.env||{})[f])return Promise.resolve();idGY();var d=GY.ult||{};
+    return apiG({accion:'enviar',persona:GY.id,apodo:GY.apodo,dia:f,pts:GY.dias[f],bien:d.dia===f?d.bien:Math.floor(GY.dias[f]/150)+(GY.dias[f]%150?1:0)}).then(function(j){GY.env[f]=1;guardarGY();datosR=j;errR='';pintarRank()},function(e){errR=e.message;pintarRank()})}
+  function cargarRank(){apiG({accion:'tabla',persona:GY.id||null}).then(function(j){datosR=j;errR='';pintarRank()},function(e){errR=e.message;pintarRank()})}
+  function pintarRank(){
+    var d=datosR,xs=d?(vista==='hoy'?d.hoy:d.semana):[],yo=d?(vista==='hoy'?d.yoHoy:d.yoSemana):null,msg=el('p',{class:'muted small',role:'status'});
+    var seg=el('div',{class:'seg rank-seg',role:'group','aria-label':'Período'},[['hoy','Hoy'],['semana','Esta semana']].map(function(x){return el('button',{type:'button','aria-pressed':String(vista===x[0]),text:x[1],onclick:function(){vista=x[0];pintarRank()}})}));
+    var lista=!d?el('p',{class:'muted',text:errR||'Cargando el ranking…'}):xs.length?el('ol',{class:'rank'},xs.map(function(r){return el('li',{class:r.vos?'vos':''},el('span',{class:'num pos',text:String(r.pos)}),el('span',{class:'ap',text:r.apodo+(r.vos?' (vos)':'')}),r.dias?el('span',{class:'muted small',text:r.dias+(r.dias===1?' día':' días')}):el('span'),el('span',{class:'num',text:r.pts+' pts'}))})):el('p',{class:'muted',text:vista==='hoy'?'Todavía nadie jugó el desafío de hoy. ¡Podés ser el primero!':'Todavía no hay puntajes esta semana.'});
+    var mio=yo&&yo.pos>xs.length?el('p',{class:'small',text:'Tu puesto: '+yo.pos+'.º con '+yo.pts+' pts.'}):null;
+    var form=null;if(!GY.apodo){var inp=el('input',{type:'text',maxlength:'18',placeholder:'Tu apodo',autocomplete:'nickname','aria-label':'Apodo para el ranking'});
+      form=el('form',{class:'apodo',onsubmit:function(e){e.preventDefault();var v=inp.value.replace(/\s+/g,' ').trim();if(v.length<3){msg.textContent='El apodo tiene que tener al menos 3 caracteres.';return}idGY();
+        if(GY.dias[f]==null){GY.apodo=v;guardarGY();pintarRank();return}
+        apiG({accion:'enviar',persona:GY.id,apodo:v,dia:f,pts:GY.dias[f],bien:(GY.ult&&GY.ult.dia===f)?GY.ult.bien:Math.ceil(GY.dias[f]/150)}).then(function(j){GY.apodo=v;GY.env[f]=1;guardarGY();datosR=j;pintarRank()},function(er){msg.textContent=er.message})}},
+        el('p',{class:'small',text:'Para aparecer en el ranking, elegí un apodo. Solo se muestra el apodo: no pedimos nombre ni contacto.'}),el('div',{class:'apodo-fila'},inp,el('button',{class:'btn main',type:'submit',text:'Entrar al ranking'})),msg)}
+    cajaRank.replaceChildren(el('div',{class:'stack',style:'gap:14px'},el('div',{class:'sig'},el('h2',{text:'Ranking'}),d&&d.jugaron?el('span',{class:'muted small',text:d.jugaron+(d.jugaron===1?' jugó hoy':' jugaron hoy')}):el('span')),seg,lista,mio,form,
+      GY.apodo?el('p',{class:'muted small'},'Jugás como ',el('b',{text:GY.apodo}),'. ',el('button',{type:'button',class:'link',text:'Cambiar apodo',onclick:function(){GY.apodo='';guardarGY();pintarRank()}})):null,
+      el('p',{class:'muted small',text:'Cuenta el primer intento del desafío de cada día. La semana va de lunes a domingo.'})));
+  }
   function stats(){var r=rachaDias();return el('dl',{class:'ficha gstats'},[['Hoy',hoy!=null?hoy+' pts':'Sin jugar'],['Tu récord',GY.rec?GY.rec+' pts':'—'],['Días seguidos',r?r+(r===1?' día':' días'):'—'],['Tu nivel',GY.rec?rango(GY.rec):'—']].map(function(x){return el('div',{},el('dt',{text:x[0]}),el('dd',{text:x[1]}))}))}
   function jugar(lista,oficial){
     var titulo=oficial?'Desafío del '+f.split('-').reverse().slice(0,2).join('/'):'Entrenamiento libre';
     zona.replaceChildren(el('section',{class:'glass'},el('h2',{text:titulo}),Entreno(lista,{reloj:true,fin:function(R,box){
-      medir('test-leccion');var antes=GY.rec;if(oficial){GY.dias[f]=R.pts;hoy=R.pts}else GY.libres++;if(R.pts>GY.rec)GY.rec=R.pts;guardarGY();cajaStats.replaceChildren(stats());
+      medir(oficial?'gimnasio':'test-leccion');var antes=GY.rec;if(oficial){GY.dias[f]=R.pts;hoy=R.pts;GY.ult={dia:f,bien:R.bien};guardarGY();enviarHoy()}else GY.libres++;if(R.pts>GY.rec)GY.rec=R.pts;guardarGY();cajaStats.replaceChildren(stats());
       var peor=Object.keys(R.fallos).sort(function(a,b){return R.fallos[b]-R.fallos[a]})[0],txt='Hice '+R.pts+' puntos ('+R.bien+'/'+R.n+') en el desafío de hoy del Gimnasio de gráficos de Valenttiel. ¿Me ganás?',url='https://dalozyx-dot.github.io/valenttiel-macro/academia/?desde=gimnasio#gimnasio',msg=el('p',{class:'muted small',role:'status'});
       box.replaceChildren(el('div',{class:'resultado'},el('p',{class:'tag',text:rango(R.pts)}),el('p',{class:'big num',text:R.pts+' pts'}),el('p',{class:'muted',text:R.bien+' de '+R.n+' bien'+(R.mejor>2?', con '+R.mejor+' seguidas':'')+'.'+(R.pts>antes&&antes?' ¡Nuevo récord!':'')})),
         peor?el('p',{},'Para mejorar: ',el('a',{href:'#'+LEC[peor],text:'repasá '+TEC.NOMBRE[peor].toLowerCase()}),'.'):el('p',{class:'up',text:'Perfecto: no fallaste ninguno.'}),
@@ -435,9 +458,9 @@ function gimnasio(){
   var chips=el('div',{class:'filtros',role:'group','aria-label':'Tema del entrenamiento'},[['todos','Todos']].concat(TEC.TIPOS.map(function(t){return[t,TEC.NOMBRE[t]]})).map(function(x){return el('button',{type:'button','aria-pressed':String(tema===x[0]),text:x[1],onclick:function(ev){tema=x[0];[].forEach.call(chips.children,function(b){b.setAttribute('aria-pressed',String(b===ev.currentTarget))})}})}));
   zona.append(el('div',{class:'cols'},el('section',{class:'glass'},el('p',{class:'tag',text:'Igual para todos hoy'}),el('h2',{text:hoy!=null?'Ya jugaste el desafío de hoy':'Desafío del día'}),el('p',{class:'muted',text:hoy!=null?'Hiciste '+hoy+' puntos. '+falta()+' Podés repetirlo para practicar, pero cuenta el primero.':'Diez gráficos de todos los temas. Cada acierto vale 100 puntos y hasta 50 más si respondés rápido. Cuenta el primer intento.'}),el('div',{class:'btns'},el('button',{class:hoy!=null?'btn':'btn main',type:'button',text:hoy!=null?'Repetir para practicar':'Jugar el desafío',onclick:function(){jugar(desafio(f),hoy==null)}}))),
     el('section',{class:'glass'},el('p',{class:'tag',text:'Sin límite'}),el('h2',{text:'Entrenamiento libre'}),el('p',{class:'muted',text:'Diez gráficos nuevos cada vez. Elegí un tema o mezclá todos.'}),chips,el('div',{class:'btns'},el('button',{class:hoy!=null?'btn main':'btn',type:'button',text:'Entrenar',onclick:libre})))));
-  cajaStats.append(stats());
+  cajaStats.append(stats());pintarRank();if(GY.apodo&&GY.dias[f]!=null&&!(GY.env||{})[f])enviarHoy();else cargarRank();
   poner(el('div',{class:'hero'},el('p',{},el('a',{href:'#',text:'Academia'})),el('h1',{class:'grad',style:'font-size:clamp(34px,6vw,70px)',text:'Gimnasio de gráficos'}),el('p',{class:'lead',text:'Leer un gráfico es un músculo. Diez gráficos por día, respuestas con explicación y puntos por velocidad.'})),
-    cajaStats,zona,
+    cajaStats,zona,cajaRank,
     el('section',{class:'glass'},el('h2',{text:'Cómo se juega'}),el('ul',{class:'claves'},['Cada pregunta tiene una sola respuesta correcta, explicada al responder.','Acierto: 100 puntos. Si respondés en menos de 3 segundos, suma 50 más; después el bonus baja hasta los 15 segundos.','Máximo: 1500 puntos. Niveles: Aprendiz, Lector de gráficos (600), Analista (1000) y Francotirador (1300).','Los gráficos son de ejemplo: entrenan la lectura, no predicen el precio.'].map(function(t){return el('li',{text:t})}))));
   scrollTo(0,0);
 }
