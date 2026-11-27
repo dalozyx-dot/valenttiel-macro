@@ -63,7 +63,7 @@ main{display:grid;gap:clamp(26px,4vw,46px);padding-block:clamp(26px,5vw,54px) 60
 .ctl button{border:0;background:rgba(241,246,243,.1);border-radius:999px;min-width:42px;height:42px;padding:0 12px;display:grid;place-items:center;font:500 14px var(--m)}.ctl button:hover{background:rgba(241,246,243,.2)}.ctl svg{width:17px;height:17px;display:block;fill:currentColor}
 .segs{flex:1;display:flex;gap:5px;height:42px;align-items:center;min-width:0}.ctl .segs button{flex:1;min-width:0;height:100%;padding:0;background:none;display:flex;align-items:center}.segs b{display:block;width:100%;height:5px;border-radius:5px;background:rgba(241,246,243,.2);overflow:hidden}.segs i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--a),var(--b))}
 .tapa{position:absolute;inset:0;display:grid;place-items:center;align-content:center;gap:16px;background:rgba(7,11,10,.34);text-align:center;padding:20px 20px 84px}
-.tapa.fin{background:rgba(7,11,10,.8)}.gran{border:0;width:92px;height:92px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(120deg,var(--a),var(--b));color:var(--on);transition:transform .35s var(--ease)}.gran:hover{transform:scale(1.08)}.gran svg{width:34px;height:34px;fill:currentColor;margin-left:5px}
+.tapa>p{margin:0;font-size:13.5px;color:var(--ink);background:rgba(8,12,11,.78);padding:6px 12px;border-radius:999px;box-shadow:inset 0 0 0 1px var(--line)}.tapa.fin>p{background:none;box-shadow:none;font-size:15px}.tapa.fin{background:rgba(7,11,10,.8)}.gran{border:0;width:92px;height:92px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(120deg,var(--a),var(--b));color:var(--on);transition:transform .35s var(--ease)}.gran:hover{transform:scale(1.08)}.gran svg{width:34px;height:34px;fill:currentColor;margin-left:5px}
 @media(prefers-reduced-motion:no-preference){.gran{animation:late 2.4s ease-out infinite}}@keyframes late{0%{box-shadow:0 0 0 0 color-mix(in srgb,var(--a) 60%,transparent)}80%,100%{box-shadow:0 0 0 26px transparent}}
 .player:fullscreen{border-radius:0;display:grid;place-items:center;background:#000}.player:fullscreen canvas{width:100vw;height:100vh;aspect-ratio:auto}
 
@@ -305,7 +305,7 @@ function test(l){
     sec.replaceChildren(el('h2',{text:bien===3?'Perfecto: 3 de 3':bien+' de 3'}),el('p',{class:'muted',text:bien===3?'Este dato ya lo tenés.':bien===2?'Muy bien. Mirá de nuevo la que fallaste y lo cerrás.':'Volvé a ver la lección: es un minuto.'}),el('div',{class:'btns'},bien<3?el('button',{class:'btn main',type:'button',text:'Intentar de nuevo',onclick:function(){i=0;bien=0;una()}}):null,sigLink(l,1,bien===3?'btn main':'btn')))}
   una();return sec;
 }
-function sigLink(l,d,c){var LS=l.tec?TEC.L:A.L,k=LS.indexOf(l)+d,x=LS[k];return x?el('a',{class:c,href:'#'+x.id,text:(d>0?'Siguiente: ':'Anterior: ')+x.corto}):d>0?el('a',{class:c,href:'#',text:'Ver todas las lecciones'}):null}
+function sigLink(l,d,c){var LS=grupo(l.tec?(esMet(l)?'met':'tec'):'fund').L,k=LS.indexOf(l)+d,x=LS[k];return x?el('a',{class:c,href:'#'+x.id,text:(d>0?'Siguiente: ':'Anterior: ')+x.corto}):d>0?el('a',{class:c,href:'#',text:'Ver todas las lecciones'}):null}
 
 /* ---- lección ---- */
 function ultimoDato(l){
@@ -341,17 +341,17 @@ function porNivel(xs,li){
 function escalera(){
   return el('section',{class:'glass escalera'},el('p',{class:'tag',style:'color:#C9A649',text:'Método Valenttiel'}),el('h2',{text:'Viste la demo. El método completo está en los niveles.'}),
     el('p',{class:'muted',text:'Cada lección de acá es gratis y te muestra el concepto. La profundidad, la práctica en vivo y la corrección de tus trades están en cada nivel.'}),
-    el('ol',{class:'niveles'},TEC.ORDN.map(function(nv,i){var N=TEC.NIVELES[nv];return el('li',{class:'n'+(i+1)},el('b',{text:N.n}),el('span',{class:'muted small',text:N.d}),el('ul',{},N.mas.map(function(m){return el('li',{text:'🔒 '+m})})))})),
+    el('ol',{class:'niveles'},TEC.ORDN.map(function(nv,i){var N=TEC.NIVELES[nv];return el('li',{class:'n'+(i+1)},el('b',{text:N.n}),el('span',{class:'muted small',text:N.d}),el('ul',{},N.mas.map(function(m){return el('li',{text:'🔒\u2002'+m})})))})),
     el('div',{class:'btns'},el('a',{class:'btn main',href:'../?de=academia-metodo#sumate',text:'Quiero entrar al método'})));
 }
 function bloqueNivel(l){var N=TEC.NIVELES[l.nivel];
   return el('section',{class:'glass bloque-nivel'},el('span',{class:'nivel-tag n'+(TEC.ORDN.indexOf(l.nivel)+1),text:N.n}),el('h2',{text:'Esto fue la demo'}),el('p',{class:'muted small',text:'En '+N.n.split(' · ')[1]+' lo ves completo:'}),
-    el('ul',{class:'claves'},(l.mas||N.mas).map(function(m){return el('li',{text:'🔒 '+m})})),el('div',{class:'btns'},el('a',{class:'btn main',href:'../?de=academia-metodo#sumate',text:'Quiero el '+N.n.split(' · ')[0].toLowerCase()})));
+    el('ul',{class:'claves'},(l.mas||N.mas).map(function(m){return el('li',{text:'🔒\u2002'+m})})),el('div',{class:'btns'},el('a',{class:'btn main',href:'../?de=academia-metodo#sumate',text:'Quiero el '+N.n.split(' · ')[0].toLowerCase()})));
 }
 function propias(){
   return el('section',{class:'glass propias'},el('p',{class:'tag',style:'color:#C9A649',text:'Método Valenttiel · mentoría'}),el('h2',{text:'Las teorías propias del método'}),
     el('p',{class:'muted',text:'Lo que diferencia al Método Valenttiel: nació de la operativa real y se enseña en la mentoría, con práctica en vivo y corrección personal.'}),
-    el('ul',{class:'candado'},TEC.PROPIAS.map(function(x){return el('li',{},el('b',{text:'🔒 '+x[0]}),el('span',{class:'muted small',text:x[1]}))})),
+    el('ul',{class:'candado'},TEC.PROPIAS.map(function(x){return el('li',{},el('b',{text:'🔒\u2002'+x[0]}),el('span',{class:'muted small',text:x[1]}))})),
     el('div',{class:'btns'},el('a',{class:'btn main',href:'../?de=academia-metodo#sumate',text:'Quiero el método completo'})));
 }
 function mapa(){
@@ -417,7 +417,7 @@ function leccionTec(l){
   var cl2=el('section',{class:'glass'},el('h2',{text:'Para no olvidarte'}),el('ul',{class:'claves'},l.claves.map(function(c){return el('li',{text:c})})),el('div',{class:'trampa'},el('h3',{text:'La trampa común'}),el('p',{text:l.trampa})));
   var pr=practica(l);color(pr,l);
   poner(el('div',{class:'hero'},el('p',{},el('a',{href:'#',text:'Todas las lecciones'})),el('h1',{style:'font-size:clamp(32px,5vw,58px)',text:l.n}),l.nivel?el('p',{},el('span',{class:'nivel-tag n'+(TEC.ORDN.indexOf(l.nivel)+1),text:'Demo gratis · se enseña completo en '+TEC.NIVELES[l.nivel].n})):null),pl.caja,
-    el('div',{class:'cols'},el('div',{class:'stack'},pr,test(l)),el('div',{class:'stack'},l.nivel?bloqueNivel(l):null,l.check?checklist(l):null,cl2,el('section',{class:'glass'},el('h2',{text:'Llevalo a la práctica'}),el('p',{class:'muted small',text:'Entrená el ojo todos los días y calculá el tamaño antes de cada operación.'}),el('div',{class:'btns'},l.cat==='metodo'?el('a',{class:'btn main',href:'../?de=academia-metodo#sumate',text:'Aprender el método completo'}):null,el('a',{class:l.cat==='metodo'?'btn':'btn main',href:'#gimnasio',text:'Gimnasio'}),el('a',{class:'btn',href:'../calculadora/',text:'Calculadora'}),el('a',{class:'btn',href:'../reto/?desde=academia',text:'Liga'}))))),
+    el('div',{class:'cols'},el('div',{class:'stack'},cl2,l.check?checklist(l):null,test(l),pr),el('div',{class:'stack'},l.nivel?bloqueNivel(l):null,el('section',{class:'glass'},el('h2',{text:'Llevalo a la práctica'}),el('p',{class:'muted small',text:'Entrená el ojo todos los días y calculá el tamaño antes de cada operación.'}),el('div',{class:'btns'},l.cat==='metodo'?el('a',{class:'btn main',href:'../?de=academia-metodo#sumate',text:'Aprender el método completo'}):null,el('a',{class:l.cat==='metodo'?'btn':'btn main',href:'#gimnasio',text:'Gimnasio'}),el('a',{class:'btn',href:'../calculadora/',text:'Calculadora'}),el('a',{class:'btn',href:'../reto/?desde=academia',text:'Liga'}))))),
     el('nav',{class:'sig','aria-label':'Otras lecciones'},sigLink(l,-1,'btn')||el('span'),sigLink(l,1,'btn main')));
   scrollTo(0,0);
 }

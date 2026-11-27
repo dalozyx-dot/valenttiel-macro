@@ -286,8 +286,8 @@ footer .wrap{display:grid;gap:8px}
   <div class="view" id="v-hoy"><p class="muted">Cargando el resumen…</p></div>
   <div class="view" id="v-activos" hidden></div>
   <div class="view" id="v-en-vivo" hidden>
-    <div class="hero"><h1 class="grad">En vivo</h1><p class="lead">Cada dato del mundo en el momento en que se publica: EE.UU., Europa, Reino Unido, Japón, China, Canadá, Australia, Nueva Zelanda y Suiza. El resumen explicado llega después, en la pestaña Hoy.</p></div>
-    <section><h2>Calendario económico</h2><div class="tv" id="tv-cal"></div></section>
+    <div class="hero"><h1 class="grad">En vivo</h1><p class="lead">Cada dato del mundo, en el momento en que sale. La explicación llega después, en Hoy.</p></div>
+    <section><h2>Calendario económico</h2><p class="muted small">Impacto medio y alto de EE.UU., Europa, Reino Unido, Japón, China, Canadá, Australia, Nueva Zelanda y Suiza. Horario de Argentina.</p><div class="tv" id="tv-cal"></div></section>
     <section><h2>Nasdaq 100</h2><div class="tv" id="tv-chart"></div></section>
   </div>
   <div class="view" id="v-historial" hidden>
@@ -489,7 +489,7 @@ function tv(box,name,cfg,sinCredito){
 }
 tv($('tape'),'ticker-tape',{...base,showSymbolLogo:false,displayMode:'adaptive',symbols:['nasdaq','sp500','oro','bitcoin','dolar','eurusd','apple','nvidia','microsoft','tesla'].map(i=>({proName:A[i][2],title:A[i][0]}))});
 function enVivo(){
-  tv($('tv-cal'),'events',{...base,width:'100%',height:620,importanceFilter:'-1,0,1',countryFilter:'us,eu,gb,de,fr,jp,cn,ca,au,nz,ch'});
+  tv($('tv-cal'),'events',{...base,isTransparent:true,width:'100%',height:640,importanceFilter:'0,1',countryFilter:'us,eu,gb,de,fr,jp,cn,ca,au,nz,ch'});
   tv($('tv-chart'),'advanced-chart',{width:'100%',height:460,symbol:'FOREXCOM:NSXUSD',interval:'15',timezone:TZ,theme:'dark',style:'1',locale:'es',allow_symbol_change:true,hide_side_toolbar:true,support_host:'https://www.tradingview.com'});
 }
 
