@@ -80,7 +80,7 @@ main{display:grid;gap:clamp(26px,4vw,46px);padding-block:clamp(26px,5vw,54px) 60
 .ops{display:grid;gap:9px}.ops button{border:0;text-align:left;border-radius:15px;padding:14px 17px;background:rgba(210,240,226,.05);box-shadow:inset 0 0 0 1px var(--line);font-size:16px}.ops button:hover:not(:disabled){background:rgba(210,240,226,.1)}.ops button:disabled{cursor:default}.ops .bien{background:rgba(95,208,160,.17);box-shadow:inset 0 0 0 1.5px var(--mint)}.ops .mal{background:rgba(240,138,123,.14);box-shadow:inset 0 0 0 1.5px var(--down)}
 .dato{display:flex;flex-wrap:wrap;gap:6px 30px;align-items:baseline}.dato .big{font:600 44px/1 var(--f);letter-spacing:-.045em}
 .sig{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px}
-.materia{max-width:520px}.materia .cuenta{opacity:.6;font-size:13.5px}
+.materia{max-width:680px}@media(max-width:520px){.materia .cuenta{display:none}.materia button{padding-inline:8px}}.materia .cuenta{opacity:.6;font-size:13.5px}
 .gym{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:14px 22px;text-decoration:none;color:inherit;background:radial-gradient(120% 140% at 100% 0%,rgba(127,180,240,.22),transparent 60%),linear-gradient(160deg,var(--glass2),var(--glass));border-color:rgba(127,180,240,.35);transition:transform .45s var(--ease),border-color .35s}.gym:hover{transform:translateY(-4px);border-color:rgba(127,180,240,.7)}.gym-txt{display:grid;gap:6px;max-width:60ch}
 .tag{display:inline-block;justify-self:start;font-size:12.5px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:#7FB4F0}
 .ej{display:block;width:100%;aspect-ratio:16/9;max-height:min(440px,52vh);border-radius:16px;border:1px solid var(--line);background:#0a100d}
@@ -152,23 +152,25 @@ function bucleMinis(t){
   minis.forEach(function(m,i){if(!m.c.isConnected||m.c._ve===false&&m.hecha)return;var d=talla(m.c);if(!m.c.width)return;var x=m.c.getContext('2d');x.setTransform(d,0,0,d,0,0);MOTOR.miniatura(x,m.c.width/d,m.c.height/d,m.l,CALMA.matches?5.2:t/1000+i*.9);m.hecha=true});
   if(CALMA.matches&&minis.every(function(m){return m.hecha}))minis=[];
 }
+var MET=['metodo','entradas'];function esMet(l){return MET.indexOf(l.cat)>=0}
+function grupo(m){if(m==='fund')return{L:A.L,CAT:A.CAT};var C={};Object.keys(TEC.CAT).forEach(function(k){if((m==='met')===(MET.indexOf(k)>=0))C[k]=TEC.CAT[k]});return{L:TEC.L.filter(function(l){return(m==='met')===esMet(l)}),CAT:C}}
 function inicio(){
   detener();document.title='Academia | Valenttiel Macro';
-  var LS=mat==='tec'?TEC.L:A.L,CT=mat==='tec'?TEC.CAT:A.CAT;if(cat!=='todas'&&!CT[cat])cat='todas';
+  var G=grupo(mat),LS=G.L,CT=G.CAT;if(cat!=='todas'&&!CT[cat])cat='todas';
   var n=TODAS.filter(function(l){return P.v[l.id]}).length,T=TODAS.filter(function(l){return P.t[l.id]>=0}).length,xs=LS.filter(function(l){return cat==='todas'||l.cat===cat});
   minis=[];
   var li=xs.map(function(l){var c=el('canvas',{'aria-hidden':'true'});minis.push({c:c,l:l});vis.observe(c);var a=el('a',{class:'card',href:'#'+l.id},c,el('h2',{text:l.n}),el('p',{class:'muted',text:l.sub}),el('p',{class:'pie'},el('span',{text:mmss(total(l))}),el('span',{text:l.nivel?'Demo · '+l.nivel:l.tec?K(l)[0]:['','Impacto bajo','Impacto medio','Impacto alto'][l.peso]}),P.v[l.id]?el('span',{class:'ok',text:P.t[l.id]>=0?'✓ Vista, test '+P.t[l.id]+'/3':'✓ Vista'}):null));color(a,l);return el('li',{},a)});
   poner(
     el('div',{class:'hero'},el('h1',{class:'grad',text:'Mirá cómo se mueve el mercado por dentro'}),el('p',{class:'lead',text:'Lecciones animadas de un minuto: los datos que mueven al mercado y cómo leer el gráfico. Y un gimnasio para entrenar el ojo todos los días.'}),
-      n?el('div',{class:'prog'},el('p',{class:'small muted',text:n===TODAS.length?'Viste las '+TODAS.length+' lecciones'+(T===TODAS.length?' y completaste todos los tests.':'. Te faltan '+(TODAS.length-T)+' tests.'):n+' de '+TODAS.length+' lecciones vistas'}),el('div',{},el('i',{style:'width:'+n/TODAS.length*100+'%'}))):el('div',{class:'btns'},el('a',{class:'btn main',href:'#fed',text:'Empezar por la Fed'}),el('a',{class:'btn',href:'#velas',text:'Empezar por las velas'}),el('a',{class:'btn',href:'#pullback',text:'Ver los setups'}))),
+      n?el('div',{class:'prog'},el('p',{class:'small muted',text:n===TODAS.length?'Viste las '+TODAS.length+' lecciones'+(T===TODAS.length?' y completaste todos los tests.':'. Te faltan '+(TODAS.length-T)+' tests.'):n+' de '+TODAS.length+' lecciones vistas'}),el('div',{},el('i',{style:'width:'+n/TODAS.length*100+'%'}))):el('div',{class:'btns'},el('a',{class:'btn main',href:'#fed',text:'Empezar por la Fed'}),el('a',{class:'btn',href:'#velas',text:'Empezar por las velas'}),el('a',{class:'btn',href:'#liquidez',text:'Método Valenttiel'}))),
     puerta(),
     proximo(),
     n===TODAS.length&&T===TODAS.length?el('section',{class:'glass'},el('h2',{text:'Terminaste la Academia'}),el('p',{class:'muted',text:'Ya sabés leer los datos y el gráfico. El paso siguiente es cumplir un plan con eso.'}),el('div',{class:'btns'},el('a',{class:'btn main',href:'../reto/?desde=academia',text:'Entrar a la Liga'}),el('a',{class:'btn',href:'../?de=academia#sumate',text:'Quiero aprender con guía'}))):null,
-    el('div',{class:'seg materia',role:'group','aria-label':'Materia'},[['fund','Fundamentales',A.L.length],['tec','Análisis técnico',TEC.L.length]].map(function(x){return el('button',{type:'button',id:'m-'+x[0],'aria-pressed':String(mat===x[0]),onclick:function(){mat=x[0];cat='todas';inicio();document.getElementById('m-'+x[0]).focus({preventScroll:true})}},x[1],el('span',{class:'cuenta',text:' '+x[2]}))})),
-    el('div',{class:'filtros',role:'group','aria-label':'Tema'},[['todas','Todas']].concat(Object.keys(CT).map(function(k){return[k,CT[k][0]]})).map(function(x){return el('button',{type:'button',id:'f-'+x[0],'aria-pressed':String(cat===x[0]),text:x[1],onclick:function(){cat=x[0];inicio();document.getElementById('f-'+x[0]).focus({preventScroll:true})}})})),
+    el('div',{class:'seg materia',role:'group','aria-label':'Materia'},[['fund','Fundamentales',A.L.length],['tec','Técnico',grupo('tec').L.length],['met','Método Valenttiel',grupo('met').L.length]].map(function(x){return el('button',{type:'button',id:'m-'+x[0],'aria-pressed':String(mat===x[0]),onclick:function(){mat=x[0];cat='todas';inicio();document.getElementById('m-'+x[0]).focus({preventScroll:true})}},x[1],el('span',{class:'cuenta',text:' '+x[2]}))})),
+    el('div',{class:'filtros',role:'group','aria-label':'Tema'},[['todas','Todas']].concat(Object.keys(CT).map(function(k){return[k,k==='metodo'?'Conceptos':CT[k][0]]})).map(function(x){return el('button',{type:'button',id:'f-'+x[0],'aria-pressed':String(cat===x[0]),text:x[1],onclick:function(){cat=x[0];inicio();document.getElementById('f-'+x[0]).focus({preventScroll:true})}})})),
     mat==='tec'&&cat==='todas'?ruta2():null,
-    mat==='tec'&&(cat==='metodo'||cat==='entradas')?porNivel(xs,li):el('ul',{class:'grid'},li),
-    mat==='tec'&&(cat==='todas'||cat==='metodo'||cat==='entradas')?escalera():null,
+    mat==='met'?porNivel(xs,li):el('ul',{class:'grid'},li),
+    mat==='met'?escalera():null,
     mat==='tec'&&(cat==='todas'||cat==='setups')?mapa():null);
   requestAnimationFrame(bucleMinis);
 }
@@ -311,7 +313,7 @@ function ultimoDato(l){
   return el('section',{class:'glass'},el('h2',{text:'El último, en la vida real'}),el('div',{class:'dato'},el('span',{class:'big',text:d.salio}),el('span',{},el('b',{style:'font-weight:500',text:d.nombre}),el('br'),el('span',{class:'muted small',text:(d.previsto?'Previsto '+d.previsto+'. ':'')+(d.anterior?'Anterior '+d.anterior+'.':'')}))),d.nota?el('p',{class:'muted small',text:d.nota}):null,el('div',{class:'btns'},el('a',{class:'btn',href:'../#hoy',text:'Ver el resumen del '+datos.fecha.split('-').reverse().slice(0,2).join('/')})));
 }
 function leccion(l){
-  detener();document.title=l.n+' | Academia Valenttiel';mat=l.tec?'tec':'fund';
+  detener();document.title=l.n+' | Academia Valenttiel';mat=l.tec?(esMet(l)?'met':'tec'):'fund';
   if(l.tec)return leccionTec(l);
   pl=Reproductor(l,function(){});
   var h=horaArg(l.hora),R=[['Quién lo publica',l.quien],['Cada cuánto',l.frec],['A qué hora suele salir',h||'Varía según el banco'],['Cuánto mueve',['','Poco','Bastante','Mucho'][l.peso]]];
