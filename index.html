@@ -122,6 +122,16 @@ td small{display:block;color:var(--muted);font-size:13px}
 .fund .est{justify-self:end;text-align:right}
 .vacio{color:var(--muted);padding:6px 0}.prox-dias summary{cursor:pointer;color:var(--mint);padding:6px 0;font-weight:500}.dia{display:grid;gap:8px;margin-top:10px}.diat{font-size:14px;color:var(--muted);font-weight:500;margin:6px 0 0}
 @media(max-width:760px){.fund{grid-template-columns:56px minmax(0,1fr);gap:10px 12px}.fund .nums{grid-column:1/-1}.fund .est{grid-column:1/-1;justify-self:start;text-align:left}.fund .hr{font-size:17px}}
+.mcab{display:grid;gap:12px}.mfil{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center}
+.paises{display:flex;flex-wrap:wrap;gap:6px}.paises button{border:0;font:inherit;font-size:13px;border-radius:999px;padding:6px 11px;background:rgba(210,240,226,.05);box-shadow:inset 0 0 0 1px var(--line);color:var(--muted);cursor:pointer;display:inline-flex;gap:6px;align-items:center}.paises button[aria-pressed=true]{color:var(--ink);background:rgba(95,208,160,.14);box-shadow:inset 0 0 0 1px rgba(95,208,160,.5)}
+.dias{display:flex;gap:6px;overflow-x:auto;padding-bottom:2px;scrollbar-width:none}.dias button{flex:0 0 auto;border:0;font:inherit;font-size:13.5px;border-radius:10px;padding:8px 12px;background:rgba(210,240,226,.04);box-shadow:inset 0 0 0 1px var(--line);color:var(--muted);cursor:pointer;display:grid;gap:1px;text-align:left;min-width:74px}.dias button b{font-weight:600;color:var(--ink);font-size:14px}.dias button[aria-pressed=true]{background:rgba(235,178,74,.13);box-shadow:inset 0 0 0 1px rgba(235,178,74,.55)}.dias button small{font-size:11.5px}
+.pais{display:inline-flex;align-items:center;gap:5px;font:600 12px/1 var(--m);letter-spacing:.03em;color:var(--muted);padding:3px 7px;border-radius:6px;background:rgba(210,240,226,.06)}
+.fund .orig{font-size:12px;color:var(--muted)}.fund .ff{font-size:13px;white-space:nowrap}
+.dichos{display:grid;gap:10px;padding:0;margin:0}.dicho{list-style:none;display:grid;gap:8px;padding:16px 18px;border-radius:14px;background:rgba(210,240,226,.035);box-shadow:inset 0 0 0 1px var(--line)}.dicho.n3{box-shadow:inset 3px 0 0 var(--amber),inset 0 0 0 1px rgba(235,178,74,.3)}
+.dicho header{display:flex;flex-wrap:wrap;gap:4px 12px;align-items:baseline;justify-content:space-between}.dicho h3{margin:0;font-size:16px;font-weight:600}.dicho .cargo{color:var(--muted);font-size:13.5px}.dicho p{margin:0}
+.dicho blockquote{margin:0;padding:2px 0 2px 12px;border-left:2px solid rgba(235,178,74,.6);font-style:italic;color:var(--ink)}.dicho footer{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:13px;color:var(--muted)}
+.discursos{display:grid;gap:0;padding:0;margin:0}.discursos li{list-style:none;display:grid;grid-template-columns:110px minmax(0,1fr) auto;gap:12px;align-items:center;padding:11px 0;border-top:1px solid var(--line);font-size:15px}.discursos .num{color:var(--amber);font-size:13.5px}
+@media(max-width:760px){.discursos li{grid-template-columns:86px minmax(0,1fr)}.discursos li>:last-child{grid-column:2}}
 .agenda{display:grid;padding:0}
 .agenda>li{list-style:none;display:grid;grid-template-columns:92px minmax(0,1fr);gap:12px;padding:13px 0;border-top:1px solid var(--line);font-size:15px}
 .agenda .num{font-size:13px;line-height:1.85;color:var(--amber)}
@@ -273,7 +283,7 @@ footer .wrap{display:grid;gap:8px}
   <div class="view" id="v-hoy"><p class="muted">Cargando el resumen…</p></div>
   <div class="view" id="v-activos" hidden></div>
   <div class="view" id="v-en-vivo" hidden>
-    <div class="hero"><h1 class="grad">En vivo</h1><p class="lead">Cada dato de EE.UU. cuando se publica. El resumen explicado llega después, en la pestaña Hoy.</p></div>
+    <div class="hero"><h1 class="grad">En vivo</h1><p class="lead">Cada dato del mundo en el momento en que se publica: EE.UU., Europa, Reino Unido, Japón, China, Canadá, Australia, Nueva Zelanda y Suiza. El resumen explicado llega después, en la pestaña Hoy.</p></div>
     <section><h2>Calendario económico</h2><div class="tv" id="tv-cal"></div></section>
     <section><h2>Nasdaq 100</h2><div class="tv" id="tv-chart"></div></section>
   </div>
@@ -466,7 +476,7 @@ function tv(box,name,cfg,sinCredito){
 }
 tv($('tape'),'ticker-tape',{...base,showSymbolLogo:false,displayMode:'adaptive',symbols:['nasdaq','sp500','oro','bitcoin','dolar','eurusd','apple','nvidia','microsoft','tesla'].map(i=>({proName:A[i][2],title:A[i][0]}))});
 function enVivo(){
-  tv($('tv-cal'),'events',{...base,width:'100%',height:620,importanceFilter:'-1,0,1',countryFilter:'us'});
+  tv($('tv-cal'),'events',{...base,width:'100%',height:620,importanceFilter:'-1,0,1',countryFilter:'us,eu,gb,de,fr,jp,cn,ca,au,nz,ch'});
   tv($('tv-chart'),'advanced-chart',{width:'100%',height:460,symbol:'FOREXCOM:NSXUSD',interval:'15',timezone:TZ,theme:'dark',style:'1',locale:'es',allow_symbol_change:true,hide_side_toolbar:true,support_host:'https://www.tradingview.com'});
 }
 
@@ -538,6 +548,89 @@ function fundamentos(d,archivo){
   };
   pinta();return box;
 }
+/* ---------- calendario mundial (Forex Factory) y lo que dicen quienes mueven el mercado ---------- */
+const API_CAL='https://leads-vbm4.vercel.app/api/calendario';
+const PAIS={USD:['🇺🇸','EE.UU.'],EUR:['🇪🇺','Eurozona'],GBP:['🇬🇧','Reino Unido'],JPY:['🇯🇵','Japón'],CNY:['🇨🇳','China'],CAD:['🇨🇦','Canadá'],AUD:['🇦🇺','Australia'],NZD:['🇳🇿','N. Zelanda'],CHF:['🇨🇭','Suiza']};
+const IMPN=['','bajo','medio','alto'];
+/* Traducción de los nombres más comunes; el original queda abajo, chiquito. */
+const TRAD=[[/Non-Farm Employment Change/,'Nóminas no agrícolas (NFP)'],[/Unemployment Claims/,'Pedidos de subsidio por desempleo'],[/Unemployment Rate/,'Tasa de desempleo'],[/Unemployment Change/,'Cambio en el desempleo'],[/Employment Change/,'Cambio en el empleo'],[/Claimant Count Change/,'Pedidos de subsidio'],
+ [/Core PCE Price Index/,'PCE subyacente'],[/PCE Price Index/,'Índice de precios PCE'],[/Trimmed Mean CPI/,'IPC media recortada'],[/Core CPI/,'IPC subyacente'],[/\bCPI\b/,'IPC (inflación)'],[/Core PPI/,'IPP subyacente'],[/\bPPI\b/,'IPP (precios al productor)'],[/GDP Price Index/,'Deflactor del PIB'],[/\bGDP\b/,'PIB'],
+ [/Core Retail Sales/,'Ventas minoristas subyacentes'],[/Retail Sales/,'Ventas minoristas'],[/Manufacturing PMI/,'PMI manufacturero'],[/Services PMI/,'PMI de servicios'],[/ISM Manufacturing PMI/,'ISM manufacturero'],[/ISM Services PMI/,'ISM de servicios'],
+ [/Federal Funds Rate/,'Decisión de tasa de la Fed'],[/Main Refinancing Rate/,'Decisión de tasa del BCE'],[/Official Bank Rate/,'Decisión de tasa del BoE'],[/BOJ Policy Rate/,'Decisión de tasa del BoJ'],[/Cash Rate/,'Decisión de tasa'],[/Overnight Rate/,'Decisión de tasa'],[/Official Cash Rate/,'Decisión de tasa'],[/SNB Policy Rate/,'Decisión de tasa del SNB'],
+ [/FOMC Meeting Minutes/,'Minutas de la Fed'],[/FOMC Statement/,'Comunicado de la Fed'],[/FOMC Press Conference/,'Conferencia de la Fed'],[/Monetary Policy Meeting Accounts/,'Actas de política monetaria'],[/Meeting Minutes/,'Minutas'],[/Monetary Policy Report Hearings/,'Informe de política monetaria (audiencias)'],[/Monetary Policy Statement/,'Comunicado de política monetaria'],[/Press Conference/,'Conferencia de prensa'],[/Financial Stability Report/,'Informe de estabilidad financiera'],[/Beige Book/,'Libro Beige'],
+ [/Trade Balance/,'Balanza comercial'],[/Current Account/,'Cuenta corriente'],[/Durable Goods Orders/,'Pedidos de bienes durables'],[/Building Permits/,'Permisos de construcción'],[/Housing Starts/,'Inicio de viviendas'],[/New Home Sales/,'Ventas de viviendas nuevas'],[/Existing Home Sales/,'Ventas de viviendas usadas'],[/Pending Home Sales/,'Ventas de viviendas pendientes'],
+ [/Consumer Confidence/,'Confianza del consumidor'],[/Consumer Sentiment/,'Sentimiento del consumidor'],[/Consumer Climate/,'Clima del consumidor'],[/Business Climate/,'Clima de negocios'],[/Economic Expectations/,'Expectativas económicas'],[/Personal Income/,'Ingreso personal'],[/Personal Spending/,'Gasto personal'],[/Consumer Spending/,'Gasto del consumidor'],[/Industrial Production/,'Producción industrial'],[/Average Hourly Earnings/,'Salario por hora'],[/JOLTS Job Openings/,'Vacantes JOLTS'],
+ [/Crude Oil Inventories/,'Inventarios de petróleo'],[/Natural Gas Storage/,'Reservas de gas natural'],[/Money Supply/,'Oferta monetaria'],[/Private Loans/,'Préstamos privados'],[/Leading Index/,'Índice adelantado'],[/Manufacturing Index/,'Índice manufacturero'],[/Wholesale Inventories/,'Inventarios mayoristas'],[/Corporate Profits/,'Ganancias corporativas'],[/Bond Auction/,'Subasta de bonos'],[/Bank Holiday/,'Feriado bancario'],
+ [/\bFlash\b/,'preliminar'],[/\bPrelim\b/,'preliminar'],[/\bFinal\b/,'final'],[/\bGerman\b/,'Alemania:'],[/\bFrench\b/,'Francia:'],[/\bItalian\b/,'Italia:'],[/\bSpanish\b/,'España:'],[/\bTokyo\b/,'Tokio:'],[/\bBOJ\b/,'BoJ:'],[/\bm\/m\b/,'mensual'],[/\bq\/q\b/,'trimestral'],[/\by\/y\b/,'anual'],[/\b10-y\b/,'10 años'],[/\b30-y\b/,'30 años']];
+const HABLA=/Speaks|Testifies|Press Conference|Hearings/;
+function traducir(t){
+  const h=t.match(/^(.*?)\s*(Speaks|Testifies)$/);if(h)return h[1].replace(/^Fed Chair /,'Presidente de la Fed, ').replace(/^ECB President /,'Presidenta del BCE, ').replace(/^BOE Gov /,'Gobernador del BoE, ').replace(/^BOJ Gov /,'Gobernador del BoJ, ').replace(/^BOC Gov /,'Gobernador del BoC, ').replace(/^RBA Gov /,'Gobernadora del RBA, ').replace(/^FOMC Member /,'Miembro de la Fed, ').replace(/^MPC Member /,'Miembro del BoE, ').replace(/^German Buba President /,'Bundesbank, ').replace(/^ECB /,'BCE, ')+(h[2]==='Testifies'?' declara':' habla');
+  let s=t;for(const[r,v]of TRAD)s=s.replace(r,v);
+  s=s.replace(/^(.*?:)\s*(.*)$/,'$1 $2').replace(/\s+/g,' ').trim();
+  const m=s.match(/^(preliminar|final) (.*)$/);if(m)s=m[2]+' '+m[1]; /* "PIB preliminar", no "preliminar PIB" */
+  s=s.replace(/^(\S+:) (preliminar|final) (.*?)( mensual| trimestral| anual)?$/,(_,p,a,b,c)=>p+' '+b+' '+a+(c||''));
+  return s[0].toUpperCase()+s.slice(1);
+}
+let MUNDO=null,MB=null,mPaises=new Set(Object.keys(PAIS)),mImp=2,mDia='';
+const tEv=e=>e.t?new Date(e.t):new Date(e.dia+'T12:00:00Z'),diaEv=e=>e.t?isoDia(new Date(e.t)):e.dia;
+async function cargaMundo(){
+  const leer=u=>conTope(u).then(j=>Array.isArray(j.eventos)&&j.eventos.length?j:Promise.reject('vacío'));
+  const rs=(await Promise.allSettled([leer(API_CAL),leer('datos/mundo.json'),leer(RAW+'datos/mundo.json')])).filter(x=>x.status==='fulfilled').map(x=>x.value);
+  if(!rs.length){if(!MUNDO&&MB)MB.replaceChildren(el('h2',{text:'Fundamentales del mundo'}),el('p',{class:'vacio',text:'No pudimos cargar el calendario mundial. Se reintenta en unos minutos; mientras tanto está en la pestaña En vivo.'}));return;}
+  const n=rs.sort((a,b)=>Date.parse(b.leido)-Date.parse(a.leido))[0];
+  if(!MUNDO||n.leido!==MUNDO.leido){const prim=!MUNDO;MUNDO=n;pintaMundo();if(prim&&hoy&&$('dichos'))$('dichos').replaceWith(dichosBox(hoy,false));}
+}
+/* El resultado sale de lo que ya verificamos (fuente oficial); si todavía no está, se enlaza a Forex Factory. */
+function salioMundo(e){const l=(hoy&&Array.isArray(hoy.mundo))?hoy.mundo:[];const x=l.find(m=>m.pais===e.pais&&m.evento===e.titulo&&e.t&&Math.abs(new Date(m.cuando)-new Date(e.t))<6e4);return x||null;}
+function filaMundo(e){
+  const t=tEv(e),pasado=e.t&&t<new Date(),v=salioMundo(e),n=e.imp||0,celda=(k,x,b)=>el('div',{class:'cel'},el('span',{class:'k',text:k}),el(b?'b':'span',{class:'num v',text:x||'—'}));
+  const es=traducir(e.titulo),p=PAIS[e.pais]||['',e.pais];
+  const estado=n===0?el('span',{class:'chip',text:'Feriado'}):v?el('a',{class:'chip ok',href:v.fuente.url,target:'_blank',rel:'noopener',text:'Salió · '+v.fuente.nombre}):!e.t?el('span',{class:'chip',text:'Sin hora fija'}):pasado&&Date.now()-t>6e5?(e.url?el('a',{class:'ff',href:e.url,target:'_blank',rel:'noopener',text:'Ver resultado ↗'}):el('span',{class:'chip',text:'Ya pasó'})):el('span',{class:'chip falta','data-t':String(+t),text:falta(t)});
+  return el('li',{class:'fund n'+Math.max(1,n)+(v?' salio':pasado?' paso':'')},
+    el('div',{class:'hr num',text:e.t?hora(t):'—'}),
+    el('div',{class:'nom'},el('div',{class:'mini'},el('span',{class:'pais',title:p[1]},p[0],' ',e.pais),n?estrellas(IMPN[n]):null),el('h3',{text:es}),es!==e.titulo?el('span',{class:'orig',text:e.titulo}):null,el('div',{class:'mini'},leccion(es))),
+    el('div',{class:'nums'},celda('Previsto',e.prev),celda('Anterior',e.ant),celda('Salió',v&&v.salio,true)),
+    el('div',{class:'est'},estado));
+}
+function pintaMundo(){
+  if(!MB)return;
+  if(!MUNDO){MB.replaceChildren(el('h2',{text:'Fundamentales del mundo'}),el('p',{class:'muted',text:'Cargando el calendario…'}));return;}
+  const ev=MUNDO.eventos.filter(e=>PAIS[e.pais]),dias=[...new Set(ev.map(diaEv))].sort(),hoyF=isoDia(new Date());
+  if(!dias.includes(mDia))mDia=dias.includes(hoyF)?hoyF:(dias.find(d=>d>hoyF)||dias[dias.length-1]);
+  const delDia=ev.filter(e=>diaEv(e)===mDia),vis=delDia.filter(e=>mPaises.has(e.pais)&&(e.imp>=mImp||(e.imp===0&&mImp===1))),fuertes=delDia.filter(e=>e.imp===3);
+  const hace=Math.max(0,Math.round((Date.now()-Date.parse(MUNDO.leido))/6e4));
+  const btnDia=d=>{const xs=ev.filter(e=>diaEv(e)===d),f=xs.filter(e=>e.imp===3).length,w=fmt(new Date(d+'T12:00:00-03:00'),{weekday:'short'}).replace('.','');
+    return el('button',{type:'button','aria-pressed':String(d===mDia),onclick:()=>{mDia=d;pintaMundo();}},el('b',{text:(d===hoyF?'Hoy':w[0].toUpperCase()+w.slice(1))+' '+d.slice(8)}),el('small',{class:f?'':'muted',text:f?f+' × ★★★':xs.length+' eventos'}));};
+  MB.replaceChildren(
+    el('div',{class:'mcab'},
+      el('div',{class:'fcab'},el('div',{},el('h2',{text:'Fundamentales del mundo'}),el('p',{class:'muted small',text:'Calendario de Forex Factory, '+(hace<2?'actualizado recién':'actualizado hace '+(hace<60?hace+' min':Math.round(hace/60)+' h'))+'. Horarios de Argentina.'})),
+        el('div',{class:'seg fseg',role:'group','aria-label':'Impacto mínimo'},[[3,'★★★'],[2,'★★ y ★★★'],[1,'Todos']].map(x=>el('button',{type:'button','aria-pressed':String(mImp===x[0]),text:x[1],onclick:()=>{mImp=x[0];pintaMundo();}})))),
+      el('div',{class:'dias',role:'group','aria-label':'Día'},dias.map(btnDia)),
+      el('div',{class:'paises',role:'group','aria-label':'Países'},
+        el('button',{type:'button','aria-pressed':String(mPaises.size===Object.keys(PAIS).length),onclick:()=>{mPaises=new Set(Object.keys(PAIS));pintaMundo();}},'🌐 Todos'),
+        Object.entries(PAIS).map(([k,v])=>el('button',{type:'button','aria-pressed':String(mPaises.size<Object.keys(PAIS).length&&mPaises.has(k)),title:v[1],onclick:()=>{if(mPaises.size===Object.keys(PAIS).length)mPaises=new Set([k]);else{mPaises.has(k)?mPaises.delete(k):mPaises.add(k);if(!mPaises.size)mPaises=new Set(Object.keys(PAIS));}pintaMundo();}},v[0]+' '+k)))),
+    el('p',{class:'muted small',text:diaLargo(mDia)+': '+delDia.length+' eventos'+(fuertes.length?', '+fuertes.length+' de impacto alto ('+[...new Set(fuertes.map(e=>e.pais))].join(', ')+')':'')+'.'}),
+    vis.length?el('ol',{class:'funds'},vis.map(filaMundo)):el('p',{class:'vacio',text:delDia.length?'No hay eventos con este filtro. Probá con "Todos" o sumá países.':'No hay eventos programados para este día.'}),
+    el('p',{class:'muted small',text:'El previsto y el anterior se actualizan solos. Cuando sale un dato, lo cargamos acá después de confirmarlo en la fuente oficial; hasta entonces, "Ver resultado" lo abre en Forex Factory y la pestaña En vivo lo muestra al instante.'}),
+    el('div',{class:'btns'},el('a',{class:'btn',href:'#en-vivo',text:'Resultados al instante'}),el('a',{class:'btn',href:'https://www.forexfactory.com/calendar',target:'_blank',rel:'noopener',text:'Abrir Forex Factory'})));
+}
+function mundoBox(){if(!MB){MB=el('section',{class:'glass fundas',id:'mundo'});pintaMundo();cargaMundo();setInterval(cargaMundo,5*6e4);}else pintaMundo();return MB;}
+/* Lo que dicen quienes mueven el mercado: solo con fuente verificada. Más los próximos discursos del calendario. */
+function dichosBox(d,archivo){
+  const l=(Array.isArray(d.dichos)?d.dichos:[]).filter(x=>x.fuente&&/^https:\/\//.test(x.fuente.url)).sort((a,b)=>new Date(b.cuando)-new Date(a.cuando));
+  const vienen=!archivo&&MUNDO?MUNDO.eventos.filter(e=>HABLA.test(e.titulo)&&e.t&&new Date(e.t)>Date.now()-36e5&&PAIS[e.pais]).slice(0,8):[];
+  const cuandoD=x=>{const t=new Date(x.cuando);return(isoDia(t)===isoDia(new Date())?'Hoy':fmt(t,{weekday:'short',day:'numeric'}))+' · '+hora(t);};
+  const caja=el('section',{class:'glass fundas',id:'dichos'},
+    el('div',{},el('h2',{text:'Lo que dicen los que mueven el mercado'}),el('p',{class:'muted small',text:'Bancos centrales, gobiernos y figuras que pueden mover tasas, dólar e índices. Cada frase con su fuente; nada inventado ni sacado de contexto.'})),
+    l.length?el('ol',{class:'dichos'},l.slice(0,6).map(x=>el('li',{class:'dicho n'+(NIV[x.impacto]||1)},
+      el('header',{},el('div',{},el('h3',{text:x.quien}),el('span',{class:'cargo',text:x.cargo})),el('div',{class:'mini'},estrellas(x.impacto),el('span',{class:'num muted small',text:cuandoD(x)}))),
+      el('p',{text:x.dijo}),
+      x.cita?el('blockquote',{text:'“'+x.cita+'”'}):null,
+      el('footer',{},x.tema?el('span',{class:'chip',text:x.tema}):null,x.porque?el('span',{text:x.porque}):null,el('a',{href:x.fuente.url,target:'_blank',rel:'noopener',text:'Fuente: '+x.fuente.nombre}))))):el('p',{class:'vacio',text:archivo?'Ese día no se registraron declaraciones.':'Todavía no hay declaraciones verificadas hoy. Las sumamos en cada actualización, desde transcripciones oficiales y medios reconocidos.'}),
+    l.length>6?mas('Ver '+(l.length-6)+' más',el('ol',{class:'dichos'},l.slice(6).map(x=>el('li',{class:'dicho'},el('header',{},el('h3',{text:x.quien}),el('span',{class:'num muted small',text:cuandoD(x)})),el('p',{text:x.dijo}),el('footer',{},el('a',{href:x.fuente.url,target:'_blank',rel:'noopener',text:'Fuente: '+x.fuente.nombre})))))):null,
+    vienen.length?el('div',{},el('h3',{class:'diat',text:'Próximos discursos'}),el('ol',{class:'discursos'},vienen.map(e=>{const t=new Date(e.t),p=PAIS[e.pais];return el('li',{},el('span',{class:'num',text:(isoDia(t)===isoDia(new Date())?'Hoy':fmt(t,{weekday:'short',day:'numeric'}))+' '+hora(t)}),el('span',{},p[0]+' ',traducir(e.titulo)),estrellas(IMPN[e.imp]||'bajo'));}))):null);
+  return caja;
+}
 function pintar(d,box,archivo,anima){
   const pend=archivo?[]:sinResumir(d),esHoy=d.fecha===isoDia(new Date()),top=medidas(d).sort((a,b)=>Math.abs(veces(b))-Math.abs(veces(a))).slice(0,6);
   box.classList.toggle('in',!!anima);
@@ -564,7 +657,7 @@ function pintar(d,box,archivo,anima){
     sec('Recordatorios',el('p',{class:'muted small',text:'Cada fundamental tiene su botón Recordarme arriba. Te llega un aviso 15 minutos antes.'})),
     !archivo&&cajaLiga(),
     sec('Compartir',el('div',{class:'btns'},copiar,el('a',{class:'btn',href:'https://wa.me/?text='+encodeURIComponent(d.mensaje),target:'_blank',rel:'noopener',text:'Abrir en WhatsApp'}))));
-  box.replaceChildren(hero,fundamentos(d,archivo),el('div',{class:'cols'},izq,der),...(archivo?[]:[cta('macro-hoy','¿Querés llegar a esta lectura por tu cuenta?','Te enseñamos a leer un dato antes de operar.')]));
+  box.replaceChildren(...[hero,fundamentos(d,archivo),archivo?null:mundoBox(),dichosBox(d,archivo),el('div',{class:'cols'},izq,der)].filter(Boolean),...(archivo?[]:[cta('macro-hoy','¿Querés llegar a esta lectura por tu cuenta?','Te enseñamos a leer un dato antes de operar.')]));
 }
 function tick(){
   const now=new Date();$('clock').textContent=fmt(now,{hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false})+' ARG';

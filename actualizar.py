@@ -12,12 +12,19 @@ import re
 import shutil
 import subprocess
 import sys
+import urllib.request
 
 DATOS = pathlib.Path(__file__).resolve().parent / "datos"
 TEXTOS = ["fecha", "actualizado", "titular", "bajada", "fed", "mensaje"]
 LISTAS = {"termometro": ["factor", "dato", "posicion", "texto"], "ideas": ["titulo", "texto"],
           "datos": ["nombre", "salio", "sorpresa"], "agenda": ["cuando", "evento", "impacto"],
           "fuentes": ["nombre", "url"]}
+
+
+# Listas opcionales: dichos de personas que mueven el mercado y resultados verificados de otros países.
+OPCIONALES = {"dichos": ["quien", "cargo", "cuando", "dijo", "impacto", "fuente"],
+              "mundo": ["cuando", "pais", "evento", "salio", "fuente"]}
+FEED_FF = "https://nfs.faireconomy.media/ff_calendar_thisweek.xml"
 
 
 def con_zona(s):
@@ -38,6 +45,26 @@ def revisar(ruta):
             continue
         for i, x in enumerate(d[k]):
             e += [f"{k}[{i}]: falta '{c}'" for c in campos if x.get(c) in (None, "")]
+    for k, campos in OPCIONALES.items():
+        if k not in d:
+            continue
+        if not isinstance(d[k], list):
+            e.append(f"'{k}' tiene que ser una lista")
+            continue
+        for i, x in enumerate(d[k]):
+            e += [f"{k}[{i}]: falta '{c}'" for c in campos if x.get(c) in (None, "")]
+            f = x.get("fuente")
+            if not isinstance(f, dict) or not str(f.get("url", "")).startswith("https://") or not f.get("nombre"):
+                e.append(f"{k}[{i}]: la fuente tiene que tener nombre y url https")
+            if x.get("cuando"):
+                try:
+                    con_zona(x["cuando"])
+                except ValueError as y:
+                    e.append(f"{k}[{i}]: '{x['cuando']}' {y}")
+            if k == "dichos" and x.get("impacto") not in ("alto", "medio", "bajo"):
+                e.append(f"dichos[{i}]: impacto tiene que ser alto, medio o bajo")
+            if k == "dichos" and len(str(x.get("cita", "")).split()) > 30:
+                e.append(f"dichos[{i}]: la cita textual no puede pasar de 30 palabras")
     if not isinstance(d.get("mercado"), list):
         e.append("'mercado' tiene que ser una lista de textos")
     if e:
@@ -108,12 +135,18 @@ def publicar(ruta):
     for k in ("reaccion", "tasa10"):  # lo que ya se midió hoy no se pierde si el borrador no lo trae
         if viejo and viejo.get(k) and not nuevo.get(k):
             nuevo[k] = viejo[k]
+    for k in ("dichos", "mundo"):  # lo que ya se contó hoy se suma, no se pisa
+        if viejo and viejo.get(k):
+            ya = {(x.get("quien") or x.get("pais"), x.get("cuando"), x.get("evento", "")) for x in nuevo.get(k, [])}
+            nuevo[k] = nuevo.get(k, []) + [x for x in viejo[k] if (x.get("quien") or x.get("pais"), x.get("cuando"), x.get("evento", "")) not in ya]
+            nuevo[k].sort(key=lambda x: x["cuando"], reverse=(k == "dichos"))
     if viejo and nuevo["actualizado"] == viejo["actualizado"]:
         nuevo["novedades"] = viejo.get("novedades", [])
     else:
         nuevo["novedades"] = (viejo or {}).get("novedades", []) + [{"cuando": nuevo["actualizado"], "texto": propia or novedad(viejo, nuevo)}]
     destino.write_text(json.dumps(nuevo, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
     indice()
+    mundo()
     git("add", "datos")
     if subprocess.run(["git", "-C", str(DATOS.parent), "diff", "--cached", "--quiet", "--", "datos"]).returncode == 0:
         print("No hay cambios nuevos en los datos.")
@@ -131,6 +164,32 @@ def publicar(ruta):
             if intento == 2:
                 raise
     print("Publicado. La página tarda uno o dos minutos en mostrarlo.")
+
+
+def mundo():
+    """Copia del calendario mundial de la semana (Forex Factory) por si el servidor en vivo no responde.
+    Si el feed falla, queda la copia anterior y se publica igual."""
+    try:
+        req = urllib.request.Request(FEED_FF, headers={"User-Agent": "valenttiel-macro-calendario"})
+        xml = urllib.request.urlopen(req, timeout=15).read().decode("windows-1252")
+        imp = {"High": 3, "Medium": 2, "Low": 1}
+        ev = []
+        for b in re.findall(r"<event>(.*?)</event>", xml, re.S):
+            c = lambda n: (re.search(rf"<{n}>(?:<!\[CDATA\[)?(.*?)(?:\]\]>)?</{n}>", b, re.S) or [None, ""])[1].replace("&amp;", "&").strip()
+            m, d_, a = c("date").split("-")
+            dia, h = f"{a}-{m}-{d_}", re.fullmatch(r"(\d{1,2}):(\d{2})(am|pm)", c("time").lower())
+            t = f"{dia}T{int(h[1]) % 12 + (12 if h[3] == 'pm' else 0):02d}:{h[2]}:00Z" if h else None
+            url = c("url") if c("url").startswith("https://www.forexfactory.com/") else ""
+            ev.append({"t": t, "dia": dia, "pais": c("country")[:4], "titulo": c("title")[:120], "imp": imp.get(c("impact"), 0),
+                       "prev": c("forecast")[:20], "ant": c("previous")[:20], "url": url})
+        if not ev:
+            raise ValueError("feed vacío")
+        ev.sort(key=lambda x: x["t"] or x["dia"])
+        leido = dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds").replace("+00:00", "Z")
+        (DATOS / "mundo.json").write_text(json.dumps({"fuente": "Forex Factory", "leido": leido, "eventos": ev}, ensure_ascii=False) + "\n", encoding="utf-8")
+        print(f"Calendario mundial: {len(ev)} eventos.")
+    except Exception as x:
+        print("No se pudo actualizar el calendario mundial (queda la copia anterior):", x)
 
 
 def indice():
