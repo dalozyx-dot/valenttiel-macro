@@ -4,13 +4,13 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Valenttiel Macro</title>
-<meta name="description" content="Fundamentales de EE.UU. en vivo, y cómo reaccionó cada activo.">
+<meta name="description" content="Fundamentales de todo el mundo con estrellas de impacto, lo que dicen los bancos centrales y cómo reaccionó cada activo.">
 <meta name="robots" content="noindex">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Valenttiel Macro">
 <meta property="og:locale" content="es_AR">
 <meta property="og:title" content="Valenttiel Macro">
-<meta property="og:description" content="Los datos de Estados Unidos, explicados simple. Con precios en vivo, gratis y sin crear cuenta.">
+<meta property="og:description" content="Los fundamentales del día explicados simple, con estrellas de impacto y calendario mundial. Gratis y sin crear cuenta.">
 <meta property="og:url" content="https://dalozyx-dot.github.io/valenttiel-macro/">
 <meta property="og:image" content="https://dalozyx-dot.github.io/valenttiel-macro/img/portada.jpg">
 <meta property="og:image:width" content="1200">
@@ -438,7 +438,7 @@ function abrir(d,r,id){
     el('div',{},el('h3',{text:'Cómo suele afectarle un dato'}),el('p',{class:'muted',text:a[3]})),
     r?el('p',{class:'muted small',text:'La medida muestra qué pasó después del dato. No prueba que el dato haya sido la causa.'}):null,a[2]?box:null,a[1]==='Acciones'||CALC[id||r.id]?el('div',{class:'btns'},el('a',{class:'btn',href:'calculadora/#'+(CALC[id||r.id]||'acc'),text:'Calcular mi tamaño'})):null,cta('macro-activo','¿Querés aprender a leer esto?','Dejanos tus datos y te contamos cómo seguir.')));
   D.showModal();D.scrollTop=0;
-  if(a[2])tv(box,'mini-symbol-overview',{...base,symbol:a[2],width:'100%',height:210,dateRange:'1D',autosize:false});
+  if(a[2])tv(box,'mini-symbol-overview',{...base,isTransparent:true,symbol:a[2],width:'100%',height:210,dateRange:'1D',autosize:false});
 }
 $('dlg').addEventListener('click',e=>{if(e.target===e.currentTarget)e.currentTarget.close();});
 $('dlg').addEventListener('close',()=>{if(!$('dlg').open)$('dlg').replaceChildren();});
@@ -487,7 +487,7 @@ function tv(box,name,cfg,sinCredito){
   s.textContent=JSON.stringify(cfg);c.append(s);box.append(c);
   if(!sinCredito)box.append(el('p',{class:'tv-credit'+(name==='ticker-tape'?' wrap':'')},'Datos en vivo: ',el('a',{href:'https://es.tradingview.com/',target:'_blank',rel:'noopener nofollow',text:'TradingView'})));
 }
-tv($('tape'),'ticker-tape',{...base,showSymbolLogo:false,displayMode:'adaptive',symbols:['nasdaq','sp500','oro','bitcoin','dolar','eurusd','apple','nvidia','microsoft','tesla'].map(i=>({proName:A[i][2],title:A[i][0]}))});
+tv($('tape'),'ticker-tape',{...base,isTransparent:true,showSymbolLogo:false,displayMode:'adaptive',symbols:['nasdaq','sp500','oro','bitcoin','dolar','eurusd','apple','nvidia','microsoft','tesla'].map(i=>({proName:A[i][2],title:A[i][0]}))});
 function enVivo(){
   tv($('tv-cal'),'events',{...base,isTransparent:true,width:'100%',height:640,importanceFilter:'0,1',countryFilter:'us,eu,gb,de,fr,jp,cn,ca,au,nz,ch'});
   tv($('tv-chart'),'advanced-chart',{width:'100%',height:460,symbol:'FOREXCOM:NSXUSD',interval:'15',timezone:TZ,theme:'dark',style:'1',locale:'es',allow_symbol_change:true,hide_side_toolbar:true,support_host:'https://www.tradingview.com'});
@@ -498,15 +498,6 @@ function prox(d){const now=Date.now();return(d.agenda||[]).filter(a=>new Date(a.
 function sinResumir(d){const upd=new Date(d.actualizado),now=new Date();return(d.agenda||[]).filter(a=>{const t=new Date(a.cuando);return t<=now&&t>upd&&!a.salio&&a.impacto!=='bajo';});}
 function cuando(a){const t=new Date(a.cuando);return isoDia(t)===isoDia(new Date())?hora(t):fmt(t,{day:'2-digit',month:'2-digit'})+' '+hora(t);}
 function datoTxt(a){const p=[];if(a.salio)p.push('salió '+a.salio);if(a.previsto)p.push('previsto '+a.previsto);if(a.anterior)p.push('anterior '+a.anterior);return p.join(' · ');}
-/* panel de cotizaciones: se crea una vez y se reubica, para no recargarlo en cada repintado */
-let panelVivo=null;
-function cotiza(){
-  if(panelVivo)return panelVivo;
-  panelVivo=el('div',{class:'tv'});
-  const g=GRUPOS.slice(1).map(n=>({name:n,symbols:Object.values(A).filter(a=>a[1]===n&&a[2]).map(a=>({name:a[2],displayName:a[0]}))}));
-  tv(panelVivo,'market-quotes',{...base,isTransparent:true,width:'100%',height:690,showSymbolLogo:true,symbolsGroups:g});
-  return panelVivo;
-}
 /* Cada dato enlaza a su lección animada. */
 function leccion(n){const l=window.ACADEMIA&&ACADEMIA.buscar(n);return l?el('a',{class:'que',href:'academia/#'+l.id,'aria-label':'Qué es: '+l.n,text:'¿Qué es?'}):null}
 function tabla(rs){return el('div',{class:'scroll',tabindex:'0',role:'region','aria-label':'Datos publicados'},el('table',{class:'tnum'},el('thead',{},el('tr',{},['Dato','Salió','Previsto','Anterior','Contra lo previsto'].map(t=>el('th',{scope:'col',text:t})))),
@@ -629,6 +620,7 @@ function mundoBox(){if(!MB){MB=el('div',{class:'fundas',id:'mundo'});pintaMundo(
 /* Lo que dicen quienes mueven el mercado: solo con fuente verificada. Más los próximos discursos del calendario. */
 function dichosBox(d,archivo){
   const l=(Array.isArray(d.dichos)?d.dichos:[]).filter(x=>x.fuente&&/^https:\/\//.test(x.fuente.url)).sort((a,b)=>new Date(b.cuando)-new Date(a.cuando));
+  if(archivo&&!l.length)return null;
   const vienen=!archivo&&MUNDO?MUNDO.eventos.filter(e=>HABLA.test(e.titulo)&&e.t&&new Date(e.t)>Date.now()-36e5&&PAIS[e.pais]).slice(0,8):[];
   const cuandoD=x=>{const t=new Date(x.cuando);return(isoDia(t)===isoDia(new Date())?'Hoy':fmt(t,{weekday:'short',day:'numeric'}))+' · '+hora(t);};
   const caja=el('section',{class:'glass fundas',id:'dichos'},
@@ -715,12 +707,12 @@ async function cargar(){
 }
 let viendoDia=false;
 function historial(){
-  if(viendoDia)return;
+  if(viendoDia)return;$('v-historial').querySelector('.hero').hidden=false;
   const hoyF=isoDia(new Date());
   $('days').replaceChildren(...idx.dias.filter(x=>FECHA.test(x.fecha)).sort((a,b)=>b.fecha.localeCompare(a.fecha)).map(x=>{
     const nov=(Array.isArray(x.novedades)?x.novedades:[]).filter(n=>!/^Primer resumen del día/.test(n.texto)).sort((a,b)=>new Date(b.cuando)-new Date(a.cuando));
     return el('article',{class:'dia'},
-      el('button',{type:'button',class:'row',onclick:async()=>{try{const d=await leerNuevo('datos/'+x.fecha+'.json'),b=el('div',{class:'view'});pintar(d,b,true,true);viendoDia=true;$('days').replaceChildren(el('div',{class:'btns',style:'margin-bottom:34px'},el('button',{class:'btn',type:'button',text:'Volver al historial',onclick:()=>{viendoDia=false;historial();}})),b);window.scrollTo(0,0);}catch(e){}}},
+      el('button',{type:'button',class:'row',onclick:async()=>{try{const d=await leerNuevo('datos/'+x.fecha+'.json'),b=el('div',{class:'view'});pintar(d,b,true,true);viendoDia=true;$('v-historial').querySelector('.hero').hidden=true;$('days').replaceChildren(el('div',{class:'btns',style:'margin-bottom:34px'},el('button',{class:'btn',type:'button',text:'Volver al historial',onclick:()=>{viendoDia=false;historial();}})),b);window.scrollTo(0,0);}catch(e){}}},
         el('span',{class:'num muted',text:x.fecha.split('-').reverse().join('/')}),el('b',{text:x.titular})),
       x.fecha===hoyF?el('p',{class:'stamp',text:'En curso, última actualización '+hora(new Date(x.actualizado))}):null,
       nov.length?el('ul',{class:'agenda nov'},nov.map(n=>el('li',{},el('span',{class:'num',text:hora(new Date(n.cuando))}),el('div',{text:n.texto})))):null);
