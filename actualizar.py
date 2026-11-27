@@ -119,8 +119,17 @@ def publicar(ruta):
         print("No hay cambios nuevos en los datos.")
     else:
         git("commit", "-q", "-m", f"Resumen {r.stem}", "--", "datos")
+    # En la Mac se usa la credencial de gh; en la nube, la que trae el entorno.
     gh = shutil.which("gh") or str(pathlib.Path.home() / ".local/bin/gh")
-    git("-c", "credential.helper=", "-c", f"credential.helper=!{gh} auth git-credential", "push", "-q", "origin", "main")
+    cred = ["-c", "credential.helper=", "-c", f"credential.helper=!{gh} auth git-credential"] if pathlib.Path(gh).exists() else []
+    for intento in range(3):  # si otra publicación subió algo antes, se rebasa y se reintenta
+        try:
+            git(*cred, "pull", "-q", "--rebase", "origin", "main")
+            git(*cred, "push", "-q", "origin", "HEAD:main")
+            break
+        except subprocess.CalledProcessError:
+            if intento == 2:
+                raise
     print("Publicado. La página tarda uno o dos minutos en mostrarlo.")
 
 
