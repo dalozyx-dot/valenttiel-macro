@@ -33,7 +33,7 @@ def revisar(ruta):
         if not isinstance(d.get(k), str) or not d[k].strip():
             e.append(f"falta '{k}'")
     for k, campos in LISTAS.items():
-        if not isinstance(d.get(k), list) or not d[k]:
+        if not isinstance(d.get(k), list) or (not d[k] and k != "datos"):  # la previa de las 00:05 todavía no tiene datos
             e.append(f"'{k}' tiene que ser una lista con algo adentro")
             continue
         for i, x in enumerate(d[k]):
