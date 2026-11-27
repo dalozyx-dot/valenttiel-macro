@@ -133,6 +133,8 @@ td small{display:block;color:var(--muted);font-size:13px}
 .dicho blockquote{margin:0;padding:2px 0 2px 12px;border-left:2px solid rgba(235,178,74,.6);font-style:italic;color:var(--ink)}.dicho footer{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:13px;color:var(--muted)}
 .discursos{display:grid;gap:0;padding:0;margin:0}.discursos li{list-style:none;display:grid;grid-template-columns:92px minmax(0,1fr) auto;gap:12px;align-items:center;padding:11px 0;border-top:1px solid var(--line);font-size:15px}.discursos .num{color:var(--amber);font-size:13.5px}
 @media(max-width:760px){.discursos li{grid-template-columns:86px minmax(0,1fr)}.discursos li>:last-child{grid-column:2}}
+@media(max-width:620px){.tnum thead{display:none}.tnum,.tnum tbody{display:block}.tnum tr{display:grid;grid-template-columns:repeat(3,minmax(0,1fr)) auto;gap:6px 10px;align-items:end;padding:14px 0;border-bottom:1px solid var(--line)}.tnum td{border:0;padding:0;text-align:left}.tnum td:first-child{grid-column:1/-1;font-weight:500}.tnum td[data-k]::before{content:attr(data-k);display:block;font:400 11px/1.6 var(--f,inherit);color:var(--muted);text-transform:uppercase;letter-spacing:.04em}.tnum .sor{justify-self:end}}
+.niv4{display:grid;gap:0;padding:0;margin:14px 0 10px;counter-reset:n}.niv4 li{list-style:none;display:grid;grid-template-columns:28px minmax(0,1fr);gap:2px 12px;padding:12px 0;border-top:1px solid var(--line);counter-increment:n}.niv4 li::before{content:counter(n);grid-row:span 2;font:600 13px/1 var(--m);color:var(--amber);width:24px;height:24px;border-radius:50%;display:grid;place-items:center;box-shadow:inset 0 0 0 1px rgba(235,178,74,.45)}.niv4 span{font-size:14.5px}
 .agenda{display:grid;padding:0}
 .agenda>li{list-style:none;display:grid;grid-template-columns:92px minmax(0,1fr);gap:12px;padding:13px 0;border-top:1px solid var(--line);font-size:15px}
 .agenda .num{font-size:13px;line-height:1.85;color:var(--amber)}
@@ -263,7 +265,7 @@ footer .wrap{display:grid;gap:8px}
 @keyframes fade{from{opacity:0}}
 @keyframes pop{from{opacity:0;transform:translateY(24px) scale(.97);filter:blur(10px)}}
 @media (max-width:980px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media (max-width:860px){.cols{grid-template-columns:minmax(0,1fr)}.gloss{grid-template-columns:minmax(0,1fr)}}
+@media (max-width:860px){.cols{display:flex;flex-direction:column;gap:clamp(40px,5vw,60px)}.cols>.stack{display:contents}.cols>.stack:last-child>*{order:2}.cols #prox{order:-1}.cols section:has(.fuentes){order:3}.gloss{grid-template-columns:minmax(0,1fr)}}
 @media (max-width:620px){.grid{grid-template-columns:minmax(0,1fr)}.clock{display:none}.join{margin-left:auto}.tabs{order:2;width:100%}table{font-size:14px}th,td{padding-left:8px}.cta .btn,.door .btn{width:100%;text-align:center}.days button{grid-template-columns:minmax(0,1fr);gap:2px}.agenda>li{grid-template-columns:78px minmax(0,1fr)}.rank>button{grid-template-columns:92px minmax(0,1fr) 62px;gap:10px;font-size:14px}.facts{grid-template-columns:minmax(0,1fr);gap:10px}.glass{padding:22px}.tabs a{padding-inline:11px}}
 </style>
 </head>
@@ -300,6 +302,8 @@ footer .wrap{display:grid;gap:8px}
     <section><h2>Reaccionó después no es reaccionó por</h2><p class="lead">La pestaña Activos mide qué hizo el precio después del dato. A la misma hora pueden pesar otras noticias, así que la medida muestra coincidencia en el tiempo y no prueba la causa.</p></section>
     <section><h2>De dónde salen los datos</h2><div class="ideas">
       <div><h3>Datos económicos</h3><p class="muted">Se confirman en la fuente oficial (BEA, BLS, Censo, Fed, Tesoro) o en dos fuentes independientes antes de publicarse.</p></div>
+      <div><h3>Calendario mundial</h3><p class="muted">Forex Factory, revisado cada 5 minutos: horario, impacto, previsto y anterior. El resultado se carga recién cuando se confirma en la fuente oficial de cada país.</p></div>
+      <div><h3>Lo que dicen</h3><p class="muted">Declaraciones de bancos centrales y gobiernos, tomadas de transcripciones oficiales o medios reconocidos, siempre con su enlace.</p></div>
       <div><h3>Precios en vivo</h3><p class="muted">TradingView. Las acciones pueden tener demora.</p></div>
       <div><h3>Reacción de Bitcoin, Ethereum, EUR/USD y oro</h3><p class="muted">Se calcula con los precios públicos de Kraken, Coinbase y Binance, según el activo; el oro, con el token PAXG. Si no coinciden, no se publica.</p></div>
       <div><h3>Reacción de índices, acciones, petróleo y dólar</h3><p class="muted">No se publica hasta contar con una fuente con licencia.</p></div>
@@ -330,8 +334,16 @@ footer .wrap{display:grid;gap:8px}
         <div class="ideas">
           <div><h3>Leer el dato antes que el titular</h3><p class="muted">Comparar lo que salió con lo que se esperaba, y separar lo importante del ruido.</p></div>
           <div><h3>Entender qué cambia para la Fed</h3><p class="muted">Seguir el hilo que une inflación, empleo, crecimiento y tasas.</p></div>
-          <div><h3>Mirar el precio con contexto</h3><p class="muted">Reconocer si un activo se movió más de lo normal, y qué venía haciendo antes.</p></div>
+          <div><h3>Entrar con el Método Valenttiel</h3><p class="muted">Liquidez, estructura y zonas para entrar con el riesgo definido antes de tocar el botón.</p></div>
         </div>
+        <h2 style="margin-top:34px">Cuatro niveles</h2>
+        <ol class="niv4">
+          <li><b>Comunidad</b><span class="muted">Los fundamentos del método, con tareas y foro de capturas.</span></li>
+          <li><b>Mentoría grupal</b><span class="muted">El método H1 + M5 con práctica en vivo cada semana.</span></li>
+          <li><b>1 a 1</b><span class="muted">Tu plan operativo y corrección personal de cada trade.</span></li>
+          <li><b>Premium</b><span class="muted">Las teorías propias en profundidad, fondeo y ejecución en vivo.</span></li>
+        </ol>
+        <p class="small"><a href="academia/#liquidez">Mirá las demos gratis del método en la Academia</a></p>
         <p class="muted small">Operar implica riesgo de pérdida. Ningún curso ni mentoría garantiza resultados.</p>
       </section>
       <form class="glass form" id="f-sumate" novalidate>
@@ -352,7 +364,7 @@ footer .wrap{display:grid;gap:8px}
 <dialog id="dlg" aria-labelledby="dlg-t"></dialog>
 <footer><div class="wrap">
   <p>Contenido educativo. No es asesoramiento financiero ni una recomendación de compra o venta.</p>
-  <p>Precios y calendario en vivo de TradingView. La fuente de cada dato está en la pestaña Aprender. Pueden tener demora.</p>
+  <p>Precios en vivo de TradingView (pueden tener demora). Calendario mundial de Forex Factory. Datos económicos verificados en su fuente oficial. <a href="#aprender">Cómo leer un dato y de dónde sale cada número</a>.</p>
   <p data-medir></p>
 </div></footer>
 
@@ -497,8 +509,8 @@ function cotiza(){
 }
 /* Cada dato enlaza a su lección animada. */
 function leccion(n){const l=window.ACADEMIA&&ACADEMIA.buscar(n);return l?el('a',{class:'que',href:'academia/#'+l.id,'aria-label':'Qué es: '+l.n,text:'¿Qué es?'}):null}
-function tabla(rs){return el('div',{class:'scroll',tabindex:'0',role:'region','aria-label':'Datos publicados'},el('table',{},el('thead',{},el('tr',{},['Dato','Salió','Previsto','Anterior','Contra lo previsto'].map(t=>el('th',{scope:'col',text:t})))),
-  el('tbody',{},rs.map(r=>el('tr',{},el('td',{},r.nombre,r.nota?el('small',{text:r.nota}):null,leccion(r.nombre)),el('td',{class:'num'},el('b',{text:r.salio})),el('td',{class:'num',text:r.previsto||'s/d'}),el('td',{class:'num',text:r.anterior||'s/d'}),el('td',{},el('span',{class:'chip '+(['mayor','menor'].includes(r.sorpresa)?r.sorpresa:''),text:{mayor:'Mayor',menor:'Menor',igual:'En línea'}[r.sorpresa]||'s/d'})))))));}
+function tabla(rs){return el('div',{class:'scroll',tabindex:'0',role:'region','aria-label':'Datos publicados'},el('table',{class:'tnum'},el('thead',{},el('tr',{},['Dato','Salió','Previsto','Anterior','Contra lo previsto'].map(t=>el('th',{scope:'col',text:t})))),
+  el('tbody',{},rs.map(r=>el('tr',{},el('td',{},r.nombre,r.nota?el('small',{text:r.nota}):null,leccion(r.nombre)),el('td',{class:'num','data-k':'Salió'},el('b',{text:r.salio})),el('td',{class:'num','data-k':'Previsto',text:r.previsto||'s/d'}),el('td',{class:'num','data-k':'Anterior',text:r.anterior||'s/d'}),el('td',{class:'sor'},el('span',{class:'chip '+(['mayor','menor'].includes(r.sorpresa)?r.sorpresa:''),text:{mayor:'Mayor',menor:'Menor',igual:'En línea'}[r.sorpresa]||'s/d'})))))));}
 /* Recordatorios: un enlace por dato y un archivo con todos. */
 const nomEv=a=>/EE\.UU\./.test(a.evento)?a.evento:a.evento+' (EE.UU.)';
 const utc=d=>new Date(d).toISOString().replace(/[-:]|\.\d{3}/g,'');
@@ -642,7 +654,7 @@ function pintar(d,box,archivo,anima){
   box.classList.toggle('in',!!anima);
   const hero=el('div',{class:'hero'},
     el('p',{class:'stamp'},diaLargo(d.fecha)+', resumen de las '+hora(new Date(d.actualizado)),archivo?null:el('span',{id:'hace'})),
-    el('h1',{class:'grad',text:d.titular}),el('p',{class:'lead',text:partir(d.bajada,3)[0]}),partir(d.bajada,3)[1]&&mas('Seguir leyendo',el('p',{class:'lead',text:partir(d.bajada,3)[1]})),
+    el('h1',{class:'grad',text:d.titular}),el('p',{class:'lead',text:partir(d.bajada,2)[0]}),partir(d.bajada,2)[1]&&mas('Seguir leyendo',el('p',{class:'lead',text:partir(d.bajada,2)[1]})),
     !archivo&&!esHoy&&el('p',{class:'warn',text:'Este es el último resumen disponible. Todavía no hay uno de hoy; los datos en vivo están en la pestaña En vivo.'}),
     pend.length>0&&el('p',{class:'warn',text:'Ya se publicó o está por aparecer: '+pend.map(a=>a.evento).join(', ')+'. Todavía no está en este resumen; miralo en En vivo.'}));
   const izq=el('div',{class:'stack'},
@@ -680,6 +692,8 @@ const FECHA=/^\d{4}-\d{2}-\d{2}$/;
 const RAW='https://raw.githubusercontent.com/dalozyx-dot/valenttiel-macro/main/';
 const sello=j=>{const t=Date.parse(j&&(j.actualizado||(Array.isArray(j.dias)&&j.dias.map(x=>x.actualizado).sort().pop())));return Number.isFinite(t)?t:0;};
 async function conTope(u){const c=new AbortController(),t=setTimeout(()=>c.abort(),9000);try{const r=await fetch(u+'?t='+Math.floor(Date.now()/60000),{cache:'no-store',signal:c.signal});if(!r.ok)throw new Error(r.status);return await r.json();}finally{clearTimeout(t);}}
+/* Primera carga: lo que llegue primero (la página o GitHub). Después se comparan los dos y gana el más nuevo. */
+const leerRapido=f=>Promise.any([conTope(f),conTope(RAW+f)].map(p=>p.then(j=>sello(j)?j:Promise.reject('vacío'))));
 async function leerNuevo(f){
   const rs=(await Promise.allSettled([conTope(f),conTope(RAW+f)])).filter(x=>x.status==='fulfilled'&&sello(x.value)).map(x=>x.value);
   if(!rs.length)throw new Error('sin datos');
@@ -687,13 +701,15 @@ async function leerNuevo(f){
 }
 async function cargar(){
   try{
-    const ni=await leerNuevo('datos/index.json');if(!idx||sello(ni)>=sello(idx))idx=ni;
+    const rapido=!hoy,leer=rapido?leerRapido:leerNuevo;
+    const ni=await leer('datos/index.json');if(!idx||sello(ni)>=sello(idx))idx=ni;
     const u=idx.dias.filter(x=>FECHA.test(x.fecha)).sort((a,b)=>b.fecha.localeCompare(a.fecha))[0],clave=u.fecha+u.actualizado;
-    if(clave!==visto){const n=await leerNuevo('datos/'+u.fecha+'.json');
+    if(clave!==visto){const n=await leer('datos/'+u.fecha+'.json');
       if(n.fecha!==u.fecha)throw new Error('fecha');
       if(n.actualizado===u.actualizado)visto=clave; /* si el archivo del día todavía viene atrasado, se reintenta */
       if(hoy&&hoy.fecha===n.fecha&&hoy.actualizado===n.actualizado){tick();return;}
       hoy=n;pintar(hoy,$('v-hoy'),false,true);activos(hoy,!$('v-activos').hidden);historial();}
+    if(rapido&&hoy)setTimeout(cargar,1500); /* enseguida se confirma con la otra copia */
     tick();
   }catch(e){if(!hoy)$('v-hoy').replaceChildren(el('div',{class:'hero'},el('h1',{text:'No se pudo cargar el resumen'}),el('p',{class:'lead',text:'Revisá tu conexión. Se vuelve a intentar en un minuto; el calendario sigue en la pestaña En vivo.'})));}
 }
