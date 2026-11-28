@@ -1,0 +1,130 @@
+{
+ "fecha": "2026-11-28",
+ "actualizado": "2026-11-28T00:15:00-03:00",
+ "titular": "Sábado sin datos: la semana que viene trae ISM, ADP y el empleo del viernes",
+ "bajada": "Hoy no hay datos ni sesión en EE.UU. La semana arranca el lunes 30/11 y el centro es el informe de empleo del viernes 4/12 (NFP previsto en 90K, desempleo 4,1%). Antes salen el ISM manufacturero y las vacantes JOLTS del martes, el ADP del miércoles y el ISM de servicios del jueves. La Fed decide la tasa el 9/12.",
+ "termometro": [
+  {
+   "factor": "Comercio",
+   "dato": "Déficit 149,5B",
+   "posicion": 60,
+   "texto": "El déficit de bienes creció 14.400 millones en un mes porque las importaciones subieron más que las exportaciones. Es un dato adelantado, que se revisa."
+  },
+  {
+   "factor": "Crecimiento",
+   "dato": "PIB 4,3% (3T)",
+   "posicion": 82,
+   "texto": "Dato del 25/11: muy por encima de lo previsto, aunque cubre de julio a septiembre."
+  },
+  {
+   "factor": "Empleo",
+   "dato": "Subsidios 189K",
+   "posicion": 78,
+   "texto": "Dato del 25/11: menos pedidos de los esperados, hay pocos despidos. El informe de empleo sale el 4/12."
+  },
+  {
+   "factor": "Inflación",
+   "dato": "PCE subyacente 3,3%",
+   "posicion": 76,
+   "texto": "Dato del 25/11: apenas arriba de lo previsto y lejos del objetivo de 2%."
+  }
+ ],
+ "ideas": [
+  {
+   "titulo": "Hoy no hay agenda",
+   "texto": "Es sábado y los mercados de EE.UU. están cerrados. Es un buen día para ordenar la semana que viene sin la presión del precio."
+  },
+  {
+   "titulo": "El empleo del viernes es el dato clave",
+   "texto": "El informe de noviembre sale el 4/12 a las 10:30 de Argentina. Se prevé NFP de 90K (anterior 165K) y desempleo de 4,1%. Es el último gran dato antes de la Fed."
+  },
+  {
+   "titulo": "Martes y jueves, las encuestas ISM",
+   "texto": "El ISM manufacturero (martes 1/12) se prevé en 55,2 contra 55,5 anterior. El de servicios sale el jueves 3/12; el anterior fue 54,5. Miran si la actividad se enfría o se sostiene."
+  }
+ ],
+ "datos": [],
+ "fed": "La tasa está en 3,75% a 4,00% y la próxima decisión es el 9 de diciembre. Hoy no hay decisión ni minutas de la Fed. Antes de la reunión queda el empleo del 4/12 y, después, el IPC del 10/12.",
+ "mercado": [
+  "La sesión todavía no empezó: hoy es sábado y la bolsa de EE.UU. abre el lunes 30/11. No publico números de mercado sin una fuente leída hoy."
+ ],
+ "leccion": "El consenso es una referencia, no una promesa. Se llama \"previsto\" al promedio de lo que esperan los analistas. Lo que mueve al mercado suele ser la diferencia entre lo que sale y lo previsto, no el número solo. Por eso conviene anotar el previsto antes de que salga el dato.",
+ "agenda": [
+  {
+   "cuando": "2026-12-01T12:00:00-03:00",
+   "evento": "ISM manufacturero (noviembre)",
+   "previsto": "55,2",
+   "anterior": "55,5",
+   "impacto": "alto"
+  },
+  {
+   "cuando": "2026-12-01T12:00:00-03:00",
+   "evento": "Vacantes JOLTS (octubre)",
+   "anterior": "7,52M",
+   "impacto": "medio"
+  },
+  {
+   "cuando": "2026-12-02T10:15:00-03:00",
+   "evento": "Empleo privado ADP (noviembre)",
+   "anterior": "86K",
+   "impacto": "medio"
+  },
+  {
+   "cuando": "2026-12-03T10:30:00-03:00",
+   "evento": "Subsidios por desempleo",
+   "impacto": "medio"
+  },
+  {
+   "cuando": "2026-12-03T12:00:00-03:00",
+   "evento": "ISM de servicios (noviembre)",
+   "anterior": "54,5",
+   "impacto": "alto"
+  },
+  {
+   "cuando": "2026-12-03T12:00:00-03:00",
+   "evento": "Órdenes de fábrica (octubre)",
+   "impacto": "bajo"
+  },
+  {
+   "cuando": "2026-12-04T10:30:00-03:00",
+   "evento": "Empleo: NFP y desempleo (noviembre)",
+   "previsto": "NFP 90K, desempleo 4,1%",
+   "anterior": "NFP 165K",
+   "impacto": "alto"
+  },
+  {
+   "cuando": "2026-12-04T10:30:00-03:00",
+   "evento": "Salario por hora (noviembre)",
+   "previsto": "m/m 0,3%, a/a 3,0%",
+   "anterior": "m/m 0,4%, a/a 3,1%",
+   "impacto": "alto"
+  },
+  {
+   "cuando": "2026-12-04T12:00:00-03:00",
+   "evento": "Confianza de Michigan (preliminar de diciembre)",
+   "impacto": "medio"
+  },
+  {
+   "cuando": "2026-12-09T16:00:00-03:00",
+   "evento": "Decisión de tasas de la Fed (9/12)",
+   "impacto": "alto"
+  }
+ ],
+ "mensaje": "📊 *PREVIA EE.UU. | sábado 28/11*\n\n*Hoy no hay datos ni sesión. La semana que viene se define con el empleo.*\n\n📅 *Lo que viene (hora de Argentina):*\n• Mar 1/12 12:00: ISM manufacturero ⭐⭐⭐ (prev. 55,2; ant. 55,5)\n• Mar 1/12 12:00: JOLTS ⭐⭐\n• Mié 2/12 10:15: ADP ⭐⭐\n• Jue 3/12 10:30: subsidios por desempleo ⭐⭐\n• Jue 3/12 12:00: ISM de servicios ⭐⭐⭐ (ant. 54,5)\n• Vie 4/12 10:30: empleo NFP ⭐⭐⭐ (prev. 90K; desempleo 4,1%)\n\n🏦 Fed: decisión el 9/12.\n\n_Contenido educativo. No es asesoramiento financiero._",
+ "fuentes": [
+  {
+   "nombre": "BLS (calendario de publicaciones)",
+   "url": "https://www.bls.gov/schedule/news_release/"
+  },
+  {
+   "nombre": "Newsquawk (semana del 30/11 al 4/12)",
+   "url": "https://www.newsquawk.com/headlines/week-in-focus-nov-30th-dec-4th-2026-highlights-include-us-nfp-ism-pmis-nvda-hearings-and-the-spanish-election"
+  }
+ ],
+ "novedades": [
+  {
+   "cuando": "2026-11-28T00:15:00-03:00",
+   "texto": "Primer resumen del día: Sábado sin datos: la semana que viene trae ISM, ADP y el empleo del viernes"
+  }
+ ]
+}

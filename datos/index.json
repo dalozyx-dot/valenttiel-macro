@@ -1,6 +1,17 @@
 {
  "dias": [
   {
+   "fecha": "2026-11-28",
+   "actualizado": "2026-11-28T00:15:00-03:00",
+   "titular": "Sábado sin datos: la semana que viene trae ISM, ADP y el empleo del viernes",
+   "novedades": [
+    {
+     "cuando": "2026-11-28T00:15:00-03:00",
+     "texto": "Primer resumen del día: Sábado sin datos: la semana que viene trae ISM, ADP y el empleo del viernes"
+    }
+   ]
+  },
+  {
    "fecha": "2026-11-27",
    "actualizado": "2026-11-27T15:50:00-03:00",
    "titular": "El déficit comercial de bienes saltó a 149.500 millones en octubre",
