@@ -49,6 +49,7 @@ main{display:grid;gap:16px;padding-block:22px 60px}
 @media(prefers-reduced-motion:no-preference){.sem.rojo .luz i{animation:late 1.6s ease-in-out infinite}}@keyframes late{50%{box-shadow:0 0 8px 0 color-mix(in srgb,var(--c) 40%,transparent)}}
 .sem h1{font-size:clamp(26px,3.6vw,40px);line-height:1.05;letter-spacing:-.04em;color:var(--c)}
 .sem .por{margin-top:6px;color:var(--ink);font-size:16px}.sem .nota{margin-top:4px}
+.ctl-sem{grid-column:1/-1;display:flex;flex-wrap:wrap;align-items:center;gap:8px 10px;border-top:1px solid var(--line);padding-top:14px}.btn[aria-pressed=true]{box-shadow:inset 0 0 0 1px rgba(95,208,160,.55);background:rgba(95,208,160,.12)}
 .relojes{display:grid;gap:6px;text-align:right}.relojes b{font:500 clamp(28px,3.4vw,38px)/1 var(--m);letter-spacing:-.05em}.relojes span{font-size:12.5px;color:var(--muted)}
 /* línea del día */
 .linea svg{display:block;width:100%;height:auto;overflow:visible}
@@ -98,6 +99,7 @@ footer{padding-block:10px 40px;color:var(--muted);font-size:13px;display:grid;ga
       <div class="luz" aria-hidden="true"><i></i></div>
       <div><p class="k" id="sem-k">Semáforo de sesión</p><h1 id="sem-t">Cargando…</h1><p class="por" id="sem-p"></p><p class="nota muted small" id="sem-n"></p></div>
       <div class="relojes"><div><b class="num" id="r-ar">--:--</b><br><span>Argentina</span></div><div><b class="num" id="r-ny" style="font-size:20px;color:var(--muted)">--:--</b><br><span>Nueva York</span></div></div>
+      <div class="ctl-sem"><button class="btn" type="button" id="b-av" aria-pressed="false"></button><button class="btn" type="button" id="b-wl" aria-pressed="false" hidden></button><span class="muted small" id="av-n"></span></div>
     </section>
 
     <section class="card linea"><div style="display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap"><h2>Tu día en una línea</h2><span class="muted small" id="lin-sub">Horario de Argentina</span></div>
@@ -110,6 +112,7 @@ footer{padding-block:10px 40px;color:var(--muted);font-size:13px;display:grid;ga
         <div class="marcador"><div><span class="k">Operaciones</span><b id="p-ops">0 / 2</b><div class="barra"><i id="p-opsb" style="width:0"></i></div></div><div><span class="k">Resultado</span><b id="p-r">0 R</b><div class="barra"><i id="p-rb" style="width:0"></i></div></div></div>
         <div class="ops"><button class="btn g" type="button" id="b-gan">+ Ganada</button><button class="btn p" type="button" id="b-per">− Perdida</button><button class="btn" type="button" id="b-be">Breakeven</button><button class="btn" type="button" id="b-des" aria-label="Deshacer la última">Deshacer</button></div>
         <div class="hist" id="p-hist" aria-label="Operaciones de hoy"></div>
+        <p class="small" style="margin-top:10px"><a href="../reto/?desde=cabina">¿Cumpliste tu plan? Sumalo en la Liga</a></p>
         <details class="cfg"><summary>Mis reglas</summary><div class="campos">
           <label class="f">Máx. operaciones<input class="n" type="number" min="1" max="10" id="c-ops"></label>
           <label class="f">Pérdida máx. (R)<input class="n" type="number" min="0.5" max="10" step="0.5" id="c-per"></label>
@@ -202,7 +205,7 @@ async function cargar(){
 }
 
 /* ---------- estado guardado en el dispositivo ---------- */
-const KEY='valenttiel-cabina';let ST={cfg:{ops:2,per:2,gan:2},tam:{cta:50000,rie:0.5,stop:20,con:'2'},dias:{}};
+const KEY='valenttiel-cabina';let ST={cfg:{ops:2,per:2,gan:2,avisos:false},tam:{cta:50000,rie:0.5,stop:20,con:'2'},dias:{}};
 try{const x=JSON.parse(localStorage.getItem(KEY));if(x)ST={...ST,...x,cfg:{...ST.cfg,...x.cfg},tam:{...ST.tam,...x.tam},dias:x.dias||{}};}catch(e){}
 const guardar=()=>{try{const hoy=diaAR(new Date());for(const k in ST.dias)if(k<hoy&&Object.keys(ST.dias).length>30)delete ST.dias[k];localStorage.setItem(KEY,JSON.stringify(ST));}catch(e){}};
 const hoyST=()=>{const k=diaAR(new Date());return ST.dias[k]||(ST.dias[k]={ops:[],chk:[]});};
@@ -286,10 +289,26 @@ function tamano(){
 }
 [['t-cta','cta'],['t-rie','rie'],['t-stop','stop'],['t-con','con']].forEach(([id,k])=>{const i=$(id);i.value=ST.tam[k];i.oninput=()=>{const v=k==='con'?i.value:Number(i.value);if(k==='con'||v>0){ST.tam[k]=v;guardar();tamano();}};});
 
+/* ---------- avisos y pantalla encendida ---------- */
+let colorAnt='',ac=null,wl=null,quiereWL=false;
+function sonar(n=2){try{ac=ac||new(window.AudioContext||window.webkitAudioContext)();if(ac.state==='suspended')ac.resume();const t0=ac.currentTime+.02;
+  for(let i=0;i<n;i++){const o=ac.createOscillator(),g=ac.createGain(),a=t0+i*.24;o.type='sine';o.frequency.value=i?1046.5:880;o.connect(g);g.connect(ac.destination);g.gain.setValueAtTime(.0001,a);g.gain.exponentialRampToValueAtTime(.2,a+.02);g.gain.exponentialRampToValueAtTime(.0001,a+.2);o.start(a);o.stop(a+.22);}}catch(e){}}
+function avisar(t,cuerpo){if(!ST.cfg.avisos)return;sonar();try{if('Notification'in window&&Notification.permission==='granted'&&document.hidden)new Notification(t,{body:cuerpo,icon:'../img/icono.png',tag:'cabina'});}catch(e){}}
+function pintaBtns(){
+  const a=$('b-av');a.textContent=ST.cfg.avisos?'🔔 Avisos activados':'🔕 Activar avisos';a.setAttribute('aria-pressed',String(!!ST.cfg.avisos));
+  $('av-n').textContent=ST.cfg.avisos?'Suena cuando cambia el semáforo'+('Notification'in window&&Notification.permission==='granted'?', y te avisa aunque estés en otra pestaña.':'. Dejá esta pestaña abierta.'):'';
+  const w=$('b-wl');if('wakeLock'in navigator){w.hidden=false;w.textContent=wl?'☀️ Pantalla encendida':'Mantener pantalla encendida';w.setAttribute('aria-pressed',String(!!wl));}
+}
+$('b-av').onclick=async()=>{ST.cfg.avisos=!ST.cfg.avisos;guardar();if(ST.cfg.avisos){sonar(1);try{if('Notification'in window&&Notification.permission==='default')await Notification.requestPermission();}catch(e){}}pintaBtns();};
+async function pedirWL(){try{wl=await navigator.wakeLock.request('screen');wl.addEventListener('release',()=>{wl=null;pintaBtns();});}catch(e){wl=null;quiereWL=false;}pintaBtns();}
+$('b-wl').onclick=async()=>{quiereWL=!quiereWL;if(quiereWL)await pedirWL();else if(wl){try{await wl.release();}catch(e){}wl=null;}pintaBtns();};
+document.addEventListener('visibilitychange',()=>{if(!document.hidden&&quiereWL&&!wl)pedirWL();});
+
 /* ---------- reloj ---------- */
 let ultimo='';
 function tick(){
   const now=new Date(),e=estado(now);
+  if(colorAnt&&e.c!==colorAnt&&e.c!=='gris')avisar(({verde:'🟢 ',ambar:'🟡 ',rojo:'🔴 '})[e.c]+e.t,e.p);colorAnt=e.c;
   $('r-ar').textContent=fmt(now,{hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false});$('r-ny').textContent=hora(now,NY);
   const s=$('sem');s.className='card sem '+e.c;$('aura').className='aura '+(e.c==='rojo'?'rojo':e.c==='ambar'?'ambar':'');
   $('sem-k').textContent=e.k;if($('sem-t').textContent!==e.t)$('sem-t').textContent=e.t;$('sem-p').textContent=e.p;$('sem-n').textContent=e.n;
@@ -303,7 +322,7 @@ function tick(){
   s.textContent=JSON.stringify({width:'100%',height:480,symbol:'FOREXCOM:NSXUSD',interval:'5',timezone:AR,theme:'dark',style:'1',locale:'es',backgroundColor:'rgba(0,0,0,0)',gridColor:'rgba(210,240,226,0.05)',hide_side_toolbar:true,allow_symbol_change:true,support_host:'https://www.tradingview.com'});c.append(s);box.append(c);
   box.after(el('p',{class:'tv-credit'},'Gráfico: ',el('a',{href:'https://es.tradingview.com/',target:'_blank',rel:'noopener nofollow',text:'TradingView'})));})();
 
-protocolo();checklist();tamano();linea();tick();cargar();
+protocolo();checklist();tamano();linea();pintaBtns();tick();cargar();
 let rz=0;addEventListener('resize',()=>{clearTimeout(rz);rz=setTimeout(linea,150);});
 setInterval(tick,1000);setInterval(cargar,5*6e4);document.addEventListener('visibilitychange',()=>{if(!document.hidden){cargar();}});
 </script>
